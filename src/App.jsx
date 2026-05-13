@@ -7,11 +7,13 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
   CartesianGrid,
   LineChart,
   Line,
   Legend,
-  Cell,
 } from "recharts";
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -96,12 +98,31 @@ const randomDetail = [
   { label: "Misc one-off charge", amount: 32 },
 ];
 
+const foodLargePurchases = [
+  { label: "Walmart", amount: 410 },
+  { label: "Costco", amount: 325 },
+  { label: "Kroger / grocery stores", amount: 385 },
+  { label: "Restaurants / fast food", amount: 305 },
+];
+
+const ashLargePurchases = [
+  { label: "Target", amount: 260 },
+  { label: "Amazon", amount: 225 },
+  { label: "Kids / family items", amount: 310 },
+  { label: "Other ASH spending", amount: 240 },
+];
+
+const overBudgetDetails = [
+  { category: "Food", over: 75, rows: foodDetail },
+  { category: "ASH", over: 35, rows: ashDetail },
+];
+
 const investmentAccounts = [
-  { name: "Roth 401(k)", purpose: "Retirement", value: 53738.92, tax: "Tax-free" },
-  { name: "Roth IRA", purpose: "Retirement", value: 45647.62, tax: "Tax-free" },
-  { name: "Kids Brokerage", purpose: "Kids / future flexibility", value: 5152.38, tax: "Taxable" },
-  { name: "Kids ESA", purpose: "Legacy education account", value: 5308.00, tax: "Education" },
-  { name: "House Brokerage", purpose: "Future house down payment", value: 874.79, tax: "Taxable" },
+  { name: "Roth 401(k)", purpose: "Retirement", value: 53738.92, tax: "Tax-free", domestic: 53738.92, international: 0, bitcoin: 0 },
+  { name: "Roth IRA", purpose: "Retirement", value: 45647.62, tax: "Tax-free", domestic: 29190.89, international: 14673.95, bitcoin: 1782.78 },
+  { name: "Kids Brokerage", purpose: "Kids / future flexibility", value: 5152.38, tax: "Taxable", domestic: 3987.07, international: 1002.59, bitcoin: 162.72 },
+  { name: "Kids ESA", purpose: "Legacy education account", value: 5308.00, tax: "Education", domestic: 4720, international: 588, bitcoin: 0 },
+  { name: "House Brokerage", purpose: "Future house down payment", value: 874.79, tax: "Taxable", domestic: 739.89, international: 134.90, bitcoin: 0 },
 ];
 
 const investmentFunds = [
@@ -109,6 +130,12 @@ const investmentFunds = [
   { ticker: "VXUS", label: "International", target: 14.7, current: 14.75 },
   { ticker: "FBTC", label: "Bitcoin ETF", target: 2.0, current: 1.80 },
 ];
+
+const allocationTarget = investmentFunds.map((row) => ({
+  className: row.label,
+  actual: row.current,
+  target: row.target,
+}));
 
 const debts = [
   { name: "Mortgage", balance: 285400.33, note: "Auto-updated from prior principal minus scheduled principal" },
@@ -121,6 +148,10 @@ const mortgagePayment = {
   interest: 1280.30,
   escrow: 736.11,
   nextDueDate: "07/01/2026",
+  propertyValue: 284000,
+  loanAmount: 306000,
+  originationDate: "06/01/2022",
+  maturityDate: "07/01/2052",
 };
 
 const mortgageTrend = [
@@ -394,8 +425,8 @@ function DashboardView() {
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <DetailBreakdown title="Food Biggest Purchases" subtitle="Actual merchants/transactions driving the overage" rows={foodDetail} total={1425} budget={1350} />
-        <DetailBreakdown title="ASH Biggest Purchases" subtitle="Actual transactions or merchant groups driving the overage" rows={ashDetail} total={1035} budget={1000} />
+        <DetailBreakdown title="Food Biggest Purchases" subtitle="Actual merchants/transactions driving the overage" rows={foodLargePurchases} total={2018} budget={1350} />
+        <DetailBreakdown title="ASH Biggest Purchases" subtitle="Actual transactions or merchant groups driving the overage" rows={ashLargePurchases} total={3349} budget={1000} />
       </section>
     </div>
   );
@@ -433,7 +464,7 @@ function BudgetingView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Fund Reserves</h2>
-        <p className="mt-1 text-sm text-slate-400">Ending fund balances help decide surplus allocation before finalizing the dashboard.</p>
+        <p className="mt-1 text-sm text-slate-400">Ending April fund balances. These help decide surplus allocation before finalizing the dashboard.</p>
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
           {fundBalances.map((fund) => (
             <div key={fund.name} className="rounded-2xl bg-slate-950/35 p-4">
@@ -469,8 +500,8 @@ function IncomeView() {
     <div className="space-y-4">
       <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <SmallMetric label="Normal" value={money(12500)} note="Paychecks, including SoFi split" tone="cyan" />
-        <SmallMetric label="Bonus" value={money(0)} note="Annual, not run-rate" tone="orange" />
-        <SmallMetric label="CPA Side" value={money(0)} note="Seasonal March/April" tone="emerald" />
+        <SmallMetric label="Bonus" value={money(4276)} note="Annual, not run-rate" tone="orange" />
+        <SmallMetric label="CPA Side" value={money(4212)} note="Seasonal March/April" tone="emerald" />
       </section>
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">12-Month Income Trend</h2>
@@ -501,18 +532,18 @@ function ExpensesView() {
         <h2 className="text-lg font-black md:text-xl">Expense Overview</h2>
         <p className="mt-1 text-sm text-slate-400">Overview of the month, not the full transaction detail.</p>
         <div className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
-          <p><span className="font-bold text-white">Food:</span> Over budget by {money(75)}. Show the actual biggest merchants/transactions, not generic labels.</p>
-          <p><span className="font-bold text-white">ASH:</span> Over budget by {money(35)}. Broad family/personal bucket, so this is visibility more than blame.</p>
+          <p><span className="font-bold text-white">Food:</span> Over budget by {money(668)}. Show the actual biggest merchants/transactions, not generic labels.</p>
+          <p><span className="font-bold text-white">ASH:</span> Over budget by {money(2349)}. Broad family/personal bucket, so this is visibility more than blame.</p>
           <p><span className="font-bold text-white">Utilities:</span> On track after water bill classification.</p>
           <p><span className="font-bold text-white">CK:</span> Essentially on budget.</p>
           <p><span className="font-bold text-white">Random:</span> Always show item-level detail because it is a one-off bucket.</p>
         </div>
       </Card>
       <section className="grid gap-4 md:grid-cols-2">
-        <DetailBreakdown title="Food Biggest Purchases" subtitle="Actual merchants/transactions driving the overage" rows={foodDetail} total={1425} budget={1350} />
-        <DetailBreakdown title="ASH Biggest Purchases" subtitle="Actual transactions or merchant groups driving the overage" rows={ashDetail} total={1035} budget={1000} />
-        <DetailBreakdown title="Random Detail" subtitle="Actual one-off transactions, never generic misc" rows={randomDetail} total={115} budget={150} />
-        <DetailBreakdown title="Housing Detail" subtitle="Mortgage actual vs budget" rows={[{ label: "Mortgage payment", amount: 2450 }]} total={2450} budget={2450} />
+        <DetailBreakdown title="Food Biggest Purchases" subtitle="Actual merchants/transactions driving the overage" rows={foodLargePurchases} total={2018} budget={1350} />
+        <DetailBreakdown title="ASH Biggest Purchases" subtitle="Actual transactions or merchant groups driving the overage" rows={ashLargePurchases} total={3349} budget={1000} />
+        <DetailBreakdown title="Random Detail" subtitle="Actual one-off transactions, never generic misc" rows={randomDetail} total={221} budget={150} />
+        <DetailBreakdown title="Housing Detail" subtitle="Mortgage actual above budget" rows={[{ label: "Mortgage payment", amount: 2504 }]} total={2504} budget={2450} />
       </section>
     </div>
   );
@@ -520,14 +551,14 @@ function ExpensesView() {
 
 function InvestmentsView() {
   const totalInvestments = investmentAccounts.reduce((sum, row) => sum + row.value, 0);
-  const allocationDollars = investmentFunds.map((row) => ({ name: row.label, actual: row.current, target: row.target }));
+  const allocationDollars = allocationTarget.map((row) => ({ name: row.className, actual: row.actual, target: row.target }));
 
   return (
     <div className="space-y-4">
       <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
-        <SmallMetric label="Retirement" value={money(99386.54)} note="Roth 401(k) + Roth IRA" tone="violet" />
-        <SmallMetric label="Kids" value={money(10460.38)} note="Brokerage + legacy ESA" tone="cyan" />
-        <SmallMetric label="House Brokerage" value={money(874.79)} note="Future down payment" tone="orange" />
+        <SmallMetric label="Retirement" value={money(93931)} note="Roth 401(k) + Roth IRA" tone="violet" />
+        <SmallMetric label="Kids" value={money(8972)} note="Brokerage + legacy ESA" tone="cyan" />
+        <SmallMetric label="House Brokerage" value={money(0)} note="Future down payment" tone="orange" />
       </section>
 
       <Card className="p-4 md:p-5">
@@ -599,7 +630,7 @@ function DebtsView() {
       </Card>
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Mortgage Balance Trend</h2>
-        <p className="mt-1 text-sm text-slate-400">Auto-updates monthly unless payment terms change.</p>
+        <p className="mt-1 text-sm text-slate-400">Will update monthly from mortgage statement.</p>
         <div className="mt-4 h-72">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={mortgageTrend}>
