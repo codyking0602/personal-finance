@@ -11,10 +11,11 @@
     "react": "latest",
     "react-dom": "latest",
     "framer-motion": "latest",
-    "recharts": "latest",
-    "tailwindcss": "latest",
-    "@tailwindcss/postcss": "latest",
-    "postcss": "latest"
+    "recharts": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "tailwindcss": "3.4.17",
+    "postcss": "8.4.49",
+    "autoprefixer": "10.4.20"
+  }
 }
