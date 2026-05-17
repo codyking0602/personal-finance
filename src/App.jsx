@@ -1,175 +1,29 @@
-import React, { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  CartesianGrid,
-  LineChart,
-  Line,
-  Legend,
-} from "recharts";
-
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  months,
+  dashboardMeta,
+  homeMetrics,
+  monthlyCloseout,
+  allocation,
+  budgetRows,
+  fundBalances,
+  netWorthTrend,
+  spendTransactions,
+  investmentAccounts,
+  collegeProjection,
+  retirementProjection,
+  retirementSummary,
+  houseGoal,
+  targetHome,
+} from "./data/monthlyData.js";
 
 const sections = [
-  { key: "dashboard", label: "Home", icon: "▦" },
-  { key: "budgeting", label: "Budget", icon: "◉" },
-  { key: "income", label: "Income", icon: "↗" },
-  { key: "expenses", label: "Spend", icon: "↘" },
-  { key: "investments", label: "Invest", icon: "▰" },
-  { key: "debts", label: "Debt", icon: "◌" },
-  { key: "goals", label: "Goals", icon: "◎" },
+  ["dashboard", "Home", "▦"],
+  ["budgeting", "Budget", "◉"],
+  ["expenses", "Spend", "↘"],
+  ["investments", "Invest", "▰"],
+  ["goals", "Goals", "◎"],
 ];
-
-const budgetRows = [
-  { category: "Housing", budget: 2450, actual: 2450, fund: false, endingFund: null },
-  { category: "Car", budget: 350, actual: 335, fund: false, endingFund: null },
-  { category: "Utilities", budget: 500, actual: 465, fund: false, endingFund: null },
-  { category: "Food", budget: 1350, actual: 1425, fund: false, endingFund: null },
-  { category: "Life Insurance / Will", budget: 75, actual: 75, fund: false, endingFund: null },
-  { category: "Gifts", budget: 250, actual: 90, fund: true, endingFund: 1160 },
-  { category: "Vacations", budget: 100, actual: 0, fund: true, endingFund: 3500 },
-  { category: "ASH", budget: 1000, actual: 1035, fund: true, endingFund: 0 },
-  { category: "CK", budget: 100, actual: 72, fund: true, endingFund: 28 },
-  { category: "Subscriptions", budget: 100, actual: 96, fund: false, endingFund: null },
-  { category: "Random", budget: 150, actual: 115, fund: false, endingFund: null },
-  { category: "Grandma / House Repairs", budget: 290, actual: 0, fund: true, endingFund: 580 },
-  { category: "Medical Debt", budget: 200, actual: 200, fund: false, endingFund: null },
-  { category: "Kids College", budget: 667, actual: 667, fund: false, endingFund: null },
-  { category: "Investing", budget: 1000, actual: 1000, fund: false, endingFund: null },
-];
-
-const fundBalances = [
-  { name: "Emergency Fund", balance: 20000 },
-  { name: "Insurance", balance: 450 },
-  { name: "Vacation", balance: 3500 },
-  { name: "Grandma / House Repairs", balance: 580 },
-  { name: "Gifts", balance: 1160 },
-  { name: "CK", balance: 28 },
-  { name: "ASH", balance: 0 },
-  { name: "Family", balance: 0 },
-];
-
-const incomeTrend = [
-  { month: "Jan", normal: 12400, bonus: 0, cpa: 0 },
-  { month: "Feb", normal: 12400, bonus: 0, cpa: 0 },
-  { month: "Mar", normal: 12500, bonus: 0, cpa: 1800 },
-  { month: "Apr", normal: 12500, bonus: 4276, cpa: 4212 },
-  { month: "May", normal: 12500, bonus: 0, cpa: 0 },
-  { month: "Jun", normal: 0, bonus: 0, cpa: 0 },
-  { month: "Jul", normal: 0, bonus: 0, cpa: 0 },
-  { month: "Aug", normal: 0, bonus: 0, cpa: 0 },
-  { month: "Sep", normal: 0, bonus: 0, cpa: 0 },
-  { month: "Oct", normal: 0, bonus: 0, cpa: 0 },
-  { month: "Nov", normal: 0, bonus: 0, cpa: 0 },
-  { month: "Dec", normal: 0, bonus: 0, cpa: 0 },
-];
-
-const monthBars = [
-  { label: "Income", amount: 12500 },
-  { label: "Spending", amount: 10450 },
-  { label: "Surplus", amount: 2050 },
-];
-
-const foodDetail = [
-  { label: "Walmart", amount: 410 },
-  { label: "Costco", amount: 325 },
-  { label: "Kroger / grocery stores", amount: 385 },
-  { label: "Restaurants / fast food", amount: 305 },
-];
-
-const ashDetail = [
-  { label: "Target", amount: 260 },
-  { label: "Amazon", amount: 225 },
-  { label: "Kids / family items", amount: 310 },
-  { label: "Other ASH spending", amount: 240 },
-];
-
-const randomDetail = [
-  { label: "School fundraiser", amount: 45 },
-  { label: "Small household item", amount: 38 },
-  { label: "Misc one-off charge", amount: 32 },
-];
-
-const foodLargePurchases = [
-  { label: "Walmart", amount: 410 },
-  { label: "Costco", amount: 325 },
-  { label: "Kroger / grocery stores", amount: 385 },
-  { label: "Restaurants / fast food", amount: 305 },
-];
-
-const ashLargePurchases = [
-  { label: "Target", amount: 260 },
-  { label: "Amazon", amount: 225 },
-  { label: "Kids / family items", amount: 310 },
-  { label: "Other ASH spending", amount: 240 },
-];
-
-const overBudgetDetails = [
-  { category: "Food", over: 75, rows: foodDetail },
-  { category: "ASH", over: 35, rows: ashDetail },
-];
-
-const investmentAccounts = [
-  { name: "Roth 401(k)", purpose: "Retirement", value: 53738.92, tax: "Tax-free", domestic: 53738.92, international: 0, bitcoin: 0 },
-  { name: "Roth IRA", purpose: "Retirement", value: 45647.62, tax: "Tax-free", domestic: 29190.89, international: 14673.95, bitcoin: 1782.78 },
-  { name: "Kids Brokerage", purpose: "Kids / future flexibility", value: 5152.38, tax: "Taxable", domestic: 3987.07, international: 1002.59, bitcoin: 162.72 },
-  { name: "Kids ESA", purpose: "Legacy education account", value: 5308.00, tax: "Education", domestic: 4720, international: 588, bitcoin: 0 },
-  { name: "House Brokerage", purpose: "Future house down payment", value: 874.79, tax: "Taxable", domestic: 739.89, international: 134.90, bitcoin: 0 },
-];
-
-const investmentFunds = [
-  { ticker: "VTI", label: "Domestic", target: 83.3, current: 83.45 },
-  { ticker: "VXUS", label: "International", target: 14.7, current: 14.75 },
-  { ticker: "FBTC", label: "Bitcoin ETF", target: 2.0, current: 1.80 },
-];
-
-const allocationTarget = investmentFunds.map((row) => ({
-  className: row.label,
-  actual: row.current,
-  target: row.target,
-}));
-
-const debts = [
-  { name: "Mortgage", balance: 285400.33, note: "Auto-updated from prior principal minus scheduled principal" },
-  { name: "Medical Debt", balance: 29800, note: "Temporary estimate after May payment" },
-];
-
-const mortgagePayment = {
-  monthlyPayment: 2449.62,
-  principal: 433.21,
-  interest: 1280.30,
-  escrow: 736.11,
-  nextDueDate: "07/01/2026",
-  propertyValue: 284000,
-  loanAmount: 306000,
-  originationDate: "06/01/2022",
-  maturityDate: "07/01/2052",
-};
-
-const mortgageTrend = [
-  { month: "Jan", balance: 287100, equity: -3100 },
-  { month: "Feb", balance: 286650, equity: -2650 },
-  { month: "Mar", balance: 286250, equity: -2250 },
-  { month: "Apr", balance: 285833.54, equity: -1833.54 },
-  { month: "May", balance: 285400.33, equity: -1400.33 },
-];
-
-const houseGoal = {
-  downPaymentTarget: 100000,
-  estimatedHomeValue: 284000,
-  estimatedMortgageBalance: 285400.33,
-  estimatedHomeEquity: -1400.33,
-  houseBrokerage: 874.79,
-  source: "Realtor.com public estimate, refreshed monthly when possible",
-};
 
 function money(value) {
   return Number(value || 0).toLocaleString("en-US", {
@@ -180,16 +34,7 @@ function money(value) {
 }
 
 function Card({ children, className = "" }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
-      className={`rounded-3xl border border-white/10 bg-[#171b34] shadow-xl shadow-black/20 ${className}`}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={`rounded-3xl border border-white/10 bg-[#171b34] shadow-xl shadow-black/20 ${className}`}>{children}</div>;
 }
 
 function SmallMetric({ label, value, note, tone = "cyan" }) {
@@ -210,23 +55,30 @@ function SmallMetric({ label, value, note, tone = "cyan" }) {
   );
 }
 
-function MonthTabs({ activeMonth, setActiveMonth }) {
+function Header({ activeMonth, setActiveMonth }) {
   return (
-    <div className="-mx-4 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0">
-      <div className="flex min-w-max gap-2">
-        {months.map((month) => (
-          <button
-            key={month}
-            onClick={() => setActiveMonth(month)}
-            className={`rounded-2xl px-4 py-2 text-sm font-black transition ${
-              activeMonth === month ? "bg-orange-500 text-white shadow-lg shadow-orange-950/30" : "bg-white/5 text-slate-400"
-            }`}
-          >
-            {month}
-          </button>
-        ))}
+    <header className="mb-5">
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-300">Household CFO</p>
+          <h1 className="mt-1 text-3xl font-black leading-tight text-white md:text-5xl">Command Center</h1>
+          <p className="mt-1 text-sm text-slate-400">{dashboardMeta.subtitle}</p>
+        </div>
+        <div className="rounded-2xl bg-white/5 px-4 py-3 text-right">
+          <div className="text-xs text-slate-400">View</div>
+          <div className="text-lg font-black text-white">{activeMonth}</div>
+        </div>
       </div>
-    </div>
+      <div className="-mx-4 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0">
+        <div className="flex min-w-max gap-2">
+          {months.map((month) => (
+            <button key={month} onClick={() => setActiveMonth(month)} className={`rounded-2xl px-4 py-2 text-sm font-black transition ${activeMonth === month ? "bg-orange-500 text-white" : "bg-white/5 text-slate-400"}`}>
+              {month}
+            </button>
+          ))}
+        </div>
+      </div>
+    </header>
   );
 }
 
@@ -234,16 +86,10 @@ function MobileNav({ activeSection, setActiveSection }) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#090d1f]/95 px-2 py-2 backdrop-blur md:hidden">
       <div className="flex justify-between gap-1">
-        {sections.map((section) => (
-          <button
-            key={section.key}
-            onClick={() => setActiveSection(section.key)}
-            className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-bold transition ${
-              activeSection === section.key ? "bg-orange-500 text-white" : "text-slate-400"
-            }`}
-          >
-            <span className="text-base leading-none">{section.icon}</span>
-            <span className="truncate">{section.label}</span>
+        {sections.map(([key, label, icon]) => (
+          <button key={key} onClick={() => setActiveSection(key)} className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-bold transition ${activeSection === key ? "bg-orange-500 text-white" : "text-slate-400"}`}>
+            <span className="text-base leading-none">{icon}</span>
+            <span className="truncate">{label}</span>
           </button>
         ))}
       </div>
@@ -262,16 +108,10 @@ function DesktopSidebar({ activeSection, setActiveSection }) {
         </div>
       </div>
       <nav className="space-y-2">
-        {sections.map((section) => (
-          <button
-            key={section.key}
-            onClick={() => setActiveSection(section.key)}
-            className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${
-              activeSection === section.key ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white" : "text-slate-300 hover:bg-white/10"
-            }`}
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">{section.icon}</span>
-            {section.label}
+        {sections.map(([key, label, icon]) => (
+          <button key={key} onClick={() => setActiveSection(key)} className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${activeSection === key ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white" : "text-slate-300 hover:bg-white/10"}`}>
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">{icon}</span>
+            {label}
           </button>
         ))}
       </nav>
@@ -279,22 +119,32 @@ function DesktopSidebar({ activeSection, setActiveSection }) {
   );
 }
 
-function Header({ activeMonth, setActiveMonth }) {
+function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = (x) => x }) {
+  const values = data.map((d) => d[yKey]);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+  const points = data.map((d, i) => {
+    const x = 20 + (i * 260) / Math.max(1, data.length - 1);
+    const y = 180 - ((d[yKey] - min) / range) * 140;
+    return `${x},${y}`;
+  }).join(" ");
+
   return (
-    <header className="mb-5">
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-300">Household CFO</p>
-          <h1 className="mt-1 text-3xl font-black leading-tight text-white md:text-5xl">Command Center</h1>
-          <p className="mt-1 text-sm text-slate-400">May 2026 mock closeout</p>
-        </div>
-        <div className="rounded-2xl bg-white/5 px-4 py-3 text-right">
-          <div className="text-xs text-slate-400">View</div>
-          <div className="text-lg font-black text-white">{activeMonth}</div>
-        </div>
-      </div>
-      <MonthTabs activeMonth={activeMonth} setActiveMonth={setActiveMonth} />
-    </header>
+    <div className="mt-4 h-72 rounded-2xl bg-slate-950/30 p-3">
+      <svg viewBox="0 0 300 210" className="h-full w-full">
+        <polyline points={points} fill="none" stroke={stroke} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+        {data.map((d, i) => {
+          const x = 20 + (i * 260) / Math.max(1, data.length - 1);
+          const y = 180 - ((d[yKey] - min) / range) * 140;
+          return <circle key={i} cx={x} cy={y} r="5" fill={stroke} />;
+        })}
+        {data.map((d, i) => {
+          const x = 20 + (i * 260) / Math.max(1, data.length - 1);
+          return <text key={i} x={x} y="202" textAnchor="middle" fontSize="10" fill="#94a3b8">{labelFormatter(d[xKey])}</text>;
+        })}
+      </svg>
+    </div>
   );
 }
 
@@ -307,9 +157,9 @@ function DetailBreakdown({ title, subtitle, rows, total, budget }) {
           <h2 className="text-lg font-black md:text-xl">{title}</h2>
           <p className="mt-1 text-sm text-slate-400">{subtitle}</p>
         </div>
-        <div className="rounded-2xl bg-rose-400/10 px-3 py-2 text-right text-rose-300">
-          <div className="text-xs">Over</div>
-          <div className="text-lg font-black">{money(over)}</div>
+        <div className={`rounded-2xl px-3 py-2 text-right ${over > 0 ? "bg-rose-400/10 text-rose-300" : "bg-emerald-400/10 text-emerald-300"}`}>
+          <div className="text-xs">{over > 0 ? "Over" : "Under"}</div>
+          <div className="text-lg font-black">{money(Math.abs(over))}</div>
         </div>
       </div>
       <div className="mt-4 space-y-3">
@@ -332,78 +182,44 @@ function DetailBreakdown({ title, subtitle, rows, total, budget }) {
   );
 }
 
-function ProgressBar({ value, max, label }) {
-  const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
-  return (
-    <div>
-      <div className="mb-2 flex justify-between text-sm">
-        <span className="text-slate-300">{label}</span>
-        <span className="font-bold text-white">{pct}%</span>
-      </div>
-      <div className="h-3 rounded-full bg-slate-800">
-        <div className="h-3 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500" style={{ width: `${pct}%` }} />
-      </div>
-      <div className="mt-2 flex justify-between text-xs text-slate-500">
-        <span>{money(value)}</span>
-        <span>{money(max)}</span>
-      </div>
-    </div>
-  );
-}
-
-function MonthlyBarChart() {
-  return (
-    <Card className="p-4 md:p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-lg font-black md:text-xl">May at a Glance</h2>
-          <p className="text-sm text-slate-400">Normal month view: income, spending, and actual surplus.</p>
-        </div>
-      </div>
-      <div className="h-64 md:h-80">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={monthBars} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#27314f" />
-            <XAxis dataKey="label" stroke="#94a3b8" tick={{ fontSize: 12 }} />
-            <YAxis stroke="#94a3b8" tick={{ fontSize: 12 }} tickFormatter={(value) => `$${value / 1000}k`} />
-            <Tooltip formatter={(value) => money(value)} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,.1)", borderRadius: 16 }} />
-            <Bar dataKey="amount" radius={[12, 12, 0, 0]}>
-              <Cell fill="#22d3ee" />
-              <Cell fill="#fb7185" />
-              <Cell fill="#10b981" />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </Card>
-  );
+function topTransactions(category, limit = 5) {
+  return (spendTransactions[category] || [])
+    .map((row) => ({ label: row.merchant, amount: row.amount }))
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, limit);
 }
 
 function DashboardView() {
-  const actualSurplus = 2050;
-  const houseAllocation = actualSurplus * 0.8;
-  const vanguardAllocation = actualSurplus * 0.2;
-
   return (
     <div className="space-y-4">
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
-        <SmallMetric label="Cash" value={money(35627)} note="Before allocation" tone="cyan" />
-        <SmallMetric label="Spending" value={money(10450)} note="May categorized" tone="rose" />
-        <SmallMetric label="Investments" value={money(109324)} note="Roth + Vanguard" tone="violet" />
-        <SmallMetric label="Actual Surplus" value={money(actualSurplus)} note="After reconciliation" tone="emerald" />
+        <SmallMetric label="Cash" value={money(homeMetrics.cash)} note="Before allocation" tone="cyan" />
+        <SmallMetric label="Spending" value={money(homeMetrics.spending)} note={`${dashboardMeta.activeMonth} categorized`} tone="rose" />
+        <SmallMetric label="Investments" value={money(homeMetrics.investments)} note="Roth + Vanguard" tone="violet" />
+        <SmallMetric label="Actual Surplus" value={money(homeMetrics.actualSurplus)} note="After reconciliation" tone="emerald" />
       </section>
 
-      <MonthlyBarChart />
+      <Card className="p-4 md:p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-black md:text-xl">Net Worth Trend</h2>
+            <p className="mt-1 text-sm text-slate-400">The scorecard number I care about most: are we moving up over time?</p>
+          </div>
+          <div className="rounded-2xl bg-emerald-400/10 px-3 py-2 text-right text-emerald-300">
+            <div className="text-xs">{dashboardMeta.activeMonth}</div>
+            <div className="text-lg font-black">{money(netWorthTrend.at(-1)?.netWorth || 0)}</div>
+          </div>
+        </div>
+        <MiniLineChart data={netWorthTrend} xKey="month" yKey="netWorth" />
+      </Card>
 
       <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">May Monthly Closeout</h2>
+        <h2 className="text-lg font-black md:text-xl">{dashboardMeta.activeMonth} Monthly Closeout</h2>
         <p className="mt-1 text-sm text-slate-400">This is the main monthly overview. The final dashboard should be generated after review questions and surplus allocation are settled.</p>
         <div className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
-          <p><span className="font-bold text-white">Bottom Line:</span> May looks like a normal operating month. No bonus and no seasonal CPA spike, so the surplus is more useful for judging the real monthly rhythm.</p>
-          <p><span className="font-bold text-white">What Went Well:</span> Cash stayed protected, emergency fund remains at $20,000, and most categories were close to plan.</p>
-          <p><span className="font-bold text-white">Where We Missed:</span> Food and ASH were slightly over, but not out of control. It is what it is, but they still need the clean detail.</p>
-          <p><span className="font-bold text-white">Cash Available:</span> Actual surplus is about $2,050 before final fund decisions.</p>
-          <p><span className="font-bold text-white">Goal Progress:</span> Mortgage balance auto-updated to $285,400.33. House brokerage increased to $874.79. Using the $284,000 public estimate, the house goal is still basically at $0 of the $100,000 target until equity turns positive.</p>
+          {monthlyCloseout.map(([label, text]) => (
+            <p key={label}><span className="font-bold text-white">{label}:</span> {text}</p>
+          ))}
         </div>
       </Card>
 
@@ -413,20 +229,20 @@ function DashboardView() {
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-orange-400/10 p-4">
             <div className="text-xs text-orange-200">House Paydown</div>
-            <div className="mt-2 text-2xl font-black">{money(houseAllocation)}</div>
+            <div className="mt-2 text-2xl font-black">{money(allocation.housePaydown)}</div>
             <div className="mt-1 text-xs text-slate-400">80% target</div>
           </div>
           <div className="rounded-2xl bg-cyan-400/10 p-4">
             <div className="text-xs text-cyan-200">House Brokerage</div>
-            <div className="mt-2 text-2xl font-black">{money(vanguardAllocation)}</div>
+            <div className="mt-2 text-2xl font-black">{money(allocation.houseBrokerage)}</div>
             <div className="mt-1 text-xs text-slate-400">20% target</div>
           </div>
         </div>
       </Card>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <DetailBreakdown title="Food Biggest Purchases" subtitle="Actual merchants/transactions driving the overage" rows={foodLargePurchases} total={2018} budget={1350} />
-        <DetailBreakdown title="ASH Biggest Purchases" subtitle="Actual transactions or merchant groups driving the overage" rows={ashLargePurchases} total={3349} budget={1000} />
+        <DetailBreakdown title="Food Biggest Purchases" subtitle="Actual merchants/transactions driving the overage" rows={topTransactions("Food")} total={1425} budget={1350} />
+        <DetailBreakdown title="ASH Biggest Purchases" subtitle="Actual transactions or merchant groups driving the overage" rows={topTransactions("ASH")} total={1035} budget={1000} />
       </section>
     </div>
   );
@@ -436,35 +252,8 @@ function BudgetingView() {
   return (
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Budgeting</h2>
-        <p className="mt-1 text-sm text-slate-400">Spending vs budget, plus fund balances where applicable.</p>
-        <div className="mt-4 space-y-3">
-          {budgetRows.map((row) => {
-            const variance = row.budget - row.actual;
-            const pct = row.budget > 0 ? Math.min(130, Math.round((row.actual / row.budget) * 100)) : 0;
-            return (
-              <div key={row.category} className="rounded-2xl bg-slate-950/35 p-4">
-                <div className="flex justify-between gap-3">
-                  <div>
-                    <div className="font-bold text-white">{row.category}</div>
-                    <div className="mt-1 text-xs text-slate-400">{money(row.actual)} spent of {money(row.budget)}</div>
-                    {row.fund && row.endingFund !== null && <div className="mt-1 text-xs text-cyan-300">Ending fund: {money(row.endingFund)}</div>}
-                    {row.fund && row.endingFund === null && <div className="mt-1 text-xs text-amber-300">Ending fund: pending final reserve balance</div>}
-                  </div>
-                  <div className={`font-black ${variance >= 0 ? "text-emerald-300" : "text-rose-300"}`}>{money(variance)}</div>
-                </div>
-                <div className="mt-3 h-2 rounded-full bg-slate-800">
-                  <div className={`h-2 rounded-full ${variance >= 0 ? "bg-cyan-400" : "bg-rose-400"}`} style={{ width: `${Math.min(100, pct)}%` }} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </Card>
-
-      <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Fund Reserves</h2>
-        <p className="mt-1 text-sm text-slate-400">Ending April fund balances. These help decide surplus allocation before finalizing the dashboard.</p>
+        <p className="mt-1 text-sm text-slate-400">Ending fund balances. These help decide surplus allocation before finalizing the dashboard.</p>
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
           {fundBalances.map((fund) => (
             <div key={fund.name} className="rounded-2xl bg-slate-950/35 p-4">
@@ -477,48 +266,22 @@ function BudgetingView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Budget vs Actual Chart</h2>
-        <div className="mt-4 h-96">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={budgetRows.slice(0, 12)} layout="vertical" margin={{ left: 0, right: 5, top: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27314f" />
-              <XAxis type="number" stroke="#94a3b8" tick={{ fontSize: 12 }} />
-              <YAxis type="category" dataKey="category" stroke="#94a3b8" width={120} tick={{ fontSize: 11 }} />
-              <Tooltip formatter={(value) => money(value)} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,.1)", borderRadius: 16 }} />
-              <Legend />
-              <Bar dataKey="budget" fill="#334155" radius={[8, 8, 8, 8]} />
-              <Bar dataKey="actual" fill="#22d3ee" radius={[8, 8, 8, 8]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </Card>
-    </div>
-  );
-}
-
-function IncomeView() {
-  return (
-    <div className="space-y-4">
-      <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
-        <SmallMetric label="Normal" value={money(12500)} note="Paychecks, including SoFi split" tone="cyan" />
-        <SmallMetric label="Bonus" value={money(4276)} note="Annual, not run-rate" tone="orange" />
-        <SmallMetric label="CPA Side" value={money(4212)} note="Seasonal March/April" tone="emerald" />
-      </section>
-      <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">12-Month Income Trend</h2>
-        <p className="mt-1 text-sm text-slate-400">Normal income separated from annual/seasonal income.</p>
-        <div className="mt-4 h-80">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={incomeTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27314f" />
-              <XAxis dataKey="month" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" tickFormatter={(value) => `$${value / 1000}k`} />
-              <Tooltip formatter={(value) => money(value)} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,.1)", borderRadius: 16 }} />
-              <Legend />
-              <Bar dataKey="normal" stackId="a" fill="#22d3ee" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="bonus" stackId="a" fill="#f97316" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="cpa" stackId="a" fill="#10b981" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+        <p className="mt-1 text-sm text-slate-400">Clean category-level budget view. Transaction drill-down lives in Spend.</p>
+        <div className="mt-4 space-y-3">
+          {budgetRows.slice(0, 12).map((row) => {
+            const pct = Math.min(100, Math.round((row.actual / row.budget) * 100));
+            return (
+              <div key={row.category}>
+                <div className="mb-1 flex items-center justify-between text-xs">
+                  <span className="text-slate-300">{row.category}</span>
+                  <span className="font-bold text-white">{money(row.actual)} / {money(row.budget)}</span>
+                </div>
+                <div className="h-3 rounded-full bg-slate-800">
+                  <div className="h-3 rounded-full bg-cyan-400" style={{ width: `${pct}%` }} />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </Card>
     </div>
@@ -526,39 +289,79 @@ function IncomeView() {
 }
 
 function ExpensesView() {
+  const [selectedCategory, setSelectedCategory] = useState("Food");
+  const selectedRows = spendTransactions[selectedCategory] || [];
+  const selectedTotal = selectedRows.reduce((sum, row) => sum + row.amount, 0);
+
   return (
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Expense Overview</h2>
-        <p className="mt-1 text-sm text-slate-400">Overview of the month, not the full transaction detail.</p>
-        <div className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
-          <p><span className="font-bold text-white">Food:</span> Over budget by {money(668)}. Show the actual biggest merchants/transactions, not generic labels.</p>
-          <p><span className="font-bold text-white">ASH:</span> Over budget by {money(2349)}. Broad family/personal bucket, so this is visibility more than blame.</p>
-          <p><span className="font-bold text-white">Utilities:</span> On track after water bill classification.</p>
-          <p><span className="font-bold text-white">CK:</span> Essentially on budget.</p>
-          <p><span className="font-bold text-white">Random:</span> Always show item-level detail because it is a one-off bucket.</p>
+        <h2 className="text-lg font-black md:text-xl">Spend by Category</h2>
+        <p className="mt-1 text-sm text-slate-400">Tap a category to see the transactions from the statements that went into it.</p>
+        <div className="mt-4 space-y-3">
+          {budgetRows.map((row) => {
+            const variance = row.budget - row.actual;
+            const pct = row.budget > 0 ? Math.min(100, Math.round((row.actual / row.budget) * 100)) : 0;
+            const isActive = selectedCategory === row.category;
+            return (
+              <button key={row.category} onClick={() => setSelectedCategory(row.category)} className={`w-full rounded-2xl p-4 text-left transition ${isActive ? "bg-orange-500/20 ring-2 ring-orange-400/60" : "bg-slate-950/35 hover:bg-white/10"}`}>
+                <div className="flex justify-between gap-3">
+                  <div>
+                    <div className="font-bold text-white">{row.category}</div>
+                    <div className="mt-1 text-xs text-slate-400">{money(row.actual)} spent of {money(row.budget)}</div>
+                    {row.fund && row.endingFund !== null && <div className="mt-1 text-xs text-cyan-300">Ending fund: {money(row.endingFund)}</div>}
+                  </div>
+                  <div className={`font-black ${variance >= 0 ? "text-emerald-300" : "text-rose-300"}`}>{money(variance)}</div>
+                </div>
+                <div className="mt-3 h-2 rounded-full bg-slate-800">
+                  <div className={`h-2 rounded-full ${variance >= 0 ? "bg-cyan-400" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />
+                </div>
+              </button>
+            );
+          })}
         </div>
       </Card>
-      <section className="grid gap-4 md:grid-cols-2">
-        <DetailBreakdown title="Food Biggest Purchases" subtitle="Actual merchants/transactions driving the overage" rows={foodLargePurchases} total={2018} budget={1350} />
-        <DetailBreakdown title="ASH Biggest Purchases" subtitle="Actual transactions or merchant groups driving the overage" rows={ashLargePurchases} total={3349} budget={1000} />
-        <DetailBreakdown title="Random Detail" subtitle="Actual one-off transactions, never generic misc" rows={randomDetail} total={221} budget={150} />
-        <DetailBreakdown title="Housing Detail" subtitle="Mortgage actual above budget" rows={[{ label: "Mortgage payment", amount: 2504 }]} total={2504} budget={2450} />
-      </section>
+
+      <Card className="p-4 md:p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-black md:text-xl">{selectedCategory} Transactions</h2>
+            <p className="mt-1 text-sm text-slate-400">Statement-level detail that makes the category total explainable.</p>
+          </div>
+          <div className="rounded-2xl bg-cyan-400/10 px-3 py-2 text-right text-cyan-200">
+            <div className="text-xs">Total</div>
+            <div className="text-lg font-black">{money(selectedTotal)}</div>
+          </div>
+        </div>
+        <div className="mt-4 space-y-3">
+          {selectedRows.length === 0 ? (
+            <div className="rounded-2xl bg-slate-950/35 p-4 text-sm text-slate-400">No transactions in this category for the mock month.</div>
+          ) : (
+            selectedRows.map((row, index) => (
+              <div key={`${row.date}-${row.merchant}-${index}`} className="flex items-center justify-between gap-3 rounded-2xl bg-slate-950/35 p-4">
+                <div>
+                  <div className="font-bold text-white">{row.merchant}</div>
+                  <div className="mt-1 text-xs text-slate-400">{row.date}</div>
+                </div>
+                <div className="font-black text-white">{money(row.amount)}</div>
+              </div>
+            ))
+          )}
+        </div>
+      </Card>
     </div>
   );
 }
 
 function InvestmentsView() {
   const totalInvestments = investmentAccounts.reduce((sum, row) => sum + row.value, 0);
-  const allocationDollars = allocationTarget.map((row) => ({ name: row.className, actual: row.actual, target: row.target }));
 
   return (
     <div className="space-y-4">
       <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
-        <SmallMetric label="Retirement" value={money(93931)} note="Roth 401(k) + Roth IRA" tone="violet" />
-        <SmallMetric label="Kids" value={money(8972)} note="Brokerage + legacy ESA" tone="cyan" />
-        <SmallMetric label="House Brokerage" value={money(0)} note="Future down payment" tone="orange" />
+        <SmallMetric label="Retirement" value={money(99386.54)} note="Roth 401(k) + Roth IRA" tone="violet" />
+        <SmallMetric label="Kids" value={money(10460.38)} note="Brokerage + legacy ESA" tone="cyan" />
+        <SmallMetric label="House Brokerage" value={money(874.79)} note="Future down payment" tone="orange" />
       </section>
 
       <Card className="p-4 md:p-5">
@@ -579,69 +382,28 @@ function InvestmentsView() {
       </Card>
 
       <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Allocation vs Target</h2>
-        <p className="mt-1 text-sm text-slate-400">Target: 83.3% VTI/domestic, 14.7% VXUS/international, 2% FBTC/Bitcoin ETF.</p>
-        <div className="mt-4 h-72">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={allocationDollars}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27314f" />
-              <XAxis dataKey="name" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" tickFormatter={(value) => `${value}%`} />
-              <Tooltip formatter={(value) => `${value}%`} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,.1)", borderRadius: 16 }} />
-              <Legend />
-              <Bar dataKey="target" fill="#334155" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="actual" fill="#22d3ee" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
-          {investmentFunds.map((fund) => (
-            <div key={fund.ticker} className="rounded-2xl bg-slate-950/35 p-4">
-              <div className="text-xs text-slate-400">{fund.label}</div>
-              <div className="mt-1 text-xl font-black text-white">{fund.ticker}</div>
-              <div className="mt-1 text-xs text-slate-400">Target {fund.target}% · Current {fund.current}%</div>
-            </div>
-          ))}
-        </div>
-        <p className="mt-3 text-sm text-slate-400">Total tracked investments: {money(totalInvestments)}. New surplus contributions should be allocated across VTI, VXUS, and FBTC to move toward target allocation.</p>
+        <h2 className="text-lg font-black md:text-xl">College Projection — Today’s Dollars</h2>
+        <p className="mt-1 text-sm text-slate-400">All kids combined. Current balance about $10,460, $667/month contribution, 6% real return, oldest age 4 to 18.</p>
+        <MiniLineChart data={collegeProjection} xKey="age" yKey="balance" labelFormatter={(age) => `Age ${age}`} />
       </Card>
-    </div>
-  );
-}
-
-function DebtsView() {
-  return (
-    <div className="space-y-4">
-      <section className="grid gap-3 md:grid-cols-2">
-        {debts.map((debt) => (
-          <SmallMetric key={debt.name} label={debt.name} value={money(debt.balance)} note={debt.note} tone={debt.name === "Mortgage" ? "orange" : "violet"} />
-        ))}
-      </section>
 
       <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Current Mortgage Payment</h2>
-        <p className="mt-1 text-sm text-slate-400">Payment due {mortgagePayment.nextDueDate}</p>
-        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-          <div className="rounded-2xl bg-cyan-400/10 p-4"><div className="text-xs text-cyan-200">Payment</div><div className="mt-1 text-xl font-black">{money(mortgagePayment.monthlyPayment)}</div></div>
-          <div className="rounded-2xl bg-emerald-400/10 p-4"><div className="text-xs text-emerald-200">Principal</div><div className="mt-1 text-xl font-black">{money(mortgagePayment.principal)}</div></div>
-          <div className="rounded-2xl bg-orange-400/10 p-4"><div className="text-xs text-orange-200">Interest</div><div className="mt-1 text-xl font-black">{money(mortgagePayment.interest)}</div></div>
-          <div className="rounded-2xl bg-violet-400/10 p-4"><div className="text-xs text-violet-200">Escrow</div><div className="mt-1 text-xl font-black">{money(mortgagePayment.escrow)}</div></div>
+        <h2 className="text-lg font-black md:text-xl">Retirement Projection — Today’s Dollars</h2>
+        <p className="mt-1 text-sm text-slate-400">Age 31 to 65. Includes Roth 401(k), employer match, Roth IRA/brokerage retirement savings, 2% salary growth, and 6% real return.</p>
+        <MiniLineChart data={retirementProjection} xKey="age" yKey="balance" stroke="#8b5cf6" labelFormatter={(age) => `${age}`} />
+        <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="rounded-2xl bg-violet-400/10 p-4">
+            <div className="text-xs text-violet-200">Projected at 65</div>
+            <div className="mt-2 text-2xl font-black">{money(retirementSummary.projectedAt65)}</div>
+            <div className="mt-1 text-xs text-slate-400">Today’s dollars</div>
+          </div>
+          <div className="rounded-2xl bg-emerald-400/10 p-4">
+            <div className="text-xs text-emerald-200">4% Rule Annual Income</div>
+            <div className="mt-2 text-2xl font-black">{money(retirementSummary.fourPercentAnnualIncome)}</div>
+            <div className="mt-1 text-xs text-slate-400">Estimated annual retirement spending using the 4% rule</div>
+          </div>
         </div>
-      </Card>
-      <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Mortgage Balance Trend</h2>
-        <p className="mt-1 text-sm text-slate-400">Will update monthly from mortgage statement.</p>
-        <div className="mt-4 h-72">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={mortgageTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27314f" />
-              <XAxis dataKey="month" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" tickFormatter={(value) => `$${value / 1000}k`} />
-              <Tooltip formatter={(value) => money(value)} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,.1)", borderRadius: 16 }} />
-              <Line type="monotone" dataKey="balance" stroke="#f97316" strokeWidth={3} dot={{ r: 5 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+        <p className="mt-3 text-sm text-slate-400">Total tracked investments: {money(totalInvestments)}.</p>
       </Card>
     </div>
   );
@@ -650,6 +412,8 @@ function DebtsView() {
 function GoalsView() {
   const totalHouseSavings = Math.max(0, houseGoal.estimatedHomeEquity + houseGoal.houseBrokerage);
   const rawEquityPosition = houseGoal.estimatedHomeEquity + houseGoal.houseBrokerage;
+  const progressPct = houseGoal.downPaymentTarget > 0 ? Math.min(100, Math.round((totalHouseSavings / houseGoal.downPaymentTarget) * 100)) : 0;
+
   return (
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
@@ -658,9 +422,20 @@ function GoalsView() {
         <div className="mt-4 rounded-2xl bg-cyan-400/10 p-4 text-sm leading-6 text-cyan-100">
           Home value uses the public estimate so it can be refreshed monthly when available. Equity should be treated as directional, not exact.
         </div>
-        <div className="mt-5 space-y-6">
-          <ProgressBar value={totalHouseSavings} max={houseGoal.downPaymentTarget} label="Home Equity + House Brokerage" />
+        <div className="mt-5">
+          <div className="mb-2 flex justify-between text-sm">
+            <span className="text-slate-300">Home Equity + House Brokerage</span>
+            <span className="font-bold text-white">{progressPct}%</span>
+          </div>
+          <div className="h-3 rounded-full bg-slate-800">
+            <div className="h-3 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500" style={{ width: `${progressPct}%` }} />
+          </div>
+          <div className="mt-2 flex justify-between text-xs text-slate-500">
+            <span>{money(totalHouseSavings)}</span>
+            <span>{money(houseGoal.downPaymentTarget)}</span>
+          </div>
         </div>
+
         <div className="mt-5 grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-orange-400/10 p-4">
             <div className="text-xs text-orange-200">Home Value Estimate</div>
@@ -683,25 +458,55 @@ function GoalsView() {
             <div className="mt-1 text-xs text-slate-400">Future down payment fund</div>
           </div>
         </div>
+
         <div className="mt-4 rounded-2xl bg-slate-950/35 p-4">
           <div className="text-xs text-slate-400">Raw equity + house brokerage position</div>
           <div className={`mt-1 text-2xl font-black ${rawEquityPosition >= 0 ? "text-cyan-200" : "text-rose-200"}`}>{money(rawEquityPosition)}</div>
         </div>
       </Card>
 
-      <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Home Equity Trend</h2>
-        <p className="mt-1 text-sm text-slate-400">This will combine mortgage payoff and estimated home value changes.</p>
-        <div className="mt-4 h-72">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={mortgageTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27314f" />
-              <XAxis dataKey="month" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" tickFormatter={(value) => `$${value / 1000}k`} />
-              <Tooltip formatter={(value) => money(value)} contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,.1)", borderRadius: 16 }} />
-              <Line type="monotone" dataKey="equity" stroke="#22d3ee" strokeWidth={3} dot={{ r: 5 }} />
-            </LineChart>
-          </ResponsiveContainer>
+      <Card className="overflow-hidden p-0">
+        <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 md:h-80">
+          <img
+            src={targetHome.imageUrl}
+            alt=""
+            className="h-full w-full object-cover"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="inline-flex rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">Target Home Example</div>
+            <h2 className="mt-3 text-2xl font-black leading-tight text-white">{targetHome.address}</h2>
+          </div>
+        </div>
+        <div className="p-4 md:p-5">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="rounded-2xl bg-orange-400/10 p-4">
+              <div className="text-xs text-orange-200">Price</div>
+              <div className="mt-1 text-xl font-black">{money(targetHome.price)}</div>
+            </div>
+            <div className="rounded-2xl bg-cyan-400/10 p-4">
+              <div className="text-xs text-cyan-200">Beds / Baths</div>
+              <div className="mt-1 text-xl font-black">{targetHome.beds} / {targetHome.baths}</div>
+            </div>
+            <div className="rounded-2xl bg-violet-400/10 p-4">
+              <div className="text-xs text-violet-200">Sq Ft</div>
+              <div className="mt-1 text-xl font-black">{targetHome.sqft.toLocaleString()}</div>
+            </div>
+            <div className="rounded-2xl bg-emerald-400/10 p-4">
+              <div className="text-xs text-emerald-200">HOA</div>
+              <div className="mt-1 text-xl font-black">{targetHome.hoa}</div>
+            </div>
+          </div>
+          <div className="mt-4 rounded-2xl bg-slate-950/35 p-4 text-sm leading-6 text-slate-300">
+            <p><span className="font-bold text-white">Why it fits:</span> over 2,750 sqft, under $650k, at least 4 bedrooms, and appears in the Zillow search near Prosper High School.</p>
+            <p className="mt-2 text-slate-400">{targetHome.schoolNote}</p>
+          </div>
+          <a href={targetHome.listingUrl} target="_blank" rel="noreferrer" className="mt-4 block rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-4 py-3 text-center text-sm font-black text-white shadow-lg shadow-orange-950/30">
+            Open Zillow Listing
+          </a>
         </div>
       </Card>
     </div>
@@ -709,18 +514,21 @@ function GoalsView() {
 }
 
 export default function PersonalFinanceCommandCenter() {
-  const [activeMonth, setActiveMonth] = useState("May");
+  const [activeMonth, setActiveMonth] = useState(dashboardMeta.activeMonth);
   const [activeSection, setActiveSection] = useState("dashboard");
 
   const renderSection = () => {
     switch (activeSection) {
-      case "budgeting": return <BudgetingView />;
-      case "income": return <IncomeView />;
-      case "expenses": return <ExpensesView />;
-      case "investments": return <InvestmentsView />;
-      case "debts": return <DebtsView />;
-      case "goals": return <GoalsView />;
-      default: return <DashboardView />;
+      case "budgeting":
+        return <BudgetingView />;
+      case "expenses":
+        return <ExpensesView />;
+      case "investments":
+        return <InvestmentsView />;
+      case "goals":
+        return <GoalsView />;
+      default:
+        return <DashboardView />;
     }
   };
 
