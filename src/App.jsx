@@ -34,23 +34,23 @@ function money(value) {
 }
 
 function Card({ children, className = "" }) {
-  return <div className={`rounded-3xl border border-white/10 bg-[#171b34] shadow-xl shadow-black/20 ${className}`}>{children}</div>;
+  return <div className={`rounded-3xl border border-[#d9ccba] bg-[#f8f2e8] text-[#4b3a2d] shadow-lg shadow-[#9f8b73]/20 ${className}`}>{children}</div>;
 }
 
 function SmallMetric({ label, value, note, tone = "cyan" }) {
   const color = {
-    cyan: "text-cyan-300 bg-cyan-400/10",
-    orange: "text-orange-300 bg-orange-400/10",
-    rose: "text-rose-300 bg-rose-400/10",
-    emerald: "text-emerald-300 bg-emerald-400/10",
-    violet: "text-violet-300 bg-violet-400/10",
+    cyan: "text-[#7c6a58] bg-[#efe2d0]",
+    orange: "text-[#b5601c] bg-[#fde5c8]",
+    rose: "text-[#9a5c46] bg-[#f5ddd4]",
+    emerald: "text-[#5f744f] bg-[#e4eddc]",
+    violet: "text-[#7a6c8f] bg-[#e8e0f1]",
   }[tone];
 
   return (
     <Card className="p-4">
       <div className={`mb-3 inline-flex rounded-full px-3 py-1 text-xs font-bold ${color}`}>{label}</div>
-      <div className="text-2xl font-black tracking-tight text-white">{value}</div>
-      {note && <div className="mt-1 text-xs leading-5 text-slate-400">{note}</div>}
+      <div className="text-2xl font-black tracking-tight text-[#3f3025]">{value}</div>
+      {note && <div className="mt-1 text-xs leading-5 text-[#8d7a66]">{note}</div>}
     </Card>
   );
 }
@@ -60,19 +60,19 @@ function Header({ activeMonth, setActiveMonth }) {
     <header className="mb-5">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-300">Household CFO</p>
-          <h1 className="mt-1 text-3xl font-black leading-tight text-white md:text-5xl">Command Center</h1>
-          <p className="mt-1 text-sm text-slate-400">{dashboardMeta.subtitle}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">Household CFO</p>
+          <h1 className="mt-1 text-3xl font-black leading-tight text-[#3f3025] md:text-5xl">Command Center</h1>
+          <p className="mt-1 text-sm text-[#8d7a66]">{dashboardMeta.subtitle}</p>
         </div>
-        <div className="rounded-2xl bg-white/5 px-4 py-3 text-right">
-          <div className="text-xs text-slate-400">View</div>
-          <div className="text-lg font-black text-white">{activeMonth}</div>
+        <div className="rounded-2xl border border-[#dfcfbb] bg-[#f1e7da] px-4 py-3 text-right">
+          <div className="text-xs text-[#8d7a66]">View</div>
+          <div className="text-lg font-black text-[#3f3025]">{activeMonth}</div>
         </div>
       </div>
       <div className="-mx-4 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0">
         <div className="flex min-w-max gap-2">
           {months.map((month) => (
-            <button key={month} onClick={() => setActiveMonth(month)} className={`rounded-2xl px-4 py-2 text-sm font-black transition ${activeMonth === month ? "bg-orange-500 text-white" : "bg-white/5 text-slate-400"}`}>
+            <button key={month} onClick={() => setActiveMonth(month)} className={`rounded-2xl px-4 py-2 text-sm font-black transition ${activeMonth === month ? "bg-[#e48733] text-white" : "bg-[#efe2d0] text-[#8d7a66]"}`}>
               {month}
             </button>
           ))}
@@ -84,10 +84,10 @@ function Header({ activeMonth, setActiveMonth }) {
 
 function MobileNav({ activeSection, setActiveSection }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#090d1f]/95 px-2 py-2 backdrop-blur md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#d8c8b2] bg-[#f8f2e8]/95 px-2 py-2 backdrop-blur md:hidden">
       <div className="flex justify-between gap-1">
         {sections.map(([key, label, icon]) => (
-          <button key={key} onClick={() => setActiveSection(key)} className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-bold transition ${activeSection === key ? "bg-orange-500 text-white" : "text-slate-400"}`}>
+          <button key={key} onClick={() => setActiveSection(key)} className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-bold transition ${activeSection === key ? "bg-[#e48733] text-white" : "text-[#8d7a66]"}`}>
             <span className="text-base leading-none">{icon}</span>
             <span className="truncate">{label}</span>
           </button>
@@ -99,18 +99,18 @@ function MobileNav({ activeSection, setActiveSection }) {
 
 function DesktopSidebar({ activeSection, setActiveSection }) {
   return (
-    <aside className="hidden w-56 shrink-0 border-r border-white/10 bg-[#0a0d1c] px-4 py-6 md:block">
+    <aside className="hidden w-56 shrink-0 border-r border-[#d8c8b2] bg-[#f4eadc] px-4 py-6 md:block">
       <div className="mb-10 flex items-center gap-3 px-2">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-300 to-violet-500 text-2xl font-black text-slate-950">PF</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#f4b36f] to-[#e48733] text-2xl font-black text-white">PF</div>
         <div>
-          <div className="text-sm text-slate-400">Cody King</div>
-          <div className="font-bold text-white">Command Center</div>
+          <div className="text-sm text-[#8d7a66]">Cody King</div>
+          <div className="font-bold text-[#3f3025]">Command Center</div>
         </div>
       </div>
       <nav className="space-y-2">
         {sections.map(([key, label, icon]) => (
-          <button key={key} onClick={() => setActiveSection(key)} className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${activeSection === key ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white" : "text-slate-300 hover:bg-white/10"}`}>
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">{icon}</span>
+          <button key={key} onClick={() => setActiveSection(key)} className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${activeSection === key ? "bg-gradient-to-r from-[#e48733] to-[#f4b36f] text-white" : "text-[#6e5a47] hover:bg-[#efe2d0]"}`}>
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#efe2d0]">{icon}</span>
             {label}
           </button>
         ))}
@@ -533,7 +533,7 @@ export default function PersonalFinanceCommandCenter() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b1d] text-white">
+    <div className="min-h-screen bg-[#e8ddcb] text-[#4b3a2d]">
       <div className="flex min-h-screen">
         <DesktopSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
         <main className="min-w-0 flex-1 px-4 pb-28 pt-5 md:p-8">
