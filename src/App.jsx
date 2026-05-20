@@ -131,7 +131,7 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = 
   }).join(" ");
 
   return (
-    <div className="mt-4 h-72 rounded-2xl bg-slate-950/30 p-3">
+    <div className="mt-4 h-72 rounded-2xl bg-[#efe2d0] p-3">
       <svg viewBox="0 0 300 210" className="h-full w-full">
         <polyline points={points} fill="none" stroke={stroke} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
         {data.map((d, i) => {
@@ -141,7 +141,7 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = 
         })}
         {data.map((d, i) => {
           const x = 20 + (i * 260) / Math.max(1, data.length - 1);
-          return <text key={i} x={x} y="202" textAnchor="middle" fontSize="10" fill="#94a3b8">{labelFormatter(d[xKey])}</text>;
+          return <text key={i} x={x} y="202" textAnchor="middle" fontSize="10" fill="#6e5a47">{labelFormatter(d[xKey])}</text>;
         })}
       </svg>
     </div>
@@ -155,9 +155,9 @@ function DetailBreakdown({ title, subtitle, rows, total, budget }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="text-lg font-black md:text-xl">{title}</h2>
-          <p className="mt-1 text-sm text-slate-400">{subtitle}</p>
+          <p className="mt-1 text-sm text-[#8d7a66]">{subtitle}</p>
         </div>
-        <div className={`rounded-2xl px-3 py-2 text-right ${over > 0 ? "bg-rose-400/10 text-rose-300" : "bg-emerald-400/10 text-emerald-300"}`}>
+        <div className={`rounded-2xl px-3 py-2 text-right ${over > 0 ? "bg-[#f5ddd4] text-[#8d4f3b]" : "bg-[#e4eddc] text-[#4f6840]"}`}>
           <div className="text-xs">{over > 0 ? "Over" : "Under"}</div>
           <div className="text-lg font-black">{money(Math.abs(over))}</div>
         </div>
@@ -168,10 +168,10 @@ function DetailBreakdown({ title, subtitle, rows, total, budget }) {
           return (
             <div key={row.label}>
               <div className="mb-2 flex items-center justify-between gap-3 text-sm">
-                <span className="font-semibold text-slate-200">{row.label}</span>
-                <span className="font-black text-white">{money(row.amount)}</span>
+                <span className="font-semibold text-[#5f4a39]">{row.label}</span>
+                <span className="font-black text-[#3f3025]">{money(row.amount)}</span>
               </div>
-              <div className="h-2 rounded-full bg-slate-800">
+              <div className="h-2 rounded-full bg-[#d9c9b4]">
                 <div className="h-2 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500" style={{ width: `${pct}%` }} />
               </div>
             </div>
@@ -203,9 +203,9 @@ function DashboardView() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-black md:text-xl">Net Worth Trend</h2>
-            <p className="mt-1 text-sm text-slate-400">The scorecard number I care about most: are we moving up over time?</p>
+            <p className="mt-1 text-sm text-[#8d7a66]">The scorecard number I care about most: are we moving up over time?</p>
           </div>
-          <div className="rounded-2xl bg-emerald-400/10 px-3 py-2 text-right text-emerald-300">
+          <div className="rounded-2xl bg-[#e4eddc] px-3 py-2 text-right text-[#4f6840]">
             <div className="text-xs">{dashboardMeta.activeMonth}</div>
             <div className="text-lg font-black">{money(netWorthTrend.at(-1)?.netWorth || 0)}</div>
           </div>
@@ -215,27 +215,27 @@ function DashboardView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">{dashboardMeta.activeMonth} Monthly Closeout</h2>
-        <p className="mt-1 text-sm text-slate-400">This is the main monthly overview. The final dashboard should be generated after review questions and surplus allocation are settled.</p>
-        <div className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
+        <p className="mt-1 text-sm text-[#8d7a66]">This is the main monthly overview. The final dashboard should be generated after review questions and surplus allocation are settled.</p>
+        <div className="mt-4 space-y-3 text-sm leading-6 text-[#6e5a47]">
           {monthlyCloseout.map(([label, text]) => (
-            <p key={label}><span className="font-bold text-white">{label}:</span> {text}</p>
+            <p key={label}><span className="font-bold text-[#3f3025]">{label}:</span> {text}</p>
           ))}
         </div>
       </Card>
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Month-End Allocation</h2>
-        <p className="mt-1 text-sm text-slate-400">Based on actual surplus after reconciliation, subject to your approval and fund reserve needs.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Based on actual surplus after reconciliation, subject to your approval and fund reserve needs.</p>
         <div className="mt-4 grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-orange-400/10 p-4">
-            <div className="text-xs text-orange-200">House Paydown</div>
+          <div className="rounded-2xl bg-[#fde5c8] p-4">
+            <div className="text-xs text-[#9b4f12]">House Paydown</div>
             <div className="mt-2 text-2xl font-black">{money(allocation.housePaydown)}</div>
-            <div className="mt-1 text-xs text-slate-400">80% target</div>
+            <div className="mt-1 text-xs text-[#8d7a66]">80% target</div>
           </div>
-          <div className="rounded-2xl bg-cyan-400/10 p-4">
-            <div className="text-xs text-cyan-200">House Brokerage</div>
+          <div className="rounded-2xl bg-[#efe2d0] p-4">
+            <div className="text-xs text-[#6e5a47]">House Brokerage</div>
             <div className="mt-2 text-2xl font-black">{money(allocation.houseBrokerage)}</div>
-            <div className="mt-1 text-xs text-slate-400">20% target</div>
+            <div className="mt-1 text-xs text-[#8d7a66]">20% target</div>
           </div>
         </div>
       </Card>
@@ -253,12 +253,12 @@ function BudgetingView() {
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Fund Reserves</h2>
-        <p className="mt-1 text-sm text-slate-400">Ending fund balances. These help decide surplus allocation before finalizing the dashboard.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Ending fund balances. These help decide surplus allocation before finalizing the dashboard.</p>
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
           {fundBalances.map((fund) => (
-            <div key={fund.name} className="rounded-2xl bg-slate-950/35 p-4">
-              <div className="text-xs text-slate-400">{fund.name}</div>
-              <div className="mt-1 text-xl font-black text-white">{money(fund.balance)}</div>
+            <div key={fund.name} className="rounded-2xl bg-[#efe2d0] p-4">
+              <div className="text-xs text-[#8d7a66]">{fund.name}</div>
+              <div className="mt-1 text-xl font-black text-[#3f3025]">{money(fund.balance)}</div>
             </div>
           ))}
         </div>
@@ -266,17 +266,17 @@ function BudgetingView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Budget vs Actual Chart</h2>
-        <p className="mt-1 text-sm text-slate-400">Clean category-level budget view. Transaction drill-down lives in Spend.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Clean category-level budget view. Transaction drill-down lives in Spend.</p>
         <div className="mt-4 space-y-3">
           {budgetRows.slice(0, 12).map((row) => {
             const pct = Math.min(100, Math.round((row.actual / row.budget) * 100));
             return (
               <div key={row.category}>
                 <div className="mb-1 flex items-center justify-between text-xs">
-                  <span className="text-slate-300">{row.category}</span>
-                  <span className="font-bold text-white">{money(row.actual)} / {money(row.budget)}</span>
+                  <span className="text-[#6e5a47]">{row.category}</span>
+                  <span className="font-bold text-[#3f3025]">{money(row.actual)} / {money(row.budget)}</span>
                 </div>
-                <div className="h-3 rounded-full bg-slate-800">
+                <div className="h-3 rounded-full bg-[#d9c9b4]">
                   <div className="h-3 rounded-full bg-cyan-400" style={{ width: `${pct}%` }} />
                 </div>
               </div>
@@ -297,23 +297,23 @@ function ExpensesView() {
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Spend by Category</h2>
-        <p className="mt-1 text-sm text-slate-400">Tap a category to see the transactions from the statements that went into it.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Tap a category to see the transactions from the statements that went into it.</p>
         <div className="mt-4 space-y-3">
           {budgetRows.map((row) => {
             const variance = row.budget - row.actual;
             const pct = row.budget > 0 ? Math.min(100, Math.round((row.actual / row.budget) * 100)) : 0;
             const isActive = selectedCategory === row.category;
             return (
-              <button key={row.category} onClick={() => setSelectedCategory(row.category)} className={`w-full rounded-2xl p-4 text-left transition ${isActive ? "bg-orange-500/20 ring-2 ring-orange-400/60" : "bg-slate-950/35 hover:bg-white/10"}`}>
+              <button key={row.category} onClick={() => setSelectedCategory(row.category)} className={`w-full rounded-2xl p-4 text-left transition ${isActive ? "bg-[#f4b36f]/35 ring-2 ring-[#e48733]/70" : "bg-[#efe2d0] hover:bg-[#eadbc7]"}`}>
                 <div className="flex justify-between gap-3">
                   <div>
-                    <div className="font-bold text-white">{row.category}</div>
-                    <div className="mt-1 text-xs text-slate-400">{money(row.actual)} spent of {money(row.budget)}</div>
-                    {row.fund && row.endingFund !== null && <div className="mt-1 text-xs text-cyan-300">Ending fund: {money(row.endingFund)}</div>}
+                    <div className="font-bold text-[#3f3025]">{row.category}</div>
+                    <div className="mt-1 text-xs text-[#8d7a66]">{money(row.actual)} spent of {money(row.budget)}</div>
+                    {row.fund && row.endingFund !== null && <div className="mt-1 text-xs text-[#6e5a47]">Ending fund: {money(row.endingFund)}</div>}
                   </div>
-                  <div className={`font-black ${variance >= 0 ? "text-emerald-300" : "text-rose-300"}`}>{money(variance)}</div>
+                  <div className={`font-black ${variance >= 0 ? "text-[#4f6840]" : "text-[#8d4f3b]"}`}>{money(variance)}</div>
                 </div>
-                <div className="mt-3 h-2 rounded-full bg-slate-800">
+                <div className="mt-3 h-2 rounded-full bg-[#d9c9b4]">
                   <div className={`h-2 rounded-full ${variance >= 0 ? "bg-cyan-400" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />
                 </div>
               </button>
@@ -326,24 +326,24 @@ function ExpensesView() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-black md:text-xl">{selectedCategory} Transactions</h2>
-            <p className="mt-1 text-sm text-slate-400">Statement-level detail that makes the category total explainable.</p>
+            <p className="mt-1 text-sm text-[#8d7a66]">Statement-level detail that makes the category total explainable.</p>
           </div>
-          <div className="rounded-2xl bg-cyan-400/10 px-3 py-2 text-right text-cyan-200">
+          <div className="rounded-2xl bg-[#efe2d0] px-3 py-2 text-right text-[#6e5a47]">
             <div className="text-xs">Total</div>
             <div className="text-lg font-black">{money(selectedTotal)}</div>
           </div>
         </div>
         <div className="mt-4 space-y-3">
           {selectedRows.length === 0 ? (
-            <div className="rounded-2xl bg-slate-950/35 p-4 text-sm text-slate-400">No transactions in this category for the mock month.</div>
+            <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">No transactions in this category for the mock month.</div>
           ) : (
             selectedRows.map((row, index) => (
-              <div key={`${row.date}-${row.merchant}-${index}`} className="flex items-center justify-between gap-3 rounded-2xl bg-slate-950/35 p-4">
+              <div key={`${row.date}-${row.merchant}-${index}`} className="flex items-center justify-between gap-3 rounded-2xl bg-[#efe2d0] p-4">
                 <div>
-                  <div className="font-bold text-white">{row.merchant}</div>
-                  <div className="mt-1 text-xs text-slate-400">{row.date}</div>
+                  <div className="font-bold text-[#3f3025]">{row.merchant}</div>
+                  <div className="mt-1 text-xs text-[#8d7a66]">{row.date}</div>
                 </div>
-                <div className="font-black text-white">{money(row.amount)}</div>
+                <div className="font-black text-[#3f3025]">{money(row.amount)}</div>
               </div>
             ))
           )}
@@ -368,13 +368,13 @@ function InvestmentsView() {
         <h2 className="text-lg font-black md:text-xl">Investment Accounts</h2>
         <div className="mt-4 space-y-3">
           {investmentAccounts.map((row) => (
-            <div key={row.name} className="rounded-2xl bg-slate-950/35 p-4">
+            <div key={row.name} className="rounded-2xl bg-[#efe2d0] p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="font-bold text-white">{row.name}</div>
-                  <div className="mt-1 text-xs text-slate-400">{row.purpose} · {row.tax}</div>
+                  <div className="font-bold text-[#3f3025]">{row.name}</div>
+                  <div className="mt-1 text-xs text-[#8d7a66]">{row.purpose} · {row.tax}</div>
                 </div>
-                <div className="font-black text-cyan-200">{money(row.value)}</div>
+                <div className="font-black text-[#6e5a47]">{money(row.value)}</div>
               </div>
             </div>
           ))}
@@ -383,27 +383,27 @@ function InvestmentsView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">College Projection — Today’s Dollars</h2>
-        <p className="mt-1 text-sm text-slate-400">All kids combined. Current balance about $10,460, $667/month contribution, 6% real return, oldest age 4 to 18.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">All kids combined. Current balance about $10,460, $667/month contribution, 6% real return, oldest age 4 to 18.</p>
         <MiniLineChart data={collegeProjection} xKey="age" yKey="balance" labelFormatter={(age) => `Age ${age}`} />
       </Card>
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Retirement Projection — Today’s Dollars</h2>
-        <p className="mt-1 text-sm text-slate-400">Age 31 to 65. Includes Roth 401(k), employer match, Roth IRA/brokerage retirement savings, 2% salary growth, and 6% real return.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Age 31 to 65. Includes Roth 401(k), employer match, Roth IRA/brokerage retirement savings, 2% salary growth, and 6% real return.</p>
         <MiniLineChart data={retirementProjection} xKey="age" yKey="balance" stroke="#8b5cf6" labelFormatter={(age) => `${age}`} />
         <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-          <div className="rounded-2xl bg-violet-400/10 p-4">
-            <div className="text-xs text-violet-200">Projected at 65</div>
+          <div className="rounded-2xl bg-[#e8e0f1] p-4">
+            <div className="text-xs text-[#665782]">Projected at 65</div>
             <div className="mt-2 text-2xl font-black">{money(retirementSummary.projectedAt65)}</div>
-            <div className="mt-1 text-xs text-slate-400">Today’s dollars</div>
+            <div className="mt-1 text-xs text-[#8d7a66]">Today’s dollars</div>
           </div>
-          <div className="rounded-2xl bg-emerald-400/10 p-4">
-            <div className="text-xs text-emerald-200">4% Rule Annual Income</div>
+          <div className="rounded-2xl bg-[#e4eddc] p-4">
+            <div className="text-xs text-[#4f6840]">4% Rule Annual Income</div>
             <div className="mt-2 text-2xl font-black">{money(retirementSummary.fourPercentAnnualIncome)}</div>
-            <div className="mt-1 text-xs text-slate-400">Estimated annual retirement spending using the 4% rule</div>
+            <div className="mt-1 text-xs text-[#8d7a66]">Estimated annual retirement spending using the 4% rule</div>
           </div>
         </div>
-        <p className="mt-3 text-sm text-slate-400">Total tracked investments: {money(totalInvestments)}.</p>
+        <p className="mt-3 text-sm text-[#8d7a66]">Total tracked investments: {money(totalInvestments)}.</p>
       </Card>
     </div>
   );
@@ -418,50 +418,50 @@ function GoalsView() {
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Bigger House Goal</h2>
-        <p className="mt-1 text-sm text-slate-400">Target down payment / move-up flexibility: {money(houseGoal.downPaymentTarget)}</p>
-        <div className="mt-4 rounded-2xl bg-cyan-400/10 p-4 text-sm leading-6 text-cyan-100">
+        <p className="mt-1 text-sm text-[#8d7a66]">Target down payment / move-up flexibility: {money(houseGoal.downPaymentTarget)}</p>
+        <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
           Home value uses the public estimate so it can be refreshed monthly when available. Equity should be treated as directional, not exact.
         </div>
         <div className="mt-5">
           <div className="mb-2 flex justify-between text-sm">
-            <span className="text-slate-300">Home Equity + House Brokerage</span>
-            <span className="font-bold text-white">{progressPct}%</span>
+            <span className="text-[#6e5a47]">Home Equity + House Brokerage</span>
+            <span className="font-bold text-[#3f3025]">{progressPct}%</span>
           </div>
-          <div className="h-3 rounded-full bg-slate-800">
+          <div className="h-3 rounded-full bg-[#d9c9b4]">
             <div className="h-3 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500" style={{ width: `${progressPct}%` }} />
           </div>
-          <div className="mt-2 flex justify-between text-xs text-slate-500">
+          <div className="mt-2 flex justify-between text-xs text-[#7b6856]">
             <span>{money(totalHouseSavings)}</span>
             <span>{money(houseGoal.downPaymentTarget)}</span>
           </div>
         </div>
 
         <div className="mt-5 grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-orange-400/10 p-4">
-            <div className="text-xs text-orange-200">Home Value Estimate</div>
+          <div className="rounded-2xl bg-[#fde5c8] p-4">
+            <div className="text-xs text-[#9b4f12]">Home Value Estimate</div>
             <div className="mt-2 text-2xl font-black">{money(houseGoal.estimatedHomeValue)}</div>
-            <div className="mt-1 text-xs text-slate-400">{houseGoal.source}</div>
+            <div className="mt-1 text-xs text-[#8d7a66]">{houseGoal.source}</div>
           </div>
-          <div className="rounded-2xl bg-rose-400/10 p-4">
-            <div className="text-xs text-rose-200">Est. Equity</div>
+          <div className="rounded-2xl bg-[#f5ddd4] p-4">
+            <div className="text-xs text-[#8d4f3b]">Est. Equity</div>
             <div className="mt-2 text-2xl font-black">{money(houseGoal.estimatedHomeEquity)}</div>
-            <div className="mt-1 text-xs text-slate-400">Estimated value less current principal</div>
+            <div className="mt-1 text-xs text-[#8d7a66]">Estimated value less current principal</div>
           </div>
-          <div className="rounded-2xl bg-violet-400/10 p-4">
-            <div className="text-xs text-violet-200">Mortgage Balance</div>
+          <div className="rounded-2xl bg-[#e8e0f1] p-4">
+            <div className="text-xs text-[#665782]">Mortgage Balance</div>
             <div className="mt-2 text-2xl font-black">{money(houseGoal.estimatedMortgageBalance)}</div>
-            <div className="mt-1 text-xs text-slate-400">Current principal balance</div>
+            <div className="mt-1 text-xs text-[#8d7a66]">Current principal balance</div>
           </div>
-          <div className="rounded-2xl bg-cyan-400/10 p-4">
-            <div className="text-xs text-cyan-200">House Brokerage</div>
+          <div className="rounded-2xl bg-[#efe2d0] p-4">
+            <div className="text-xs text-[#6e5a47]">House Brokerage</div>
             <div className="mt-2 text-2xl font-black">{money(houseGoal.houseBrokerage)}</div>
-            <div className="mt-1 text-xs text-slate-400">Future down payment fund</div>
+            <div className="mt-1 text-xs text-[#8d7a66]">Future down payment fund</div>
           </div>
         </div>
 
-        <div className="mt-4 rounded-2xl bg-slate-950/35 p-4">
-          <div className="text-xs text-slate-400">Raw equity + house brokerage position</div>
-          <div className={`mt-1 text-2xl font-black ${rawEquityPosition >= 0 ? "text-cyan-200" : "text-rose-200"}`}>{money(rawEquityPosition)}</div>
+        <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4">
+          <div className="text-xs text-[#8d7a66]">Raw equity + house brokerage position</div>
+          <div className={`mt-1 text-2xl font-black ${rawEquityPosition >= 0 ? "text-[#6e5a47]" : "text-[#8d4f3b]"}`}>{money(rawEquityPosition)}</div>
         </div>
       </Card>
 
@@ -483,26 +483,26 @@ function GoalsView() {
         </div>
         <div className="p-4 md:p-5">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <div className="rounded-2xl bg-orange-400/10 p-4">
-              <div className="text-xs text-orange-200">Price</div>
+            <div className="rounded-2xl bg-[#fde5c8] p-4">
+              <div className="text-xs text-[#9b4f12]">Price</div>
               <div className="mt-1 text-xl font-black">{money(targetHome.price)}</div>
             </div>
-            <div className="rounded-2xl bg-cyan-400/10 p-4">
-              <div className="text-xs text-cyan-200">Beds / Baths</div>
+            <div className="rounded-2xl bg-[#efe2d0] p-4">
+              <div className="text-xs text-[#6e5a47]">Beds / Baths</div>
               <div className="mt-1 text-xl font-black">{targetHome.beds} / {targetHome.baths}</div>
             </div>
-            <div className="rounded-2xl bg-violet-400/10 p-4">
-              <div className="text-xs text-violet-200">Sq Ft</div>
+            <div className="rounded-2xl bg-[#e8e0f1] p-4">
+              <div className="text-xs text-[#665782]">Sq Ft</div>
               <div className="mt-1 text-xl font-black">{targetHome.sqft.toLocaleString()}</div>
             </div>
-            <div className="rounded-2xl bg-emerald-400/10 p-4">
-              <div className="text-xs text-emerald-200">HOA</div>
+            <div className="rounded-2xl bg-[#e4eddc] p-4">
+              <div className="text-xs text-[#4f6840]">HOA</div>
               <div className="mt-1 text-xl font-black">{targetHome.hoa}</div>
             </div>
           </div>
-          <div className="mt-4 rounded-2xl bg-slate-950/35 p-4 text-sm leading-6 text-slate-300">
-            <p><span className="font-bold text-white">Why it fits:</span> over 2,750 sqft, under $650k, at least 4 bedrooms, and appears in the Zillow search near Prosper High School.</p>
-            <p className="mt-2 text-slate-400">{targetHome.schoolNote}</p>
+          <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
+            <p><span className="font-bold text-[#3f3025]">Why it fits:</span> over 2,750 sqft, under $650k, at least 4 bedrooms, and appears in the Zillow search near Prosper High School.</p>
+            <p className="mt-2 text-[#8d7a66]">{targetHome.schoolNote}</p>
           </div>
           <a href={targetHome.listingUrl} target="_blank" rel="noreferrer" className="mt-4 block rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-4 py-3 text-center text-sm font-black text-white shadow-lg shadow-orange-950/30">
             Open Zillow Listing
