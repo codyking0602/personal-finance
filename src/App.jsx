@@ -42,7 +42,7 @@ function money(value) {
 }
 
 function Card({ children, className = "" }) {
-  return <div className={`rounded-3xl border ${COLORS.cardBorder} ${COLORS.cardBg} ${COLORS.cardText} shadow-lg shadow-[#9f8b73]/20 ${className}`}>{children}</div>;
+  return <div className={`rounded-3xl border border-[#d9ccba] bg-[#f8f2e8] text-[#4b3a2d] shadow-lg shadow-[#9f8b73]/20 ${className}`}>{children}</div>;
 }
 
 function SmallMetric({ label, value, note, tone = "cyan" }) {
@@ -332,7 +332,7 @@ function ExpensesView() {
         </div>
         <div className="mt-4 space-y-3">
           {selectedRows.length === 0 ? (
-            <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">No transactions in this category for the selected month.</div>
+            <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">No transactions in this category for the mock month.</div>
           ) : (
             selectedRows.map((row, index) => (
               <div key={`${row.date}-${row.merchant}-${index}`} className="flex items-center justify-between gap-3 rounded-2xl bg-[#efe2d0] p-4">
@@ -493,8 +493,8 @@ function GoalsView() {
               <div className="mt-1 text-xl font-black">{targetHome.sqft.toLocaleString()}</div>
             </div>
             <div className="rounded-2xl bg-[#e4eddc] p-4">
-              <div className="text-xs text-[#4f6840]">Lot Sq Ft</div>
-              <div className="mt-1 text-xl font-black">{targetHome.lotSqft.toLocaleString()}</div>
+              <div className="text-xs text-[#4f6840]">HOA</div>
+              <div className="mt-1 text-xl font-black">{targetHome.hoa}</div>
             </div>
           </div>
           <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
@@ -530,7 +530,7 @@ export default function PersonalFinanceCommandCenter() {
   };
 
   return (
-    <div className={`min-h-screen ${COLORS.appBg} ${COLORS.appText}`}>
+    <div className="min-h-screen bg-[#e8ddcb] text-[#4b3a2d]">
       <div className="flex min-h-screen">
         <DesktopSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
         <main className="min-w-0 flex-1 px-4 pb-28 pt-5 md:p-8">
