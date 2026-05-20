@@ -42,7 +42,6 @@ export const fundBalances = [
   ["Grandma / House Repairs",580],
   ["Gifts",1160],
   ["CK",28],
-  ["ASH",0],
   ["Family",0],
 ].map(([name,balance]) => ({name,balance}));
 
@@ -57,11 +56,9 @@ export const spendTransactions = {
   Housing: [["4/1","Mortgage Payment",2450]],
   Car: [["4/4","Shell",72],["4/12","State Farm",210],["4/24","QuikTrip",53]],
   Utilities: [["4/8","TXU Energy",185],["4/17","Kaufman County Water",88],["4/21","AT&T / Internet",92],["4/25","Phone reimbursement",100]],
-  Food: [["4/3","Walmart",210],["4/7","Costco",325],["4/11","Kroger",185],["4/18","Walmart",200],["4/20","Chick-fil-A",58],["4/25","Restaurants / fast food",247],["4/29","Grocery stores",200]],
   "Life Insurance / Will": [["4/5","Life Insurance",75]],
   Gifts: [["4/14","Birthday gift",90]],
   Vacations: [],
-  ASH: [["4/2","Target",260],["4/9","Amazon",225],["4/13","Kids / family items",310],["4/19","Other ASH spending",240]],
   CK: [["4/10","CK spending",72]],
   Subscriptions: [["4/1","Streaming / subscriptions",96]],
   Random: [["4/6","School fundraiser",45],["4/15","Small household item",38],["4/26","Misc one-off charge",32]],
