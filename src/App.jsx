@@ -286,7 +286,7 @@ function BudgetingView() {
 }
 
 function ExpensesView() {
-  const [selectedCategory, setSelectedCategory] = useState("Food");
+  const [selectedCategory, setSelectedCategory] = useState(budgetRows[0]?.category || "");
   const selectedRows = spendTransactions[selectedCategory] || [];
   const selectedTotal = selectedRows.reduce((sum, row) => sum + row.amount, 0);
 

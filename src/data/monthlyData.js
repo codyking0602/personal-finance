@@ -51,7 +51,6 @@ export const netWorthTrend = [
   ["Feb",122300],
   ["Mar",126900],
   ["Apr",128200],
-  ["Apr",131600],
 ].map(([month,netWorth]) => ({month,netWorth}));
 
 export const spendTransactions = {
