@@ -25,6 +25,14 @@ const sections = [
   ["goals", "Goals", "◎"],
 ];
 
+const COLORS = {
+  appBg: "bg-[#e8ddcb]",
+  appText: "text-[#4b3a2d]",
+  cardBorder: "border-[#d9ccba]",
+  cardBg: "bg-[#f8f2e8]",
+  cardText: "text-[#4b3a2d]",
+};
+
 function money(value) {
   return Number(value || 0).toLocaleString("en-US", {
     style: "currency",
@@ -182,13 +190,6 @@ function DetailBreakdown({ title, subtitle, rows, total, budget }) {
   );
 }
 
-function topTransactions(category, limit = 5) {
-  return (spendTransactions[category] || [])
-    .map((row) => ({ label: row.merchant, amount: row.amount }))
-    .sort((a, b) => b.amount - a.amount)
-    .slice(0, limit);
-}
-
 function DashboardView() {
   return (
     <div className="space-y-4">
@@ -240,10 +241,6 @@ function DashboardView() {
         </div>
       </Card>
 
-      <section className="grid gap-4 md:grid-cols-2">
-        <DetailBreakdown title="Food Biggest Purchases" subtitle="Actual merchants/transactions driving the overage" rows={topTransactions("Food")} total={1425} budget={1350} />
-        <DetailBreakdown title="ASH Biggest Purchases" subtitle="Actual transactions or merchant groups driving the overage" rows={topTransactions("ASH")} total={1035} budget={1000} />
-      </section>
     </div>
   );
 }
@@ -289,7 +286,7 @@ function BudgetingView() {
 }
 
 function ExpensesView() {
-  const [selectedCategory, setSelectedCategory] = useState("Food");
+  const [selectedCategory, setSelectedCategory] = useState(budgetRows[0]?.category || "");
   const selectedRows = spendTransactions[selectedCategory] || [];
   const selectedTotal = selectedRows.reduce((sum, row) => sum + row.amount, 0);
 
