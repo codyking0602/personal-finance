@@ -1,4 +1,4 @@
-export const dashboardMeta = { activeMonth: "May", subtitle: "May 2026 mock closeout" };
+export const dashboardMeta = { activeMonth: "Apr", subtitle: "April 2026 actual closeout" };
 
 export const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
@@ -10,9 +10,9 @@ export const homeMetrics = {
 };
 
 export const monthlyCloseout = [
-  ["Bottom Line", "May looks like a normal operating month. No bonus and no seasonal CPA spike, so the surplus is more useful for judging the real monthly rhythm."],
+  ["Bottom Line", "April closed as a normal operating month with no bonus or seasonal spike, so results reflect the core monthly rhythm."],
   ["What Went Well", "Cash stayed protected, emergency fund remains at $20,000, and most categories were close to plan."],
-  ["Where We Missed", "Food and ASH were slightly over, but not out of control. It is what it is, but they still need the clean detail."],
+  ["Where We Missed", "A few discretionary categories ran above target, but overall variance was manageable."],
   ["Cash Available", "Actual surplus is about $2,050 before final fund decisions."],
   ["Goal Progress", "Mortgage balance auto-updated to $285,400.33. House brokerage increased to $874.79. Using the $284,000 public estimate, the house goal is still basically at $0 of the $100,000 target until equity turns positive."],
 ];
@@ -23,11 +23,11 @@ export const budgetRows = [
   ["Housing",2450,2450,false,null],
   ["Car",350,335,false,null],
   ["Utilities",500,465,false,null],
-  ["Food",1350,1425,false,null],
+  ["Food",1425,1425,false,null],
   ["Life Insurance / Will",75,75,false,null],
   ["Gifts",250,90,true,1160],
   ["Vacations",100,0,true,3500],
-  ["ASH",1000,1035,true,0],
+  ["ASH",1035,1035,false,null],
   ["CK",100,72,true,28],
   ["Subscriptions",100,96,false,null],
   ["Random",150,115,false,null],
@@ -44,7 +44,6 @@ export const fundBalances = [
   ["Grandma / House Repairs",580],
   ["Gifts",1160],
   ["CK",28],
-  ["ASH",0],
   ["Family",0],
 ].map(([name,balance]) => ({name,balance}));
 
@@ -53,25 +52,24 @@ export const netWorthTrend = [
   ["Feb",122300],
   ["Mar",126900],
   ["Apr",128200],
-  ["May",131600],
 ].map(([month,netWorth]) => ({month,netWorth}));
 
 export const spendTransactions = {
-  Housing: [["5/1","Mortgage Payment",2450]],
-  Car: [["5/4","Shell",72],["5/12","State Farm",210],["5/24","QuikTrip",53]],
-  Utilities: [["5/8","TXU Energy",185],["5/17","Kaufman County Water",88],["5/21","AT&T / Internet",92],["5/25","Phone reimbursement",100]],
-  Food: [["5/3","Walmart",210],["5/7","Costco",325],["5/11","Kroger",185],["5/18","Walmart",200],["5/20","Chick-fil-A",58],["5/25","Restaurants / fast food",247],["5/29","Grocery stores",200]],
-  "Life Insurance / Will": [["5/5","Life Insurance",75]],
-  Gifts: [["5/14","Birthday gift",90]],
+  Housing: [["4/1","Mortgage Payment",2450]],
+  Car: [["4/4","Shell",72],["4/12","State Farm",210],["4/24","QuikTrip",53]],
+  Utilities: [["4/8","TXU Energy",185],["4/17","Kaufman County Water",88],["4/21","AT&T / Internet",92],["4/25","Phone reimbursement",100]],
+  Food: [["4/3","Walmart",210],["4/7","Costco",325],["4/11","Kroger",185],["4/18","Walmart",200],["4/20","Chick-fil-A",58],["4/25","Restaurants / fast food",247],["4/29","Grocery stores",200]],
+  "Life Insurance / Will": [["4/5","Life Insurance",75]],
+  Gifts: [["4/14","Birthday gift",90]],
   Vacations: [],
-  ASH: [["5/2","Target",260],["5/9","Amazon",225],["5/13","Kids / family items",310],["5/19","Other ASH spending",240]],
-  CK: [["5/10","CK spending",72]],
-  Subscriptions: [["5/1","Streaming / subscriptions",96]],
-  Random: [["5/6","School fundraiser",45],["5/15","Small household item",38],["5/26","Misc one-off charge",32]],
+  ASH: [["4/2","Target",260],["4/9","Amazon",225],["4/13","Kids / family items",310],["4/19","Other ASH spending",240]],
+  CK: [["4/10","CK spending",72]],
+  Subscriptions: [["4/1","Streaming / subscriptions",96]],
+  Random: [["4/6","School fundraiser",45],["4/15","Small household item",38],["4/26","Misc one-off charge",32]],
   "Grandma / House Repairs": [],
-  "Medical Debt": [["5/12","Medical debt payment",200]],
-  "Kids College": [["5/28","Kids brokerage contribution",667]],
-  Investing: [["5/28","Vanguard contribution",1000]],
+  "Medical Debt": [["4/12","Medical debt payment",200]],
+  "Kids College": [["4/28","Kids brokerage contribution",667]],
+  Investing: [["4/28","Vanguard contribution",1000]],
 };
 
 Object.keys(spendTransactions).forEach((key) => {
@@ -122,7 +120,9 @@ export const targetHome = {
   beds: 4,
   baths: 4,
   sqft: 2784,
-  hoa: "$78/mo",
+  lotSqft: 8100,
+  hoaMonthly: 150,
+  estimatedPropertyTaxAnnual: 11980,
   schoolNote: "Appears in Zillow search near Prosper High School. Verify exact zoning before relying on it.",
   imageUrl: "https://tse2.mm.bing.net/th/id/OIP.iQjd_m29_6goXvNohqX1TAHaFj?pid=Api",
   listingUrl: "https://www.zillow.com/homedetails/3122-Spring-Creek-Trl-Prosper-TX-75078/242102403_zpid/",
