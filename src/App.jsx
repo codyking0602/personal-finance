@@ -26,10 +26,10 @@ const sections = [
 ];
 
 const COLORS = {
-  appBg: "bg-[#e8ddcb]",
+  appBg: "bg-[#f2ecdf]",
   appText: "text-[#4b3a2d]",
-  cardBorder: "border-[#d9ccba]",
-  cardBg: "bg-[#f8f2e8]",
+  cardBorder: "border-[#ddd4c7]",
+  cardBg: "bg-[#fffdf9]",
   cardText: "text-[#4b3a2d]",
 };
 
@@ -42,7 +42,7 @@ function money(value) {
 }
 
 function Card({ children, className = "" }) {
-  return <div className={`rounded-3xl border border-[#d9ccba] bg-[#f8f2e8] text-[#4b3a2d] shadow-lg shadow-[#9f8b73]/20 ${className}`}>{children}</div>;
+  return <div className={`rounded-3xl border ${COLORS.cardBorder} ${COLORS.cardBg} ${COLORS.cardText} shadow-lg shadow-[#9f8b73]/20 ${className}`}>{children}</div>;
 }
 
 function SmallMetric({ label, value, note, tone = "cyan" }) {
@@ -127,7 +127,7 @@ function DesktopSidebar({ activeSection, setActiveSection }) {
   );
 }
 
-function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = (x) => x }) {
+function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = (x) => x, xAxisLabel = "X Axis", yAxisLabel = "Value" }) {
   const values = data.map((d) => d[yKey]);
   const min = Math.min(...values);
   const max = Math.max(...values);
@@ -139,8 +139,11 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = 
   }).join(" ");
 
   return (
-    <div className="mt-4 h-72 rounded-2xl bg-[#efe2d0] p-3">
+    <div className="mt-4 h-72 rounded-2xl border border-[#ddd4c7] bg-[#faf5ec] p-3">
       <svg viewBox="0 0 300 210" className="h-full w-full">
+        {[40, 75, 110, 145, 180].map((y) => (
+          <line key={y} x1="20" y1={y} x2="280" y2={y} stroke="#decfb8" strokeWidth="1" />
+        ))}
         <polyline points={points} fill="none" stroke={stroke} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
         {data.map((d, i) => {
           const x = 20 + (i * 260) / Math.max(1, data.length - 1);
@@ -151,6 +154,8 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = 
           const x = 20 + (i * 260) / Math.max(1, data.length - 1);
           return <text key={i} x={x} y="202" textAnchor="middle" fontSize="10" fill="#6e5a47">{labelFormatter(d[xKey])}</text>;
         })}
+        <text x="150" y="209" textAnchor="middle" fontSize="9" fill="#5e4b3b">{xAxisLabel}</text>
+        <text x="8" y="108" textAnchor="middle" fontSize="9" fill="#5e4b3b" transform="rotate(-90 8 108)">{yAxisLabel}</text>
       </svg>
     </div>
   );
@@ -204,19 +209,18 @@ function DashboardView() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-black md:text-xl">Net Worth Trend</h2>
-            <p className="mt-1 text-sm text-[#8d7a66]">The scorecard number I care about most: are we moving up over time?</p>
+            <p className="mt-1 text-sm text-[#8d7a66]">Are we moving up over time?</p>
           </div>
           <div className="rounded-2xl bg-[#e4eddc] px-3 py-2 text-right text-[#4f6840]">
             <div className="text-xs">{dashboardMeta.activeMonth}</div>
             <div className="text-lg font-black">{money(netWorthTrend.at(-1)?.netWorth || 0)}</div>
           </div>
         </div>
-        <MiniLineChart data={netWorthTrend} xKey="month" yKey="netWorth" />
+        <MiniLineChart data={netWorthTrend} xKey="month" yKey="netWorth" stroke="#d68936" xAxisLabel="Month" yAxisLabel="Net Worth ($)" />
       </Card>
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">{dashboardMeta.activeMonth} Monthly Closeout</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">This is the main monthly overview. The final dashboard should be generated after review questions and surplus allocation are settled.</p>
         <div className="mt-4 space-y-3 text-sm leading-6 text-[#6e5a47]">
           {monthlyCloseout.map(([label, text]) => (
             <p key={label}><span className="font-bold text-[#3f3025]">{label}:</span> {text}</p>
@@ -226,7 +230,6 @@ function DashboardView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Month-End Allocation</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Based on actual surplus after reconciliation, subject to your approval and fund reserve needs.</p>
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-[#fde5c8] p-4">
             <div className="text-xs text-[#9b4f12]">House Paydown</div>
@@ -250,7 +253,7 @@ function BudgetingView() {
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Fund Reserves</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Ending fund balances. These help decide surplus allocation before finalizing the dashboard.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Ending fund balances.</p>
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
           {fundBalances.map((fund) => (
             <div key={fund.name} className="rounded-2xl bg-[#efe2d0] p-4">
@@ -263,9 +266,9 @@ function BudgetingView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Budget vs Actual Chart</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Clean category-level budget view. Transaction drill-down lives in Spend.</p>
+        <div className="mt-1 text-xs font-semibold uppercase tracking-wide text-[#8d7a66]">X axis: Categories · Fill: Actual vs Budget</div>
         <div className="mt-4 space-y-3">
-          {budgetRows.slice(0, 12).map((row) => {
+          {budgetRows.map((row) => {
             const pct = Math.min(100, Math.round((row.actual / row.budget) * 100));
             return (
               <div key={row.category}>
@@ -274,7 +277,7 @@ function BudgetingView() {
                   <span className="font-bold text-[#3f3025]">{money(row.actual)} / {money(row.budget)}</span>
                 </div>
                 <div className="h-3 rounded-full bg-[#d9c9b4]">
-                  <div className="h-3 rounded-full bg-cyan-400" style={{ width: `${pct}%` }} />
+                  <div className="h-3 rounded-full bg-[#d68936]" style={{ width: `${pct}%` }} />
                 </div>
               </div>
             );
@@ -294,7 +297,7 @@ function ExpensesView() {
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Spend by Category</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Tap a category to see the transactions from the statements that went into it.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Tap a category to see transactions.</p>
         <div className="mt-4 space-y-3">
           {budgetRows.map((row) => {
             const variance = row.budget - row.actual;
@@ -311,7 +314,7 @@ function ExpensesView() {
                   <div className={`font-black ${variance >= 0 ? "text-[#4f6840]" : "text-[#8d4f3b]"}`}>{money(variance)}</div>
                 </div>
                 <div className="mt-3 h-2 rounded-full bg-[#d9c9b4]">
-                  <div className={`h-2 rounded-full ${variance >= 0 ? "bg-cyan-400" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />
+                  <div className={`h-2 rounded-full ${variance >= 0 ? "bg-[#d68936]" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />
                 </div>
               </button>
             );
@@ -323,7 +326,7 @@ function ExpensesView() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-black md:text-xl">{selectedCategory} Transactions</h2>
-            <p className="mt-1 text-sm text-[#8d7a66]">Statement-level detail that makes the category total explainable.</p>
+            <p className="mt-1 text-sm text-[#8d7a66]">Statement-level detail.</p>
           </div>
           <div className="rounded-2xl bg-[#efe2d0] px-3 py-2 text-right text-[#6e5a47]">
             <div className="text-xs">Total</div>
@@ -332,7 +335,7 @@ function ExpensesView() {
         </div>
         <div className="mt-4 space-y-3">
           {selectedRows.length === 0 ? (
-            <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">No transactions in this category for the mock month.</div>
+            <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">No transactions in this category for the selected month.</div>
           ) : (
             selectedRows.map((row, index) => (
               <div key={`${row.date}-${row.merchant}-${index}`} className="flex items-center justify-between gap-3 rounded-2xl bg-[#efe2d0] p-4">
@@ -380,14 +383,14 @@ function InvestmentsView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">College Projection — Today’s Dollars</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">All kids combined. Current balance about $10,460, $667/month contribution, 6% real return, oldest age 4 to 18.</p>
-        <MiniLineChart data={collegeProjection} xKey="age" yKey="balance" labelFormatter={(age) => `Age ${age}`} />
+        <p className="mt-1 text-sm text-[#8d7a66]">All kids combined.</p>
+        <MiniLineChart data={collegeProjection} xKey="age" yKey="balance" stroke="#d68936" labelFormatter={(age) => `Age ${age}`} xAxisLabel="Age" yAxisLabel="Projected Balance ($)" />
       </Card>
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Retirement Projection — Today’s Dollars</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Age 31 to 65. Includes Roth 401(k), employer match, Roth IRA/brokerage retirement savings, 2% salary growth, and 6% real return.</p>
-        <MiniLineChart data={retirementProjection} xKey="age" yKey="balance" stroke="#8b5cf6" labelFormatter={(age) => `${age}`} />
+        <p className="mt-1 text-sm text-[#8d7a66]">Age 31 to 65.</p>
+        <MiniLineChart data={retirementProjection} xKey="age" yKey="balance" stroke="#d68936" labelFormatter={(age) => `${age}`} xAxisLabel="Age" yAxisLabel="Projected Balance ($)" />
         <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="rounded-2xl bg-[#e8e0f1] p-4">
             <div className="text-xs text-[#665782]">Projected at 65</div>
@@ -493,8 +496,8 @@ function GoalsView() {
               <div className="mt-1 text-xl font-black">{targetHome.sqft.toLocaleString()}</div>
             </div>
             <div className="rounded-2xl bg-[#e4eddc] p-4">
-              <div className="text-xs text-[#4f6840]">HOA</div>
-              <div className="mt-1 text-xl font-black">{targetHome.hoa}</div>
+              <div className="text-xs text-[#4f6840]">Lot Sq Ft</div>
+              <div className="mt-1 text-xl font-black">{targetHome.lotSqft.toLocaleString()}</div>
             </div>
           </div>
           <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
@@ -530,7 +533,7 @@ export default function PersonalFinanceCommandCenter() {
   };
 
   return (
-    <div className="min-h-screen bg-[#e8ddcb] text-[#4b3a2d]">
+    <div className={`min-h-screen ${COLORS.appBg} ${COLORS.appText}`}>
       <div className="flex min-h-screen">
         <DesktopSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
         <main className="min-w-0 flex-1 px-4 pb-28 pt-5 md:p-8">
