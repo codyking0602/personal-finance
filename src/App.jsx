@@ -68,8 +68,8 @@ function Header({ activeMonth, setActiveMonth }) {
     <header className="mb-5">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">The King's Finances</p>
-          <h1 className="mt-1 text-3xl font-black leading-tight text-[#3f3025] md:text-5xl">Command Center</h1>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">THE KING'S</p>
+          <h1 className="mt-1 text-3xl font-black leading-tight text-[#3f3025] md:text-5xl">FINANCES</h1>
           <p className="mt-1 text-sm text-[#8d7a66]">{dashboardMeta.subtitle}</p>
         </div>
         <div className="rounded-2xl border border-[#dfcfbb] bg-[#f1e7da] px-4 py-3 text-right">
