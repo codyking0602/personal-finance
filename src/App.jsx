@@ -398,8 +398,8 @@ function InvestmentsView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">College Projection — Today’s Dollars</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">All kids combined.</p>
-        <MiniLineChart data={collegeProjection} xKey="age" yKey="balance" stroke="#d68936" labelFormatter={(age) => `Age ${age}`} xAxisLabel="Kid's Age" yAxisLabel="Projected Balance ($)" yTickFormatter={roundedMoneyTick} />
+        <p className="mt-1 text-sm text-[#8d7a66]">All kids combined. Current balance about $10,460, $667/month contribution, 6% real return, oldest age 4 to 18.</p>
+        <MiniLineChart data={collegeProjection} xKey="age" yKey="balance" labelFormatter={(age) => `Age ${age}`} />
       </Card>
 
       <Card className="p-4 md:p-5">
