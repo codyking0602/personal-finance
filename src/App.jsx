@@ -26,10 +26,10 @@ const sections = [
 ];
 
 const COLORS = {
-  appBg: "bg-[#e8ddcb]",
+  appBg: "bg-[#f2ecdf]",
   appText: "text-[#4b3a2d]",
-  cardBorder: "border-[#d9ccba]",
-  cardBg: "bg-[#f8f2e8]",
+  cardBorder: "border-[#ddd4c7]",
+  cardBg: "bg-[#fffdf9]",
   cardText: "text-[#4b3a2d]",
 };
 
@@ -41,8 +41,15 @@ function money(value) {
   });
 }
 
+function roundedMoneyTick(value) {
+  const abs = Math.abs(value || 0);
+  const bucket = abs >= 1000000 ? 100000 : abs >= 100000 ? 25000 : 5000;
+  const rounded = Math.round((value || 0) / bucket) * bucket;
+  return money(rounded);
+}
+
 function Card({ children, className = "" }) {
-  return <div className={`rounded-3xl border border-[#d9ccba] bg-[#f8f2e8] text-[#4b3a2d] shadow-lg shadow-[#9f8b73]/20 ${className}`}>{children}</div>;
+  return <div className={`rounded-3xl border ${COLORS.cardBorder} ${COLORS.cardBg} ${COLORS.cardText} shadow-lg shadow-[#9f8b73]/20 ${className}`}>{children}</div>;
 }
 
 function SmallMetric({ label, value, note, tone = "cyan" }) {
@@ -68,7 +75,7 @@ function Header({ activeMonth, setActiveMonth }) {
     <header className="mb-5">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">Household CFO</p>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">The King's Finances</p>
           <h1 className="mt-1 text-3xl font-black leading-tight text-[#3f3025] md:text-5xl">Command Center</h1>
           <p className="mt-1 text-sm text-[#8d7a66]">{dashboardMeta.subtitle}</p>
         </div>
@@ -127,30 +134,44 @@ function DesktopSidebar({ activeSection, setActiveSection }) {
   );
 }
 
-function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = (x) => x }) {
+function MiniLineChart({ data, xKey, yKey, stroke = "#22d3ee", labelFormatter = (x) => x, xAxisLabel = "X Axis", yAxisLabel = "Value", yTickFormatter = (v) => `${Math.round(v)}` }) {
   const values = data.map((d) => d[yKey]);
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
   const points = data.map((d, i) => {
-    const x = 20 + (i * 260) / Math.max(1, data.length - 1);
-    const y = 180 - ((d[yKey] - min) / range) * 140;
+    const x = 34 + (i * 232) / Math.max(1, data.length - 1);
+    const y = 170 - ((d[yKey] - min) / range) * 125;
     return `${x},${y}`;
   }).join(" ");
+  const firstValue = values[0] || 0;
+  const lastValue = values.at(-1) || 0;
 
   return (
-    <div className="mt-4 h-72 rounded-2xl bg-[#efe2d0] p-3">
+    <div className="mt-4 h-72 rounded-2xl border border-[#ddd4c7] bg-[#faf5ec] p-3">
       <svg viewBox="0 0 300 210" className="h-full w-full">
+        <text x="34" y="17" fontSize="8.5" fill="#6e5a47">Start: {yTickFormatter(firstValue)}</text>
+        <text x="266" y="17" textAnchor="end" fontSize="8.5" fill="#6e5a47">Latest: {yTickFormatter(lastValue)}</text>
+        {[45, 76, 107, 138, 170].map((y) => (
+          <line key={y} x1="34" y1={y} x2="266" y2={y} stroke="#decfb8" strokeWidth="1" />
+        ))}
+        {[0, 1, 2, 3, 4].map((step) => {
+          const value = max - (range * step) / 4;
+          const y = 45 + step * 31;
+          return <text key={`y-${step}`} x="29" y={y + 3} textAnchor="end" fontSize="8.5" fill="#766352">{yTickFormatter(value)}</text>;
+        })}
         <polyline points={points} fill="none" stroke={stroke} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
         {data.map((d, i) => {
-          const x = 20 + (i * 260) / Math.max(1, data.length - 1);
-          const y = 180 - ((d[yKey] - min) / range) * 140;
+          const x = 34 + (i * 232) / Math.max(1, data.length - 1);
+          const y = 170 - ((d[yKey] - min) / range) * 125;
           return <circle key={i} cx={x} cy={y} r="5" fill={stroke} />;
         })}
         {data.map((d, i) => {
-          const x = 20 + (i * 260) / Math.max(1, data.length - 1);
-          return <text key={i} x={x} y="202" textAnchor="middle" fontSize="10" fill="#6e5a47">{labelFormatter(d[xKey])}</text>;
+          const x = 34 + (i * 232) / Math.max(1, data.length - 1);
+          return <text key={i} x={x} y="193" textAnchor="middle" fontSize="10" fill="#6e5a47">{labelFormatter(d[xKey])}</text>;
         })}
+        <text x="150" y="207" textAnchor="middle" fontSize="9" fill="#5e4b3b">{xAxisLabel}</text>
+        <text x="4" y="108" textAnchor="middle" fontSize="9" fill="#5e4b3b" transform="rotate(-90 4 108)">{yAxisLabel}</text>
       </svg>
     </div>
   );
@@ -204,19 +225,18 @@ function DashboardView() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-black md:text-xl">Net Worth Trend</h2>
-            <p className="mt-1 text-sm text-[#8d7a66]">The scorecard number I care about most: are we moving up over time?</p>
+            <p className="mt-1 text-sm text-[#8d7a66]">Are we moving up over time?</p>
           </div>
           <div className="rounded-2xl bg-[#e4eddc] px-3 py-2 text-right text-[#4f6840]">
             <div className="text-xs">{dashboardMeta.activeMonth}</div>
             <div className="text-lg font-black">{money(netWorthTrend.at(-1)?.netWorth || 0)}</div>
           </div>
         </div>
-        <MiniLineChart data={netWorthTrend} xKey="month" yKey="netWorth" />
+        <MiniLineChart data={netWorthTrend} xKey="month" yKey="netWorth" stroke="#d68936" xAxisLabel="Month" yAxisLabel="Net Worth ($)" yTickFormatter={roundedMoneyTick} />
       </Card>
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">{dashboardMeta.activeMonth} Monthly Closeout</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">This is the main monthly overview. The final dashboard should be generated after review questions and surplus allocation are settled.</p>
         <div className="mt-4 space-y-3 text-sm leading-6 text-[#6e5a47]">
           {monthlyCloseout.map(([label, text]) => (
             <p key={label}><span className="font-bold text-[#3f3025]">{label}:</span> {text}</p>
@@ -226,7 +246,6 @@ function DashboardView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Month-End Allocation</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Based on actual surplus after reconciliation, subject to your approval and fund reserve needs.</p>
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-[#fde5c8] p-4">
             <div className="text-xs text-[#9b4f12]">House Paydown</div>
@@ -250,7 +269,7 @@ function BudgetingView() {
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Fund Reserves</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Ending fund balances. These help decide surplus allocation before finalizing the dashboard.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Ending fund balances.</p>
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
           {fundBalances.map((fund) => (
             <div key={fund.name} className="rounded-2xl bg-[#efe2d0] p-4">
@@ -263,9 +282,8 @@ function BudgetingView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Budget vs Actual Chart</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Clean category-level budget view. Transaction drill-down lives in Spend.</p>
         <div className="mt-4 space-y-3">
-          {budgetRows.slice(0, 12).map((row) => {
+          {budgetRows.map((row) => {
             const pct = Math.min(100, Math.round((row.actual / row.budget) * 100));
             return (
               <div key={row.category}>
@@ -274,7 +292,7 @@ function BudgetingView() {
                   <span className="font-bold text-[#3f3025]">{money(row.actual)} / {money(row.budget)}</span>
                 </div>
                 <div className="h-3 rounded-full bg-[#d9c9b4]">
-                  <div className="h-3 rounded-full bg-cyan-400" style={{ width: `${pct}%` }} />
+                  <div className="h-3 rounded-full bg-[#d68936]" style={{ width: `${pct}%` }} />
                 </div>
               </div>
             );
@@ -294,7 +312,7 @@ function ExpensesView() {
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Spend by Category</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Tap a category to see the transactions from the statements that went into it.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Tap a category to see transactions.</p>
         <div className="mt-4 space-y-3">
           {budgetRows.map((row) => {
             const variance = row.budget - row.actual;
@@ -311,7 +329,7 @@ function ExpensesView() {
                   <div className={`font-black ${variance >= 0 ? "text-[#4f6840]" : "text-[#8d4f3b]"}`}>{money(variance)}</div>
                 </div>
                 <div className="mt-3 h-2 rounded-full bg-[#d9c9b4]">
-                  <div className={`h-2 rounded-full ${variance >= 0 ? "bg-cyan-400" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />
+                  <div className={`h-2 rounded-full ${variance >= 0 ? "bg-[#d68936]" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />
                 </div>
               </button>
             );
@@ -323,7 +341,7 @@ function ExpensesView() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-black md:text-xl">{selectedCategory} Transactions</h2>
-            <p className="mt-1 text-sm text-[#8d7a66]">Statement-level detail that makes the category total explainable.</p>
+            <p className="mt-1 text-sm text-[#8d7a66]">Statement-level detail.</p>
           </div>
           <div className="rounded-2xl bg-[#efe2d0] px-3 py-2 text-right text-[#6e5a47]">
             <div className="text-xs">Total</div>
@@ -332,7 +350,7 @@ function ExpensesView() {
         </div>
         <div className="mt-4 space-y-3">
           {selectedRows.length === 0 ? (
-            <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">No transactions in this category for the mock month.</div>
+            <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">No transactions in this category for the selected month.</div>
           ) : (
             selectedRows.map((row, index) => (
               <div key={`${row.date}-${row.merchant}-${index}`} className="flex items-center justify-between gap-3 rounded-2xl bg-[#efe2d0] p-4">
@@ -386,8 +404,8 @@ function InvestmentsView() {
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Retirement Projection — Today’s Dollars</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Age 31 to 65. Includes Roth 401(k), employer match, Roth IRA/brokerage retirement savings, 2% salary growth, and 6% real return.</p>
-        <MiniLineChart data={retirementProjection} xKey="age" yKey="balance" stroke="#8b5cf6" labelFormatter={(age) => `${age}`} />
+        <p className="mt-1 text-sm text-[#8d7a66]">Age 31 to 65.</p>
+        <MiniLineChart data={retirementProjection} xKey="age" yKey="balance" stroke="#d68936" labelFormatter={(age) => `${age}`} xAxisLabel="Cody & Ashley Age" yAxisLabel="Projected Balance ($)" yTickFormatter={roundedMoneyTick} />
         <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="rounded-2xl bg-[#e8e0f1] p-4">
             <div className="text-xs text-[#665782]">Projected at 65</div>
@@ -410,6 +428,19 @@ function GoalsView() {
   const totalHouseSavings = Math.max(0, houseGoal.estimatedHomeEquity + houseGoal.houseBrokerage);
   const rawEquityPosition = houseGoal.estimatedHomeEquity + houseGoal.houseBrokerage;
   const progressPct = houseGoal.downPaymentTarget > 0 ? Math.min(100, Math.round((totalHouseSavings / houseGoal.downPaymentTarget) * 100)) : 0;
+  const downPayment = 100000;
+  const annualRate = 0.06;
+  const valuationForOffer = targetHome.offerInsightsPrice || targetHome.zestimate || targetHome.price;
+  const loanPrincipal = Math.max(0, valuationForOffer - downPayment);
+  const monthlyRate = annualRate / 12;
+  const loanTermMonths = 30 * 12;
+  const principalAndInterest = loanPrincipal > 0 ? (loanPrincipal * monthlyRate) / (1 - (1 + monthlyRate) ** -loanTermMonths) : 0;
+  const pmiMonthly = (loanPrincipal * 0.002) / 12;
+  const propertyTaxMonthly = (targetHome.estimatedPropertyTaxAnnual || 0) / 12;
+  const homeInsuranceMonthly = targetHome.homeInsuranceMonthly || 0;
+  const hoaMonthly = targetHome.hoaMonthly || 0;
+  const totalMonthlyHousing = principalAndInterest + pmiMonthly + propertyTaxMonthly + homeInsuranceMonthly + hoaMonthly;
+  const requiredGrossIncome = totalMonthlyHousing * 45.4545;
 
   return (
     <div className="space-y-4">
@@ -417,7 +448,7 @@ function GoalsView() {
         <h2 className="text-lg font-black md:text-xl">Bigger House Goal</h2>
         <p className="mt-1 text-sm text-[#8d7a66]">Target down payment / move-up flexibility: {money(houseGoal.downPaymentTarget)}</p>
         <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
-          Home value uses the public estimate so it can be refreshed monthly when available. Equity should be treated as directional, not exact.
+          Mortgage balance and planning assumptions are treated as exact for this final dashboard.
         </div>
         <div className="mt-5">
           <div className="mb-2 flex justify-between text-sm">
@@ -493,13 +524,25 @@ function GoalsView() {
               <div className="mt-1 text-xl font-black">{targetHome.sqft.toLocaleString()}</div>
             </div>
             <div className="rounded-2xl bg-[#e4eddc] p-4">
-              <div className="text-xs text-[#4f6840]">HOA</div>
-              <div className="mt-1 text-xl font-black">{targetHome.hoa}</div>
+              <div className="text-xs text-[#4f6840]">Lot Sq Ft</div>
+              <div className="mt-1 text-xl font-black">{targetHome.lotSqft.toLocaleString()}</div>
             </div>
           </div>
           <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
             <p><span className="font-bold text-[#3f3025]">Why it fits:</span> over 2,750 sqft, under $650k, at least 4 bedrooms, and appears in the Zillow search near Prosper High School.</p>
             <p className="mt-2 text-[#8d7a66]">{targetHome.schoolNote}</p>
+          </div>
+          <div className="mt-4 rounded-2xl bg-[#fff4e6] p-4">
+            <div className="text-xs font-bold uppercase tracking-wide text-[#a25b19]">Affordability Estimate</div>
+            <div className="mt-2 grid grid-cols-2 gap-3 text-sm text-[#6e5a47]">
+              <div>P&I @ 6%: <span className="font-bold text-[#3f3025]">{money(principalAndInterest)}</span>/mo</div>
+              <div>PMI (0.2%): <span className="font-bold text-[#3f3025]">{money(pmiMonthly)}</span>/mo</div>
+              <div>HOA: <span className="font-bold text-[#3f3025]">{money(hoaMonthly)}</span>/mo</div>
+              <div>Taxes: <span className="font-bold text-[#3f3025]">{money(propertyTaxMonthly)}</span>/mo</div>
+              <div>Home Insurance: <span className="font-bold text-[#3f3025]">{money(homeInsuranceMonthly)}</span>/mo</div>
+            </div>
+            <div className="mt-3 text-sm text-[#6e5a47]">Estimated total monthly housing payment: <span className="font-black text-[#3f3025]">{money(totalMonthlyHousing)}</span></div>
+            <div className="mt-1 text-sm text-[#6e5a47]">Required gross income: <span className="font-black text-[#3f3025]">{money(requiredGrossIncome)}</span>/year</div>
           </div>
           <a href={targetHome.listingUrl} target="_blank" rel="noreferrer" className="mt-4 block rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-4 py-3 text-center text-sm font-black text-white shadow-lg shadow-orange-950/30">
             Open Zillow Listing
@@ -530,7 +573,7 @@ export default function PersonalFinanceCommandCenter() {
   };
 
   return (
-    <div className="min-h-screen bg-[#e8ddcb] text-[#4b3a2d]">
+    <div className={`min-h-screen ${COLORS.appBg} ${COLORS.appText}`}>
       <div className="flex min-h-screen">
         <DesktopSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
         <main className="min-w-0 flex-1 px-4 pb-28 pt-5 md:p-8">
