@@ -1,49 +1,52 @@
-export const dashboardMeta = { activeMonth: "Apr", subtitle: "April 2026 actual closeout" };
+export const dashboardMeta = { activeMonth: "May", subtitle: "May 2026 actual closeout" };
 
 export const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 export const homeMetrics = {
-  cash: 35627,
-  spending: 10450,
-  investments: 109324,
-  actualSurplus: 2050,
+  cash: 26583,
+  spending: 11100,
+  investments: 112784,
+  actualSurplus: 505,
 };
 
 export const monthlyCloseout = [
-  ["Bottom Line", "April closed as a normal operating month with no bonus or seasonal spike, so results reflect the core monthly rhythm."],
-  ["What Went Well", "Cash stayed protected, emergency fund remains at $20,000, and most categories were close to plan."],
-  ["Where We Missed", "A few discretionary categories ran above target, but overall variance was manageable."],
-  ["Cash Available", "Actual surplus is about $2,050 before final fund decisions."],
-  ["Goal Progress", "Mortgage balance auto-updated to $285,400.33. House brokerage increased to $874.79. Using the $284,000 public estimate, the house goal is still basically at $0 of the $100,000 target until equity turns positive."],
+  ["Bottom Line", "May fully funded Investing, Kids College, Vacation, Grandma/House Repairs, and the Bigger House Goal. The Bigger House Goal was sent out 80/20, with $945.60 to extra mortgage principal and $236.40 to the house brokerage."],
+  ["What Went Well", "The core wealth-building items got funded, Food was unusually low, and Ashley income/tips helped the month work even with higher ASH spending."],
+  ["Where We Missed", "ASH was the pressure point. The Gifts fund was emptied and the unused Food budget helped absorb ASH, so May worked, but it was not a clean month."],
+  ["Cash Movement", "After paying credit cards, investing, kids college, and the Bigger House Goal, transfer about $3,701.28 from SoFi to Chase to restore the $5,000 Chase cushion."],
+  ["Vanguard Buys", "Drift-based buys: Roth IRA buy VTI $475, VXUS $294, FBTC $231. Kids brokerage buy VTI $554, VXUS $31, FBTC $83. House brokerage buy VTI $201.83 and VXUS $34.57, with no FBTC for the house account."],
+  ["Goal Progress", "Mortgage balance was reduced immediately for the confirmed $945.60 extra principal payment. House brokerage was increased for the confirmed $236.40 contribution. Vehicle values were added to net worth using Good-condition estimates."],
 ];
 
-export const allocation = { housePaydown: 1640, houseBrokerage: 410 };
+export const allocation = { housePaydown: 945.60, houseBrokerage: 236.40 };
 
 export const budgetRows = [
-  ["Housing",2450,2450,false,null],
-  ["Car",350,335,false,null],
-  ["Utilities",500,465,false,null],
-  ["Food",1425,1425,false,null],
-  ["Life Insurance / Will",75,75,false,null],
-  ["Gifts",250,90,true,1160],
-  ["Vacations",100,0,true,3500],
-  ["ASH",1035,1035,false,null],
-  ["CK",100,72,true,28],
-  ["Subscriptions",100,96,false,null],
-  ["Random",150,115,false,null],
-  ["Grandma / House Repairs",290,0,true,580],
-  ["Medical Debt",200,200,false,null],
-  ["Kids College",667,667,false,null],
+  ["Housing",2450,2449.62,false,null],
+  ["Car",350,434.35,false,null],
+  ["Utilities",500,527.42,false,null],
+  ["Food",1350,480.46,false,null],
+  ["Life Insurance / Will",75,47.54,false,null],
+  ["Vacations",100,100,true,3500],
+  ["Bigger House Goal",1182,1182,false,null],
+  ["Gifts",250,0,true,0],
+  ["Grandma / House Repairs",290,290,true,580],
+  ["ASH",1000,3536.58,true,0],
+  ["CK",100,0,true,0],
+  ["Subscriptions",100,78.83,false,null],
+  ["Random",150,223.08,false,null],
+  ["Medical Debt",200,83.34,false,null],
+  ["Kids College",667,666.67,false,null],
   ["Investing",1000,1000,false,null],
 ].map(([category,budget,actual,fund,endingFund]) => ({category,budget,actual,fund,endingFund}));
 
 export const fundBalances = [
   ["Emergency Fund",20000],
-  ["Insurance",450],
+  ["Car Insurance Reserve",600],
   ["Vacation",3500],
   ["Grandma / House Repairs",580],
-  ["Gifts",1160],
-  ["CK",28],
+  ["Gifts",0],
+  ["ASH",0],
+  ["CK",0],
   ["Family",0],
 ].map(([name,balance]) => ({name,balance}));
 
@@ -52,24 +55,70 @@ export const netWorthTrend = [
   ["Feb",122300],
   ["Mar",126900],
   ["Apr",128200],
+  ["May",135562],
 ].map(([month,netWorth]) => ({month,netWorth}));
 
 export const spendTransactions = {
-  Housing: [["4/1","Mortgage Payment",2450]],
-  Car: [["4/4","Shell",72],["4/12","State Farm",210],["4/24","QuikTrip",53]],
-  Utilities: [["4/8","TXU Energy",185],["4/17","Kaufman County Water",88],["4/21","AT&T / Internet",92],["4/25","Phone reimbursement",100]],
-  Food: [["4/3","Walmart",210],["4/7","Costco",325],["4/11","Kroger",185],["4/18","Walmart",200],["4/20","Chick-fil-A",58],["4/25","Restaurants / fast food",247],["4/29","Grocery stores",200]],
-  "Life Insurance / Will": [["4/5","Life Insurance",75]],
-  Gifts: [["4/14","Birthday gift",90]],
-  Vacations: [],
-  ASH: [["4/2","Target",260],["4/9","Amazon",225],["4/13","Kids / family items",310],["4/19","Other ASH spending",240]],
-  CK: [["4/10","CK spending",72]],
-  Subscriptions: [["4/1","Streaming / subscriptions",96]],
-  Random: [["4/6","School fundraiser",45],["4/15","Small household item",38],["4/26","Misc one-off charge",32]],
-  "Grandma / House Repairs": [],
-  "Medical Debt": [["4/12","Medical debt payment",200]],
-  "Kids College": [["4/28","Kids brokerage contribution",667]],
-  Investing: [["4/28","Vanguard contribution",1000]],
+  Housing: [["5/4","Lakeview mortgage payment",2449.62]],
+  Car: [
+    ["5/7","Costco Gas",47.36],
+    ["5/20","Costco Gas",60.24],
+    ["5/23","Kwik Kar",18.50],
+    ["5/24","Vehicle registration",76.25],
+    ["5/24","Texas.gov service fee",2.00],
+    ["5/31","Other gas / tolls / minor car",80.00],
+    ["5/31","Car insurance reserve",150.00],
+  ],
+  Utilities: [
+    ["5/8","AT&T normal family plan portion",111.00],
+    ["5/27","Farmers Electric",194.00],
+    ["5/8","Apple / AT&T related utility bill",75.70],
+    ["5/17","Kaufman County M",75.16],
+    ["5/21","Forney Lake Water",71.56],
+  ],
+  Food: [
+    ["5/5","Walmart WMTPAY",94.62],
+    ["5/5","Walmart.com",129.14],
+    ["5/8","Walmart WMTPAY",89.94],
+    ["5/7","WM Supercenter",2.17],
+    ["5/6","Chick-fil-A",8.98],
+    ["5/7","Whataburger",15.69],
+    ["5/15","Whataburger",13.52],
+    ["5/16","TST 30 Brunch House",112.88],
+    ["5/21","Whataburger",13.52],
+  ],
+  "Life Insurance / Will": [["5/31","Life insurance / will",47.54]],
+  Vacations: [["5/31","Vacation fund allocation",100.00]],
+  "Bigger House Goal": [
+    ["5/31","Extra mortgage principal",945.60],
+    ["5/31","House brokerage contribution",236.40],
+  ],
+  Gifts: [["5/31","Gifts fund emptied to offset ASH",0]],
+  "Grandma / House Repairs": [["5/31","Grandma / House Repairs fund allocation",290.00]],
+  ASH: [
+    ["5/31","ASH gross spending before offsets",3536.58],
+    ["5/31","Gifts fund offset used against ASH",-1000.00],
+    ["5/31","Unused Food budget offset used against ASH",-869.54],
+  ],
+  CK: [],
+  Subscriptions: [
+    ["5/4","Apple.com/bill",9.99],
+    ["5/6","Netflix",9.73],
+    ["5/7","Apple.com/bill",0.99],
+    ["5/8","Apple.com/bill",21.64],
+    ["5/31","Other subscriptions",36.48],
+  ],
+  Random: [
+    ["5/8","AT&T excess paid to help family after car repair",195.08],
+    ["5/31","Random / one-off items",28.00],
+  ],
+  "Medical Debt": [
+    ["5/12","Urology Clinics",10.00],
+    ["5/31","Medical debt payment / net medical items",85.76],
+    ["5/5","Lake Pointe Women's Center refund",-12.42],
+  ],
+  "Kids College": [["5/31","Kids brokerage contribution",666.67]],
+  Investing: [["5/31","Roth IRA / Vanguard contribution",1000.00]],
 };
 
 Object.keys(spendTransactions).forEach((key) => {
@@ -77,11 +126,12 @@ Object.keys(spendTransactions).forEach((key) => {
 });
 
 export const investmentAccounts = [
-  ["Roth 401(k)","Retirement",53738.92,"Tax-free"],
-  ["Roth IRA","Retirement",45647.62,"Tax-free"],
-  ["Kids Brokerage","Kids / future flexibility",5152.38,"Taxable"],
+  ["Roth 401(k)","Retirement",55000.48,"Tax-free"],
+  ["Roth IRA","Retirement",46514.56,"Tax-free"],
+  ["Kids Brokerage","Kids / future flexibility",5247.74,"Taxable"],
   ["Kids ESA","Legacy education account",5308,"Education"],
-  ["House Brokerage","Future house down payment",874.79,"Taxable"],
+  ["House Brokerage","Future house down payment",712.84,"Taxable"],
+  ["Vehicles","Paid-off vehicle values",27000,"Asset"],
 ].map(([name,purpose,value,tax]) => ({name,purpose,value,tax}));
 
 export const collegeProjection = [
@@ -108,25 +158,25 @@ export const retirementSummary = { projectedAt65: 3899000, fourPercentAnnualInco
 export const houseGoal = {
   downPaymentTarget: 100000,
   estimatedHomeValue: 284000,
-  estimatedMortgageBalance: 285400.33,
-  estimatedHomeEquity: -1400.33,
-  houseBrokerage: 874.79,
-  source: "Realtor.com public estimate, refreshed monthly when possible",
+  estimatedMortgageBalance: 284887.94,
+  estimatedHomeEquity: -887.94,
+  houseBrokerage: 712.84,
+  source: "Public home value estimate, refreshed monthly when possible",
 };
 
 export const targetHome = {
-  address: "3122 Spring Creek Trl, Prosper, TX 75078",
-  price: 599000,
-  offerInsightsPrice: 597000,
+  address: "3633 Keechi Creek Dr, Prosper, TX 75078",
+  price: 639000,
+  offerInsightsPrice: 639000,
   zestimate: null,
-  beds: 4,
+  beds: 5,
   baths: 4,
-  sqft: 2784,
-  lotSqft: 8100,
+  sqft: 3473,
+  lotSqft: null,
   hoaMonthly: 78,
-  homeInsuranceMonthly: 200,
-  estimatedPropertyTaxAnnual: 8448,
-  schoolNote: "Appears in Zillow search near Prosper High School. Verify exact zoning before relying on it.",
-  imageUrl: "https://tse2.mm.bing.net/th/id/OIP.iQjd_m29_6goXvNohqX1TAHaFj?pid=Api",
-  listingUrl: "https://www.zillow.com/homedetails/3122-Spring-Creek-Trl-Prosper-TX-75078/242102403_zpid/",
-};  
+  homeInsuranceMonthly: 220,
+  estimatedPropertyTaxAnnual: 9000,
+  schoolNote: "Current bigger-house example that appears to fit the Prosper-area search. Verify exact Prosper High School zoning before relying on it.",
+  imageUrl: "https://photos.zillowstatic.com/fp/93f89e04c7df033dd3aceef280797835-cc_ft_768.webp",
+  listingUrl: "https://www.zillow.com/homedetails/3633-Keechi-Creek-Dr-Prosper-TX-75078/338526232_zpid/",
+};
