@@ -197,10 +197,10 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#d68936", labelFormatter = 
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
-  const left = 86;
-  const right = 328;
-  const top = 42;
-  const bottom = 174;
+  const left = 58;
+  const right = 312;
+  const top = 38;
+  const bottom = 176;
   const width = right - left;
   const height = bottom - top;
 
@@ -211,15 +211,15 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#d68936", labelFormatter = 
 
   return (
     <div className="mt-4 h-72 rounded-2xl border border-[#ddd4c7] bg-[#faf5ec] p-3">
-      <svg viewBox="0 0 370 220" className="h-full w-full overflow-visible">
-        {topLabel ? <text x="350" y="18" textAnchor="end" fontSize="9" fill="#6e5a47">{topLabel}: {yTickFormatter(lastValue)}</text> : null}
+      <svg viewBox="0 0 330 220" className="h-full w-full overflow-visible">
+        {topLabel ? <text x="312" y="17" textAnchor="end" fontSize="8.5" fill="#6e5a47">{topLabel}: {yTickFormatter(lastValue)}</text> : null}
         {[0, 1, 2, 3, 4].map((step) => {
           const value = max - (range * step) / 4;
           const y = top + step * (height / 4);
           return (
             <g key={`grid-${step}`}>
               <line x1={left} y1={y} x2={right} y2={y} stroke="#decfb8" strokeWidth="1" />
-              <text x={left - 10} y={y + 3} textAnchor="end" fontSize="9" fill="#766352">{yTickFormatter(value)}</text>
+              <text x={left - 8} y={y + 3} textAnchor="end" fontSize="8.5" fill="#766352">{yTickFormatter(value)}</text>
             </g>
           );
         })}
@@ -233,7 +233,7 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#d68936", labelFormatter = 
           const x = getX(i);
           return <text key={i} x={x} y="198" textAnchor="middle" fontSize="10" fill="#6e5a47">{labelFormatter(d[xKey])}</text>;
         })}
-        {xAxisLabel ? <text x="207" y="214" textAnchor="middle" fontSize="9" fill="#5e4b3b">{xAxisLabel}</text> : null}
+        {xAxisLabel ? <text x="185" y="214" textAnchor="middle" fontSize="9" fill="#5e4b3b">{xAxisLabel}</text> : null}
       </svg>
     </div>
   );
