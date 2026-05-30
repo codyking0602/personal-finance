@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="King's Finances icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7ecd9"/>
+      <stop offset="55%" stop-color="#f1dfc5"/>
+      <stop offset="100%" stop-color="#d8bd95"/>
+    </linearGradient>
+    <linearGradient id="crown" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f4bd6d"/>
+      <stop offset="55%" stop-color="#d98a35"/>
+      <stop offset="100%" stop-color="#b56425"/>
+    </linearGradient>
+    <linearGradient id="money" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff3cf"/>
+      <stop offset="100%" stop-color="#f1c47a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#7a4b25" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
+  <circle cx="512" cy="496" r="344" fill="#d8d2ae" opacity="0.38"/>
+  <path d="M0 742 C185 640 330 842 512 742 C706 636 838 640 1024 728 L1024 1024 L0 1024 Z" fill="#d7b889" opacity="0.42"/>
+  <g filter="url(#shadow)">
+    <path d="M207 688 L163 380 L355 542 L512 184 L669 542 L861 380 L817 688 Z" fill="url(#crown)" stroke="#fff1cf" stroke-width="22" stroke-linejoin="round"/>
+    <circle cx="163" cy="380" r="46" fill="#e19a43" stroke="#fff1cf" stroke-width="18"/>
+    <circle cx="861" cy="380" r="46" fill="#e19a43" stroke="#fff1cf" stroke-width="18"/>
+    <path d="M512 153 C554 205 567 252 512 315 C457 252 470 205 512 153Z" fill="#efad55" stroke="#fff1cf" stroke-width="18"/>
+    <path d="M218 668 H806 V738 H218 Z" fill="#c9792c" stroke="#fff1cf" stroke-width="18"/>
+    <path d="M237 736 H787 V786 H237 Z" fill="#df9b46" stroke="#fff1cf" stroke-width="14"/>
+    <text x="512" y="635" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="330" font-weight="900" fill="url(#money)" stroke="#fff4d3" stroke-width="10">$</text>
+  </g>
+</svg>
