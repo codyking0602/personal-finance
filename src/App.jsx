@@ -42,19 +42,22 @@ function money(value, decimals = 0) {
   });
 }
 
+function shortMoney(value) {
+  const number = Number(value || 0);
+  const abs = Math.abs(number);
+  const sign = number < 0 ? "-" : "";
+
+  if (abs >= 1000000) return `${sign}$${(abs / 1000000).toFixed(abs >= 10000000 ? 0 : 1)}M`;
+  if (abs >= 1000) return `${sign}$${Math.round(abs / 1000)}k`;
+  return `${sign}$${Math.round(abs)}`;
+}
+
 function percent(value, decimals = 2) {
   return `${Number(value || 0).toFixed(decimals)}%`;
 }
 
 function roundToNearest(value, nearest = 5000) {
   return Math.round((value || 0) / nearest) * nearest;
-}
-
-function roundedMoneyTick(value) {
-  const abs = Math.abs(value || 0);
-  const bucket = abs >= 1000000 ? 100000 : abs >= 100000 ? 25000 : 5000;
-  const rounded = Math.round((value || 0) / bucket) * bucket;
-  return money(rounded);
 }
 
 function Card({ children, className = "" }) {
@@ -65,7 +68,7 @@ function Card({ children, className = "" }) {
   );
 }
 
-function SmallMetric({ label, value, note, tone = "cyan" }) {
+function SmallMetric({ label, value, tone = "cyan" }) {
   const color = {
     cyan: "text-[#7c6a58] bg-[#efe2d0]",
     orange: "text-[#b5601c] bg-[#fde5c8]",
@@ -78,7 +81,6 @@ function SmallMetric({ label, value, note, tone = "cyan" }) {
     <Card className="p-4">
       <div className={`mb-3 inline-flex rounded-full px-3 py-1 text-xs font-bold ${color}`}>{label}</div>
       <div className="text-2xl font-black tracking-tight text-[#3f3025]">{value}</div>
-      {note && <div className="mt-1 text-xs leading-5 text-[#8d7a66]">{note}</div>}
     </Card>
   );
 }
@@ -88,8 +90,8 @@ function Header({ activeMonth, setActiveMonth }) {
     <header className="mb-5">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">The King's Finances</p>
-          <h1 className="mt-1 text-3xl font-black leading-tight text-[#3f3025] md:text-5xl">Command Center</h1>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">The King's</p>
+          <h1 className="mt-1 text-4xl font-black leading-tight text-[#3f3025] md:text-5xl">Finances</h1>
           <p className="mt-1 text-sm text-[#8d7a66]">{dashboardMeta.subtitle}</p>
         </div>
         <div className="rounded-2xl border border-[#dfcfbb] bg-[#f1e7da] px-4 py-3 text-right">
@@ -140,7 +142,7 @@ function DesktopSidebar({ activeSection, setActiveSection }) {
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#f4b36f] to-[#e48733] text-2xl font-black text-white">PF</div>
         <div>
           <div className="text-sm text-[#8d7a66]">Cody King</div>
-          <div className="font-bold text-[#3f3025]">Command Center</div>
+          <div className="font-bold text-[#3f3025]">Finances</div>
         </div>
       </div>
       <nav className="space-y-2">
@@ -159,41 +161,48 @@ function DesktopSidebar({ activeSection, setActiveSection }) {
   );
 }
 
-function MiniLineChart({ data, xKey, yKey, stroke = "#d68936", labelFormatter = (x) => x, xAxisLabel = "", yTickFormatter = (v) => `${Math.round(v)}`, topLabel = "" }) {
-  const values = data.map((d) => d[yKey]);
+function MiniLineChart({ data, xKey, yKey, stroke = "#d68936", labelFormatter = (x) => x, xAxisLabel = "", yTickFormatter = shortMoney, topLabel = "" }) {
+  const values = data.map((d) => Number(d[yKey] || 0));
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
-  const points = data.map((d, i) => {
-    const x = 34 + (i * 232) / Math.max(1, data.length - 1);
-    const y = 170 - ((d[yKey] - min) / range) * 125;
-    return `${x},${y}`;
-  }).join(" ");
+  const left = 70;
+  const right = 312;
+  const top = 42;
+  const bottom = 174;
+  const width = right - left;
+  const height = bottom - top;
+
+  const getX = (i) => left + (i * width) / Math.max(1, data.length - 1);
+  const getY = (value) => bottom - ((value - min) / range) * height;
+  const points = data.map((d, i) => `${getX(i)},${getY(Number(d[yKey] || 0))}`).join(" ");
   const lastValue = values.at(-1) || 0;
 
   return (
     <div className="mt-4 h-72 rounded-2xl border border-[#ddd4c7] bg-[#faf5ec] p-3">
-      <svg viewBox="0 0 300 210" className="h-full w-full">
-        {topLabel ? <text x="266" y="17" textAnchor="end" fontSize="8.5" fill="#6e5a47">{topLabel}: {yTickFormatter(lastValue)}</text> : null}
-        {[45, 76, 107, 138, 170].map((y) => (
-          <line key={y} x1="34" y1={y} x2="266" y2={y} stroke="#decfb8" strokeWidth="1" />
-        ))}
+      <svg viewBox="0 0 340 220" className="h-full w-full overflow-visible">
+        {topLabel ? <text x="318" y="18" textAnchor="end" fontSize="9" fill="#6e5a47">{topLabel}: {yTickFormatter(lastValue)}</text> : null}
         {[0, 1, 2, 3, 4].map((step) => {
           const value = max - (range * step) / 4;
-          const y = 45 + step * 31;
-          return <text key={`y-${step}`} x="29" y={y + 3} textAnchor="end" fontSize="8.5" fill="#766352">{yTickFormatter(value)}</text>;
+          const y = top + step * (height / 4);
+          return (
+            <g key={`grid-${step}`}>
+              <line x1={left} y1={y} x2={right} y2={y} stroke="#decfb8" strokeWidth="1" />
+              <text x={left - 8} y={y + 3} textAnchor="end" fontSize="9" fill="#766352">{yTickFormatter(value)}</text>
+            </g>
+          );
         })}
         <polyline points={points} fill="none" stroke={stroke} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
         {data.map((d, i) => {
-          const x = 34 + (i * 232) / Math.max(1, data.length - 1);
-          const y = 170 - ((d[yKey] - min) / range) * 125;
+          const x = getX(i);
+          const y = getY(Number(d[yKey] || 0));
           return <circle key={i} cx={x} cy={y} r="5" fill={stroke} />;
         })}
         {data.map((d, i) => {
-          const x = 34 + (i * 232) / Math.max(1, data.length - 1);
-          return <text key={i} x={x} y="193" textAnchor="middle" fontSize="10" fill="#6e5a47">{labelFormatter(d[xKey])}</text>;
+          const x = getX(i);
+          return <text key={i} x={x} y="198" textAnchor="middle" fontSize="10" fill="#6e5a47">{labelFormatter(d[xKey])}</text>;
         })}
-        {xAxisLabel ? <text x="150" y="207" textAnchor="middle" fontSize="9" fill="#5e4b3b">{xAxisLabel}</text> : null}
+        {xAxisLabel ? <text x="190" y="214" textAnchor="middle" fontSize="9" fill="#5e4b3b">{xAxisLabel}</text> : null}
       </svg>
     </div>
   );
@@ -203,10 +212,10 @@ function DashboardView() {
   return (
     <div className="space-y-4">
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
-        <SmallMetric label="Cash" value={money(homeMetrics.cash)} note="Before allocation" tone="cyan" />
-        <SmallMetric label="Spending" value={money(homeMetrics.spending)} note={`${dashboardMeta.activeMonth} categorized`} tone="rose" />
-        <SmallMetric label="Investments" value={money(homeMetrics.investments)} note="Roth + Vanguard" tone="violet" />
-        <SmallMetric label="Actual Surplus" value={money(homeMetrics.actualSurplus)} note="After reconciliation" tone="emerald" />
+        <SmallMetric label="Cash" value={money(homeMetrics.cash)} tone="cyan" />
+        <SmallMetric label="Spending" value={money(homeMetrics.spending)} tone="rose" />
+        <SmallMetric label="Investments" value={money(homeMetrics.investments)} tone="violet" />
+        <SmallMetric label="Budget Income" value={money(homeMetrics.budgetIncome || 0)} tone="emerald" />
       </section>
 
       <Card className="p-4 md:p-5">
@@ -220,7 +229,7 @@ function DashboardView() {
             <div className="text-lg font-black">{money(netWorthTrend.at(-1)?.netWorth || 0)}</div>
           </div>
         </div>
-        <MiniLineChart data={netWorthTrend} xKey="month" yKey="netWorth" xAxisLabel="Month" yTickFormatter={roundedMoneyTick} />
+        <MiniLineChart data={netWorthTrend} xKey="month" yKey="netWorth" stroke="#d68936" xAxisLabel="Month" />
       </Card>
 
       <Card className="p-4 md:p-5">
@@ -238,12 +247,10 @@ function DashboardView() {
           <div className="rounded-2xl bg-[#fde5c8] p-4">
             <div className="text-xs text-[#9b4f12]">House Paydown</div>
             <div className="mt-2 text-2xl font-black">{money(allocation.housePaydown)}</div>
-            <div className="mt-1 text-xs text-[#8d7a66]">80% target</div>
           </div>
           <div className="rounded-2xl bg-[#efe2d0] p-4">
             <div className="text-xs text-[#6e5a47]">House Brokerage</div>
             <div className="mt-2 text-2xl font-black">{money(allocation.houseBrokerage)}</div>
-            <div className="mt-1 text-xs text-[#8d7a66]">20% target</div>
           </div>
         </div>
       </Card>
@@ -373,9 +380,9 @@ function InvestmentsView() {
   return (
     <div className="space-y-4">
       <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
-        <SmallMetric label="Retirement" value={money(retirementTotal)} note="Roth 401(k) + Roth IRA" tone="violet" />
-        <SmallMetric label="Kids" value={money(kidsTotal)} note="Brokerage + legacy ESA" tone="cyan" />
-        <SmallMetric label="House Brokerage" value={money(houseBrokerage)} note="Future down payment" tone="orange" />
+        <SmallMetric label="Retirement" value={money(retirementTotal)} tone="violet" />
+        <SmallMetric label="Kids" value={money(kidsTotal)} tone="cyan" />
+        <SmallMetric label="House Brokerage" value={money(houseBrokerage)} tone="orange" />
       </section>
 
       <Card className="p-4 md:p-5">
@@ -398,13 +405,13 @@ function InvestmentsView() {
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">College Projection — Today’s Dollars</h2>
         <p className="mt-1 text-sm text-[#8d7a66]">All kids combined.</p>
-        <MiniLineChart data={collegeProjection} xKey="age" yKey="balance" stroke="#22d3ee" labelFormatter={(age) => `Age ${age}`} xAxisLabel="Kid's Age" yTickFormatter={roundedMoneyTick} topLabel="Ending projected balance" />
+        <MiniLineChart data={collegeProjection} xKey="age" yKey="balance" stroke="#d68936" labelFormatter={(age) => `Age ${age}`} xAxisLabel="Kid's Age" topLabel="Ending projected balance" />
       </Card>
 
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Retirement Projection — Today’s Dollars</h2>
         <p className="mt-1 text-sm text-[#8d7a66]">Age 31 to 65.</p>
-        <MiniLineChart data={retirementProjection} xKey="age" yKey="balance" stroke="#d68936" labelFormatter={(age) => `${age}`} xAxisLabel="Cody & Ashley Age" yTickFormatter={roundedMoneyTick} topLabel="Ending projected balance" />
+        <MiniLineChart data={retirementProjection} xKey="age" yKey="balance" stroke="#d68936" labelFormatter={(age) => `${age}`} xAxisLabel="Cody & Ashley Age" topLabel="Ending projected balance" />
         <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="rounded-2xl bg-[#e8e0f1] p-4">
             <div className="text-xs text-[#665782]">Projected at 65</div>
@@ -417,7 +424,7 @@ function InvestmentsView() {
             <div className="mt-1 text-xs text-[#8d7a66]">Estimated annual retirement spending using the 4% rule</div>
           </div>
         </div>
-        <p className="mt-3 text-sm text-[#8d7a66]">Total tracked investments/assets in this section: {money(totalInvestments)}.</p>
+        <p className="mt-3 text-sm text-[#8d7a66]">Total tracked investments in this section: {money(totalInvestments)}.</p>
       </Card>
     </div>
   );
@@ -448,9 +455,7 @@ function GoalsView() {
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Bigger House Goal</h2>
         <p className="mt-1 text-sm text-[#8d7a66]">Target down payment / move-up flexibility: {money(houseGoal.downPaymentTarget)}</p>
-        <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
-          Mortgage balance and planning assumptions are treated as final for this dashboard month.
-        </div>
+
         <div className="mt-5">
           <div className="mb-2 flex justify-between text-sm">
             <span className="text-[#6e5a47]">Home Equity + House Brokerage</span>
@@ -544,7 +549,7 @@ function GoalsView() {
               <div>Rate: <span className="font-bold text-[#3f3025]">{percent(annualRate * 100, 2)}</span></div>
               <div>P&I: <span className="font-bold text-[#3f3025]">{money(principalAndInterest)}</span>/mo</div>
               <div>Taxes: <span className="font-bold text-[#3f3025]">{money(propertyTaxMonthly)}</span>/mo</div>
-              <div>Home Insurance: <span className="font-bold text-[#3f3025]">{money(homeInsuranceMonthly)}</span>/mo</div>
+              <div>Insurance: <span className="font-bold text-[#3f3025]">{money(homeInsuranceMonthly)}</span>/mo</div>
               <div>HOA: <span className="font-bold text-[#3f3025]">{money(hoaMonthly)}</span>/mo</div>
               <div>PMI: <span className="font-bold text-[#3f3025]">{money(pmiMonthly)}</span>/mo</div>
             </div>
@@ -555,7 +560,6 @@ function GoalsView() {
             <div className="mt-3 rounded-2xl bg-[#e4eddc] p-4">
               <div className="text-xs text-[#4f6840]">Gross Income Target</div>
               <div className="mt-1 text-3xl font-black text-[#3f3025]">{money(incomeTarget)}</div>
-              <div className="mt-1 text-xs text-[#8d7a66]">Monthly payment × 45.4545, rounded to a clean planning number.</div>
             </div>
           </div>
 
