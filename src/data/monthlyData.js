@@ -181,6 +181,6 @@ export const targetHome = {
   incomeMultiplier: 45.4545,
   incomeTargetAnnual: 190000,
   schoolNote: "Strong model-house candidate because it keeps the commute reasonable, about 35 minutes to Cody's work during rush hour, while still fitting a school profile we like. The elementary school is about 12% low income and 47% white, which makes this area worth tracking as a possible move-up target.",
-  imageUrl: "",
+  imageUrl: "https://photos.zillowstatic.com/fp/a2f643fa6be283c0e6578302c72c3265-uncropped_scaled_within_1344_1008.webp",
   listingUrl: "https://www.zillow.com/homedetails/4008-Brook-Wood-Dr-McKinney-TX-75071/119555569_zpid/",
 };
