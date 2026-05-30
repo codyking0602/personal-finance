@@ -3,19 +3,17 @@ export const dashboardMeta = { activeMonth: "May", subtitle: "May 2026 actual cl
 export const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 export const homeMetrics = {
-  cash: 26583,
+  cash: 23734,
   spending: 9171,
   investments: 112784,
+  budgetIncome: 9764,
   actualSurplus: 1494,
 };
 
 export const monthlyCloseout = [
-  ["Bottom Line", "May fully funded Investing, Kids College, Vacation, and the Bigger House Goal. The Bigger House Goal was sent out 80/20, with $945.60 to extra mortgage principal and $236.40 to the house brokerage."],
-  ["What Went Well", "Core wealth-building stayed on track. Investing and Kids College were funded, Vacation was funded, and the Bigger House Goal was fully funded despite a tight month."],
-  ["Where We Missed", "ASH was the pressure point. Costco warehouse was moved to Food, Gifts was emptied, Grandma / House Repairs was zeroed out, and ASH carries a small negative balance to make the final allocation work."],
-  ["Cash Movement", "After paying credit cards, investing, kids college, and the Bigger House Goal, transfer about $3,701.28 from SoFi to Chase to restore the $5,000 Chase cushion."],
-  ["Vanguard Buys", "Drift-based buys account for the Roth 401(k) being domestic-only and the kids ESA staying fixed. Roth IRA: VTI $475, VXUS $294, FBTC $231. Kids brokerage: VTI $554, VXUS $31, FBTC $83. House brokerage: VTI $201.83 and VXUS $34.57, with no FBTC for the house account."],
-  ["Goal Progress", "Mortgage balance was reduced immediately for the confirmed $945.60 extra principal payment. House brokerage was increased for the confirmed $236.40 contribution. Vehicle values were added to net worth using Good-condition estimates."],
+  ["Bottom Line", "May was tight, but the main goals stayed on track. Investing, Kids College, Vacation, and the Bigger House Goal were fully funded."],
+  ["Watch Point", "ASH spending was the pressure point. Gifts and Grandma / House Repairs were emptied, and ASH carries a small negative balance."],
+  ["Cash Plan", "After closeout payments, move about $3,701 from SoFi to Chase to restore the $5,000 Chase cushion."],
 ];
 
 export const allocation = { housePaydown: 945.60, houseBrokerage: 236.40 };
@@ -47,7 +45,6 @@ export const fundBalances = [
   ["Gifts",0],
   ["ASH",-64.81],
   ["CK",0],
-  ["Family",0],
 ].map(([name,balance]) => ({name,balance}));
 
 export const netWorthTrend = [
@@ -133,7 +130,6 @@ export const investmentAccounts = [
   ["Kids Brokerage","Kids / future flexibility",5247.74,"Taxable"],
   ["Kids ESA","Legacy education account",5308,"Education"],
   ["House Brokerage","Future house down payment",712.84,"Taxable"],
-  ["Vehicles","Paid-off vehicle values",27000,"Asset"],
 ].map(([name,purpose,value,tax]) => ({name,purpose,value,tax}));
 
 export const collegeProjection = [
@@ -158,7 +154,7 @@ export const retirementProjection = [
 export const retirementSummary = { projectedAt65: 3899000, fourPercentAnnualIncome: 156000 };
 
 export const houseGoal = {
-  downPaymentTarget: 100000,
+  downPaymentTarget: 50000,
   estimatedHomeValue: 284000,
   estimatedMortgageBalance: 284887.94,
   estimatedHomeEquity: -887.94,
