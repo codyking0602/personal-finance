@@ -155,6 +155,9 @@ export const retirementSummary = { projectedAt65: 3899200, fourPercentAnnualInco
 
 export const houseGoal = {
   downPaymentTarget: 50000,
+  nextHomeSavings: 20000,
+  projectedDate: "March 2027",
+  monthlyPace: 3139,
   estimatedHomeValue: 284000,
   estimatedMortgageBalance: 284887.94,
   estimatedHomeEquity: -887.94,
@@ -163,26 +166,26 @@ export const houseGoal = {
 };
 
 export const targetHome = {
-  address: "4008 Brook Wood Dr, McKinney, TX 75071",
-  price: 570000,
-  offerInsightsPrice: 570000,
-  zestimate: 585100,
-  beds: 4,
-  baths: 3,
-  sqft: 3067,
-  lotSqft: 7100,
-  hoaMonthly: 44,
-  homeInsuranceMonthly: 193,
-  estimatedPropertyTaxAnnual: 8172,
+  address: "3313 Robin Trl, Melissa, TX 75454",
+  price: 490000,
+  offerInsightsPrice: 490000,
+  zestimate: 490000,
+  beds: "N/A",
+  baths: "N/A",
+  sqft: 0,
+  lotSqft: 0,
+  hoaMonthly: 55,
+  homeInsuranceMonthly: 167,
+  estimatedPropertyTaxAnnual: 7056,
   downPayment: 50000,
   interestRate: 0.0625,
   loanTermYears: 30,
-  mortgageInsuranceMonthly: 87,
+  mortgageInsuranceMonthly: 73,
   incomeMultiplier: 45.4545,
-  incomeTargetAnnual: 190000,
-  schoolNote: "Strong model-house candidate because it keeps the commute reasonable, about 35 minutes to Cody's work during rush hour, while still fitting a school profile we like. The elementary school is about 12% low income and 47% white, which makes this area worth tracking as a possible move-up target.",
-  imageUrl: "https://photos.zillowstatic.com/fp/a2f643fa6be283c0e6578302c72c3265-uncropped_scaled_within_1344_1008.webp",
-  listingUrl: "https://www.zillow.com/homedetails/4008-Brook-Wood-Dr-McKinney-TX-75071/119555569_zpid/",
+  incomeTargetAnnual: 165000,
+  schoolNote: "This Melissa area shows strong household income, solid home values, and a well-educated, stable homeowner base. Median household income is about $124,821, median owner-occupied home value is about $466,600, and 48.3% of adults have a bachelor's degree or higher. The area is also heavily owner-occupied, with a diverse population that is about 57% White, 16% Black, 5% Asian, and 18% Hispanic.",
+  imageUrl: "https://photos.zillowstatic.com/fp/8013d937ce5d65b46e2151f4d1933068-uncropped_scaled_within_1536_1152.webp",
+  listingUrl: "https://www.zillow.com/homedetails/3313-Robin-Trl-Melissa-TX-75454/168648390_zpid/",
 };
 
 export const monthlyRecords = {
