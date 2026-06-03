@@ -457,6 +457,8 @@ function GoalsView({ data }) {
   const saved = goal.nextHomeSavings ?? goal.cashSavings ?? goal.currentSavings ?? 20000;
   const left = Math.max(0, target - saved);
   const progressPct = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
+  const projectedDate = goal.projectedDate || "March 2027";
+  const monthlyPace = goal.monthlyPace || 3139;
 
   const modelPrice = home.offerInsightsPrice || home.price || 0;
   const downPayment = home.downPayment || 50000;
@@ -497,22 +499,13 @@ function GoalsView({ data }) {
             <span>{money(target)} goal</span>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-3 p-4 md:grid-cols-4 md:p-5">
-          <div className="rounded-2xl bg-[#efe2d0] p-4">
-            <div className="text-xs text-[#8d7a66]">Saved</div>
-            <div className="mt-1 text-2xl font-black text-[#3f3025]">{money(saved)}</div>
-          </div>
-          <div className="rounded-2xl bg-[#fde5c8] p-4">
-            <div className="text-xs text-[#9b4f12]">Left</div>
-            <div className="mt-1 text-2xl font-black text-[#3f3025]">{money(left)}</div>
-          </div>
-          <div className="rounded-2xl bg-[#e4eddc] p-4">
-            <div className="text-xs text-[#4f6840]">Target</div>
-            <div className="mt-1 text-2xl font-black text-[#3f3025]">{money(target)}</div>
-          </div>
-          <div className="rounded-2xl bg-[#e8e0f1] p-4">
-            <div className="text-xs text-[#665782]">Progress</div>
-            <div className="mt-1 text-2xl font-black text-[#3f3025]">{progressPct}%</div>
+        <div className="p-4 md:p-5">
+          <div className="rounded-3xl bg-[#fff4e6] p-5 text-center shadow-inner shadow-[#d6a96b]/20">
+            <div className="text-xs font-black uppercase tracking-[0.18em] text-[#9b4f12]">Anticipated Date</div>
+            <div className="mt-2 text-4xl font-black text-[#3f3025]">{projectedDate}</div>
+            <div className="mt-2 text-sm font-semibold text-[#7b6856]">
+              {money(left)} left at about {money(monthlyPace)} per month
+            </div>
           </div>
         </div>
       </Card>
