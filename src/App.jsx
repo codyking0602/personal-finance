@@ -69,6 +69,14 @@ function shortMoney(value) {
   return `${sign}$${Math.round(abs)}`;
 }
 
+function percent(value, decimals = 2) {
+  return `${Number(value || 0).toFixed(decimals)}%`;
+}
+
+function roundToNearest(value, nearest = 5000) {
+  return Math.round((value || 0) / nearest) * nearest;
+}
+
 function Card({ children, className = "" }) {
   return (
     <div className={`rounded-3xl border ${COLORS.cardBorder} ${COLORS.cardBg} ${COLORS.cardText} shadow-lg shadow-[#9f8b73]/20 ${className}`}>
@@ -444,18 +452,26 @@ function InvestmentsView({ data }) {
 
 function GoalsView({ data }) {
   const goal = data.houseGoal || {};
+  const home = data.targetHome || {};
   const target = goal.downPaymentTarget || 50000;
   const saved = goal.nextHomeSavings ?? goal.cashSavings ?? goal.currentSavings ?? 20000;
   const left = Math.max(0, target - saved);
   const progressPct = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
-  const milestones = [
-    { amount: 10000, label: "Getting Started" },
-    { amount: 20000, label: "Momentum" },
-    { amount: 30000, label: "Real Progress" },
-    { amount: 40000, label: "Getting Close" },
-    { amount: 50000, label: "Move Ready" },
-  ];
-  const currentStage = milestones.reduce((stage, item) => (saved >= item.amount ? item.label : stage), "Getting Started");
+
+  const modelPrice = home.offerInsightsPrice || home.price || 0;
+  const downPayment = home.downPayment || 50000;
+  const annualRate = home.interestRate || 0.0625;
+  const loanTermMonths = (home.loanTermYears || 30) * 12;
+  const monthlyRate = annualRate / 12;
+  const loanPrincipal = Math.max(0, modelPrice - downPayment);
+  const principalAndInterest = loanPrincipal > 0 ? (loanPrincipal * monthlyRate) / (1 - (1 + monthlyRate) ** -loanTermMonths) : 0;
+  const propertyTaxMonthly = (home.estimatedPropertyTaxAnnual || 0) / 12;
+  const homeInsuranceMonthly = home.homeInsuranceMonthly || 0;
+  const hoaMonthly = home.hoaMonthly || 0;
+  const pmiMonthly = home.mortgageInsuranceMonthly ?? ((loanPrincipal * 0.002) / 12);
+  const totalMonthlyHousing = principalAndInterest + propertyTaxMonthly + homeInsuranceMonthly + hoaMonthly + pmiMonthly;
+  const incomeMultiplier = home.incomeMultiplier || 45.4545;
+  const incomeTarget = home.incomeTargetAnnual || roundToNearest(totalMonthlyHousing * incomeMultiplier, 5000);
 
   return (
     <div className="space-y-4">
@@ -472,7 +488,6 @@ function GoalsView({ data }) {
               <div className="text-3xl font-black text-[#3f3025]">{progressPct}%</div>
             </div>
           </div>
-
           <div className="mt-6 h-6 overflow-hidden rounded-full bg-[#d9c9b4]/80 shadow-inner">
             <div className="h-full rounded-full bg-gradient-to-r from-[#d68936] to-[#9f6b36]" style={{ width: `${progressPct}%` }} />
           </div>
@@ -482,7 +497,6 @@ function GoalsView({ data }) {
             <span>{money(target)} goal</span>
           </div>
         </div>
-
         <div className="grid grid-cols-2 gap-3 p-4 md:grid-cols-4 md:p-5">
           <div className="rounded-2xl bg-[#efe2d0] p-4">
             <div className="text-xs text-[#8d7a66]">Saved</div>
@@ -497,40 +511,76 @@ function GoalsView({ data }) {
             <div className="mt-1 text-2xl font-black text-[#3f3025]">{money(target)}</div>
           </div>
           <div className="rounded-2xl bg-[#e8e0f1] p-4">
-            <div className="text-xs text-[#665782]">Stage</div>
-            <div className="mt-1 text-xl font-black text-[#3f3025]">{currentStage}</div>
+            <div className="text-xs text-[#665782]">Progress</div>
+            <div className="mt-1 text-2xl font-black text-[#3f3025]">{progressPct}%</div>
           </div>
         </div>
       </Card>
 
-      <Card className="p-4 md:p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-black md:text-xl">Dream House Meter</h2>
-            <p className="mt-1 text-sm text-[#8d7a66]">Every step gets us closer to the move.</p>
-          </div>
-          <div className="rounded-2xl bg-[#fde5c8] px-3 py-2 text-right text-[#9b4f12]">
-            <div className="text-xs font-bold">Current Stage</div>
-            <div className="text-sm font-black">{currentStage}</div>
+      <Card className="overflow-hidden p-0">
+        <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 md:h-80">
+          {home.imageUrl ? (
+            <img
+              src={home.imageUrl}
+              alt=""
+              className="h-full w-full object-cover"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          ) : null}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="inline-flex rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">Model House</div>
+            <h2 className="mt-3 text-2xl font-black leading-tight text-white">{home.address}</h2>
           </div>
         </div>
-
-        <div className="relative mt-7">
-          <div className="h-3 rounded-full bg-[#d9c9b4]">
-            <div className="h-3 rounded-full bg-gradient-to-r from-[#d68936] to-[#9f6b36]" style={{ width: `${progressPct}%` }} />
+        <div className="p-4 md:p-5">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="rounded-2xl bg-[#fde5c8] p-4">
+              <div className="text-xs text-[#9b4f12]">Price Used</div>
+              <div className="mt-1 text-xl font-black">{money(modelPrice)}</div>
+            </div>
+            <div className="rounded-2xl bg-[#efe2d0] p-4">
+              <div className="text-xs text-[#6e5a47]">Beds / Baths</div>
+              <div className="mt-1 text-xl font-black">{home.beds} / {home.baths}</div>
+            </div>
+            <div className="rounded-2xl bg-[#e8e0f1] p-4">
+              <div className="text-xs text-[#665782]">Sq Ft</div>
+              <div className="mt-1 text-xl font-black">{home.sqft ? home.sqft.toLocaleString() : "N/A"}</div>
+            </div>
+            <div className="rounded-2xl bg-[#e4eddc] p-4">
+              <div className="text-xs text-[#4f6840]">Lot Sq Ft</div>
+              <div className="mt-1 text-xl font-black">{home.lotSqft ? home.lotSqft.toLocaleString() : "N/A"}</div>
+            </div>
           </div>
-          <div className="mt-4 grid grid-cols-5 gap-2">
-            {milestones.map((item) => {
-              const reached = saved >= item.amount;
-              return (
-                <div key={item.amount} className={`rounded-2xl border p-2 text-center ${reached ? "border-[#d68936] bg-[#fff4e6]" : "border-[#ddd4c7] bg-[#faf5ec]"}`}>
-                  <div className={`mx-auto mb-2 h-4 w-4 rounded-full ${reached ? "bg-[#d68936]" : "bg-[#d9c9b4]"}`} />
-                  <div className="text-[11px] font-black text-[#3f3025]">{shortMoney(item.amount)}</div>
-                  <div className="mt-1 text-[10px] font-bold leading-3 text-[#8d7a66]">{item.label}</div>
-                </div>
-              );
-            })}
+          <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
+            <p><span className="font-bold text-[#3f3025]">Why it fits:</span> {home.schoolNote}</p>
           </div>
+          <div className="mt-4 rounded-2xl bg-[#fff4e6] p-4">
+            <div className="text-xs font-bold uppercase tracking-wide text-[#a25b19]">Affordability Estimate</div>
+            <div className="mt-3 grid grid-cols-2 gap-3 text-sm text-[#6e5a47]">
+              <div>Down Payment: <span className="font-bold text-[#3f3025]">{money(downPayment)}</span></div>
+              <div>Loan Amount: <span className="font-bold text-[#3f3025]">{money(loanPrincipal)}</span></div>
+              <div>Rate: <span className="font-bold text-[#3f3025]">{percent(annualRate * 100, 2)}</span></div>
+              <div>P&I: <span className="font-bold text-[#3f3025]">{money(principalAndInterest)}</span>/mo</div>
+              <div>Taxes: <span className="font-bold text-[#3f3025]">{money(propertyTaxMonthly)}</span>/mo</div>
+              <div>Insurance: <span className="font-bold text-[#3f3025]">{money(homeInsuranceMonthly)}</span>/mo</div>
+              <div>HOA: <span className="font-bold text-[#3f3025]">{money(hoaMonthly)}</span>/mo</div>
+              <div>PMI: <span className="font-bold text-[#3f3025]">{money(pmiMonthly)}</span>/mo</div>
+            </div>
+            <div className="mt-4 rounded-2xl bg-[#fde5c8] p-4">
+              <div className="text-xs text-[#9b4f12]">Estimated Monthly Payment</div>
+              <div className="mt-1 text-3xl font-black text-[#3f3025]">{money(totalMonthlyHousing)}</div>
+            </div>
+            <div className="mt-3 rounded-2xl bg-[#e4eddc] p-4">
+              <div className="text-xs text-[#4f6840]">Gross Income Target</div>
+              <div className="mt-1 text-3xl font-black text-[#3f3025]">{money(incomeTarget)}</div>
+            </div>
+          </div>
+          <a href={home.listingUrl} target="_blank" rel="noreferrer" className="mt-4 block rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-4 py-3 text-center text-sm font-black text-white shadow-lg shadow-orange-950/30">
+            Open Zillow Listing
+          </a>
         </div>
       </Card>
     </div>
