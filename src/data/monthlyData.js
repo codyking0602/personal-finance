@@ -133,25 +133,25 @@ export const investmentAccounts = [
 ].map(([name,purpose,value,tax]) => ({name,purpose,value,tax}));
 
 export const collegeProjection = [
-  [4,10460],
-  [8,52300],
-  [12,100900],
-  [16,157400],
-  [18,191900],
+  [4,10556],
+  [8,48300],
+  [12,96000],
+  [16,156200],
+  [18,192000],
 ].map(([age,balance]) => ({age,balance}));
 
 export const retirementProjection = [
-  [31,99387],
-  [35,204000],
-  [40,385000],
-  [45,648000],
-  [50,1031000],
-  [55,1589000],
-  [60,2402000],
-  [65,3899000],
+  [31,99400],
+  [35,243600],
+  [40,486000],
+  [45,820000],
+  [50,1277600],
+  [55,1901800],
+  [60,2749900],
+  [65,3899200],
 ].map(([age,balance]) => ({age,balance}));
 
-export const retirementSummary = { projectedAt65: 3899000, fourPercentAnnualIncome: 156000 };
+export const retirementSummary = { projectedAt65: 3899200, fourPercentAnnualIncome: 156000 };
 
 export const houseGoal = {
   downPaymentTarget: 50000,
