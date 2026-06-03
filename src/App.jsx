@@ -466,7 +466,8 @@ function GoalsView({ data }) {
   const loanTermMonths = (home.loanTermYears || 30) * 12;
   const monthlyRate = annualRate / 12;
   const loanPrincipal = Math.max(0, modelPrice - downPayment);
-  const principalAndInterest = loanPrincipal > 0 ? (loanPrincipal * monthlyRate) / (1 - (1 + monthlyRate) ** -loanTermMonths) : 0;
+  const calculatedPrincipalAndInterest = loanPrincipal > 0 ? (loanPrincipal * monthlyRate) / (1 - (1 + monthlyRate) ** -loanTermMonths) : 0;
+  const principalAndInterest = home.principalAndInterestMonthly ?? calculatedPrincipalAndInterest;
   const propertyTaxMonthly = (home.estimatedPropertyTaxAnnual || 0) / 12;
   const homeInsuranceMonthly = home.homeInsuranceMonthly || 0;
   const hoaMonthly = home.hoaMonthly || 0;
@@ -511,7 +512,7 @@ function GoalsView({ data }) {
       </Card>
 
       <Card className="overflow-hidden p-0">
-        <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 md:h-80">
+        <div className="relative h-64 w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 md:h-96">
           {home.imageUrl ? (
             <img
               src={home.imageUrl}
@@ -522,14 +523,14 @@ function GoalsView({ data }) {
               }}
             />
           ) : null}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="inline-flex rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">Model House</div>
-            <h2 className="mt-3 text-2xl font-black leading-tight text-white">{home.address}</h2>
-          </div>
+          <div className="absolute left-4 top-4 inline-flex rounded-full bg-orange-500/95 px-3 py-1 text-xs font-black text-white shadow-lg shadow-black/20">Model House</div>
         </div>
         <div className="p-4 md:p-5">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div className="mb-4 rounded-2xl bg-[#efe2d0] p-4">
+            <div className="text-xs font-black uppercase tracking-[0.18em] text-[#9b4f12]">Current Target House</div>
+            <h2 className="mt-2 text-2xl font-black leading-tight text-[#3f3025]">{home.address}</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
             <div className="rounded-2xl bg-[#fde5c8] p-4">
               <div className="text-xs text-[#9b4f12]">Price Used</div>
               <div className="mt-1 text-xl font-black">{money(modelPrice)}</div>
@@ -545,6 +546,10 @@ function GoalsView({ data }) {
             <div className="rounded-2xl bg-[#e4eddc] p-4">
               <div className="text-xs text-[#4f6840]">Lot Sq Ft</div>
               <div className="mt-1 text-xl font-black">{home.lotSqft ? home.lotSqft.toLocaleString() : "N/A"}</div>
+            </div>
+            <div className="rounded-2xl bg-[#fff4e6] p-4">
+              <div className="text-xs text-[#9b4f12]">Year Built</div>
+              <div className="mt-1 text-xl font-black">{home.builtYear || "N/A"}</div>
             </div>
           </div>
           <div className="mt-4 rounded-2xl bg-[#efe2d0] p-4 text-sm leading-6 text-[#6e5a47]">
