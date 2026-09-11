@@ -345,6 +345,32 @@ const augustTargetHome = {
   listingUrl: "https://www.zillow.com/homedetails/3313-Robin-Trl-Melissa-TX-75454/168648390_zpid/",
 };
 
+
+export const currentTargetHome = {
+  address: "3609 Red Deer Ln, Melissa, TX 75454",
+  price: 489000,
+  offerInsightsPrice: 489000,
+  zestimate: null,
+  beds: 4,
+  baths: 3,
+  sqft: 3020,
+  lotSqft: 8363,
+  builtYear: 2020,
+  hoaMonthly: 54.17,
+  homeInsuranceMonthly: 167,
+  estimatedPropertyTaxAnnual: 9795,
+  downPayment: 50000,
+  interestRate: 0.0625,
+  loanTermYears: 30,
+  principalAndInterestMonthly: 2703,
+  mortgageInsuranceMonthly: 73.17,
+  incomeMultiplier: 45.4545,
+  incomeTargetAnnual: 175000,
+  schoolNote: "Strong Melissa-area household income, home values, education, and homeownership remain the location fit. This home adds a 2020 build, rare 3-car garage, private office, game room, media room, pool-sized backyard, and solar panels that the seller says will be paid off at closing, while keeping the family in Melissa ISD with convenient access to US-75, H-E-B, Kroger, parks, and trails.",
+  imageUrl: "https://photos.zillowstatic.com/fp/8d72064c6815e0e23242e922edb012a3-cc_ft_960.jpg",
+  listingUrl: "https://www.zillow.com/homedetails/3609-Red-Deer-Ln-Melissa-TX-75454/336111536_zpid/",
+};
+
 export const monthlyRecords = {
   May: {
     dashboardMeta,
