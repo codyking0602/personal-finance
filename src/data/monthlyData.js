@@ -201,9 +201,9 @@ const augustHomeMetrics = {
 };
 
 const augustMonthlyCloseout = [
-  ["Bottom Line", "August was a spending-heavy month and ran about a $1.9k operating shortfall, but move savings still increased from May and now sit around $23.2k."],
-  ["Watch Point", "ASH gross shopping was $6,026. Ashley's $764 of work income now goes directly against her shopping, leaving $5,262 as the family-funded ASH spend. Gifts, Grandma / House Repairs, and CK were emptied and applied against ASH."],
-  ["Cash Plan", "Keep the Roth 401(k) contribution needed for the employer match. Pause Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown until the move; keep about $5,000 in Chase and direct available cash toward the move."],
+  ["Bottom Line", "Family income was $9,821 and family spending was $11,726, for a $1,904 operating shortfall. August ended with $28,196 of usable cash, including $23,196 earmarked toward the move."],
+  ["Watch Point", "ASH gross shopping was $6,026. Ashley earned $764 from Wisely / Shear Drive and that income now offsets her shopping directly, leaving $5,262 funded by the family side. After the approved fund offsets, ASH carries a $759 overage."],
+  ["Cash Plan", "Keep the Roth 401(k) contribution needed for the employer match. Pause Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown until the move. Base move pace is $3,139 per month from the family budget, with Ashley work income excluded from the move plan."],
 ];
 
 const augustAllocation = { housePaydown: 0, houseBrokerage: 0 };
@@ -213,8 +213,14 @@ const augustMoveMode = {
   nextHomeSavings: 23196.30,
   target: 50000,
   chaseCushion: 5000,
+  monthlyPace: 3139,
+  minimumPaceToJuly: 2437,
+  projectedDate: "May 2027",
+  ashleyWorkIncome: 764.06,
+  ashleyGrossShopping: 6026.30,
+  ashleyFamilyFundedShopping: 5262.24,
   status: "Roth 401(k) match stays on",
-  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown are paused. Ashley's work income is excluded from household income and offsets ASH shopping directly. All other extra cash goes to the move.",
+  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown are paused. Ashley keeps her work income plus the normal $1,000 family ASH allowance for shopping. Her work income is excluded from the move plan. The April bonus is reserved for closing / moving costs, amount TBD.",
 };
 
 const augustBudgetRows = [
@@ -431,9 +437,9 @@ const augustSpendTransactions = {
     ["8/28","Target return",-6.48],
     ["8/31","American Eagle",170.82],
     ["8/31","Echo Park Paper",98.61],
-    ["8/5","Ashley work income offset - Wisely",-250.00],
-    ["8/7","Ashley work income offset - Shear Drive",-264.92],
-    ["8/21","Ashley work income offset - Shear Drive",-249.14],
+    ["8/5","Ashley work income applied to ASH - Wisely",-250.00],
+    ["8/7","Ashley work income applied to ASH - Shear Drive",-264.92],
+    ["8/21","Ashley work income applied to ASH - Shear Drive",-249.14],
   ],
   "CK": [
     ["8/28","Fanatics",157.76],
@@ -499,7 +505,7 @@ const augustRetirementSummary = { projectedAt65: 3899200, fourPercentAnnualIncom
 const augustHouseGoal = {
   downPaymentTarget: 50000,
   nextHomeSavings: 23196.30,
-  projectedDate: "June 2027",
+  projectedDate: "May 2027",
   monthlyPace: 3139,
   estimatedHomeValue: 284000,
   estimatedMortgageBalance: 283126.35,
