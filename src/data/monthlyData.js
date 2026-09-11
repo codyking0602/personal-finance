@@ -189,6 +189,162 @@ export const targetHome = {
   listingUrl: "https://www.zillow.com/homedetails/3313-Robin-Trl-Melissa-TX-75454/168648390_zpid/",
 };
 
+
+const augustDashboardMeta = { activeMonth: "Aug", subtitle: "August 2026" };
+
+const augustHomeMetrics = {
+  cash: 28196.30,
+  income: 10585.47,
+  spending: 12489.75,
+  investments: 118087.81,
+  actualSurplus: -1904.28,
+};
+
+const augustMonthlyCloseout = [
+  ["Bottom Line", "August was a spending-heavy month and ran about a $1.9k operating shortfall, but move savings still increased from May and now sit around $23.2k."],
+  ["Watch Point", "ASH spending was about $6.0k and was the clear pressure point. Gifts, Grandma / House Repairs, and CK were emptied and applied against ASH."],
+  ["Cash Plan", "Pause retirement and investing contributions until the move. Keep about $5,000 in Chase and direct available cash toward the move; Next Home liquid savings are about $23.2k."],
+];
+
+const augustAllocation = { housePaydown: 0, houseBrokerage: 0 };
+
+const augustBudgetRows = [
+  ["Housing",2450,2449.62,false,null],
+  ["Car",350,477.56,false,null],
+  ["Utilities",500,503.96,false,null],
+  ["Food",1350,2061.70,false,null],
+  ["Life Insurance / Will",75,47.54,false,null],
+  ["Vacations",100,0,true,3800],
+  ["Bigger House Goal",1182,0,false,null],
+  ["Gifts",250,0,true,0],
+  ["Grandma / House Repairs",290,377.79,true,0],
+  ["ASH",1000,6026.30,true,-758.70],
+  ["CK",100,157.76,true,0],
+  ["Subscriptions",100,60.36,false,null],
+  ["Random",150,209.85,false,null],
+  ["Medical Debt",200,117.31,false,null],
+  ["Kids College",667,0,false,null],
+  ["Investing",1000,0,false,null],
+].map(([category,budget,actual,fund,endingFund]) => ({category,budget,actual,fund,endingFund}));
+
+const augustFundBalances = [
+  ["Emergency Fund",20000],
+  ["Car Insurance Reserve",155],
+  ["Vacation",3800],
+  ["Grandma / House Repairs",0],
+  ["Gifts",0],
+  ["ASH",-758.70],
+  ["CK",0],
+].map(([name,balance]) => ({name,balance}));
+
+const augustNetWorthTrend = [
+  ["Jan",120500],
+  ["Feb",122300],
+  ["Mar",126900],
+  ["Apr",128200],
+  ["May",135562],
+  ["Aug",147090],
+].map(([month,netWorth]) => ({month,netWorth}));
+
+const augustSpendTransactions = {
+  Housing: [["8/4","Lakeview mortgage payment",2449.62]],
+  Car: [
+    ["8/31","Costco gas",197.74],
+    ["8/31","O'Reilly Auto Parts",93.07],
+    ["8/31","Vehicle registration",76.25],
+    ["8/31","NTTA tolls",90.00],
+    ["8/31","Christian Brothers Automotive",18.50],
+    ["8/31","Texas.gov registration fee",2.00],
+  ],
+  Utilities: [["8/31","August utilities per reconciled audit",503.96]],
+  Food: [["8/31","August food per reconciled audit",2061.70]],
+  "Life Insurance / Will": [["8/31","August life insurance / will",47.54]],
+  Vacations: [],
+  "Bigger House Goal": [],
+  Gifts: [],
+  "Grandma / House Repairs": [["8/31","Home Depot",377.79]],
+  ASH: [["8/31","Wife shopping per reconciled August audit",6026.30]],
+  CK: [["8/31","Fanatics",157.76]],
+  Subscriptions: [["8/31","August subscriptions per reconciled audit",60.36]],
+  Random: [
+    ["8/31","Dallas World Aquarium",113.51],
+    ["8/31","NEX Playground",96.34],
+  ],
+  "Medical Debt": [["8/31","August medical spending per reconciled audit",117.31]],
+  "Kids College": [],
+  Investing: [],
+};
+
+Object.keys(augustSpendTransactions).forEach((key) => {
+  augustSpendTransactions[key] = augustSpendTransactions[key].map(([date, merchant, amount]) => ({date, merchant, amount}));
+});
+
+const augustInvestmentAccounts = [
+  ["Roth 401(k)","Retirement",59312.97,"Tax-free"],
+  ["Roth IRA","Retirement",47396.17,"Tax-free"],
+  ["Kids Brokerage","Kids / future flexibility",5345.70,"Taxable"],
+  ["Kids ESA","Legacy education account",5308,"Education"],
+  ["House Brokerage","Future house down payment",724.97,"Taxable"],
+].map(([name,purpose,value,tax]) => ({name,purpose,value,tax}));
+
+const augustCollegeProjection = [
+  [4,10556],
+  [8,48300],
+  [12,96000],
+  [16,156200],
+  [18,192000],
+].map(([age,balance]) => ({age,balance}));
+
+const augustRetirementProjection = [
+  [31,99400],
+  [35,243600],
+  [40,486000],
+  [45,820000],
+  [50,1277600],
+  [55,1901800],
+  [60,2749900],
+  [65,3899200],
+].map(([age,balance]) => ({age,balance}));
+
+const augustRetirementSummary = { projectedAt65: 3899200, fourPercentAnnualIncome: 156000 };
+
+const augustHouseGoal = {
+  downPaymentTarget: 50000,
+  nextHomeSavings: 23196.30,
+  projectedDate: "June 2027",
+  monthlyPace: 3139,
+  estimatedHomeValue: 284000,
+  estimatedMortgageBalance: 283126.35,
+  estimatedHomeEquity: 873.65,
+  houseBrokerage: 724.97,
+  source: "Public home value estimate, refreshed monthly when possible",
+};
+
+const augustTargetHome = {
+  address: "3313 Robin Trl, Melissa, TX 75454",
+  price: 490000,
+  offerInsightsPrice: 490000,
+  zestimate: 493100,
+  beds: 4,
+  baths: 4,
+  sqft: 3314,
+  lotSqft: 8058,
+  builtYear: 2016,
+  hoaMonthly: 55,
+  homeInsuranceMonthly: 167,
+  estimatedPropertyTaxAnnual: 7056,
+  downPayment: 50000,
+  interestRate: 0.0625,
+  loanTermYears: 30,
+  principalAndInterestMonthly: 2709,
+  mortgageInsuranceMonthly: 73,
+  incomeMultiplier: 45.4545,
+  incomeTargetAnnual: 165000,
+  schoolNote: "This Melissa area shows strong household income, solid home values, and a well-educated, stable homeowner base. Median household income is about $124,821, median owner-occupied home value is about $466,600, and 48.3% of adults have a bachelor's degree or higher. The area is also heavily owner-occupied, with a diverse population that is about 57% White, 16% Black, 5% Asian, and 18% Hispanic.",
+  imageUrl: "https://photos.zillowstatic.com/fp/8013d937ce5d65b46e2151f4d1933068-uncropped_scaled_within_1536_1152.webp",
+  listingUrl: "https://www.zillow.com/homedetails/3313-Robin-Trl-Melissa-TX-75454/168648390_zpid/",
+};
+
 export const monthlyRecords = {
   May: {
     dashboardMeta,
@@ -205,5 +361,21 @@ export const monthlyRecords = {
     retirementSummary,
     houseGoal,
     targetHome,
+  },
+  Aug: {
+    dashboardMeta: augustDashboardMeta,
+    homeMetrics: augustHomeMetrics,
+    monthlyCloseout: augustMonthlyCloseout,
+    allocation: augustAllocation,
+    budgetRows: augustBudgetRows,
+    fundBalances: augustFundBalances,
+    netWorthTrend: augustNetWorthTrend,
+    spendTransactions: augustSpendTransactions,
+    investmentAccounts: augustInvestmentAccounts,
+    collegeProjection: augustCollegeProjection,
+    retirementProjection: augustRetirementProjection,
+    retirementSummary: augustRetirementSummary,
+    houseGoal: augustHouseGoal,
+    targetHome: augustTargetHome,
   },
 };
