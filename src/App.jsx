@@ -260,6 +260,9 @@ function DashboardView({ data }) {
           </div>
         </div>
         <MiniLineChart data={data.netWorthTrend || []} xKey="month" yKey="netWorth" stroke="#d68936" xAxisLabel="Month" />
+        {data.dashboardMeta?.activeMonth === "Aug" && (
+          <p className="mt-3 text-xs leading-5 text-[#8d7a66]">June and July were not backfilled, so this chart intentionally jumps from May to August.</p>
+        )}
       </Card>
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">{data.dashboardMeta?.activeMonth} Monthly Closeout</h2>
@@ -315,7 +318,7 @@ function DashboardView({ data }) {
 }
 
 function BudgetingView({ data }) {
-  const reserves = (data.fundBalances || []).filter((fund) => fund.balance >= 0);
+  const reserves = (data.fundBalances || []).filter((fund) => fund.balance > 0);
   const overages = (data.fundBalances || []).filter((fund) => fund.balance < 0);
 
   return (
@@ -334,6 +337,9 @@ function BudgetingView({ data }) {
         {overages.length > 0 && (
           <div className="mt-5 border-t border-[#ddd4c7] pt-4">
             <div className="text-xs font-black uppercase tracking-[0.16em] text-[#9a5c46]">Carryforward / Overage</div>
+            {data.moveMode?.active && (
+              <p className="mt-1 text-xs leading-5 text-[#8d7a66]">Gifts, Grandma / House Repairs, and CK were emptied into ASH for the move-focused closeout.</p>
+            )}
             <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
               {overages.map((fund) => (
                 <div key={fund.name} className="rounded-2xl bg-[#f5ddd4] p-4">
@@ -383,7 +389,7 @@ function ExpensesView({ data }) {
     <div className="space-y-4">
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Spend by Category</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Tap a category to see the underlying August transactions.</p>
+        <p className="mt-1 text-sm text-[#8d7a66]">Tap a category to see the underlying transactions for the selected month.</p>
         <div className="mt-4 space-y-3">
           {rows.map((row) => {
             const variance = row.budget - row.actual;
@@ -419,7 +425,7 @@ function ExpensesView({ data }) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-black md:text-xl">{selectedCategory} Transactions</h2>
-            <p className="mt-1 text-sm text-[#8d7a66]">Transaction-level detail from the reconciled August audit.</p>
+            <p className="mt-1 text-sm text-[#8d7a66]">Transaction-level detail stored for the selected month.</p>
           </div>
           <div className="rounded-2xl bg-[#efe2d0] px-3 py-2 text-right text-[#6e5a47]">
             <div className="text-xs">Total</div>
@@ -478,6 +484,11 @@ function InvestmentsView({ data }) {
           ))}
         </div>
       </Card>
+      {data.moveMode?.active && (
+        <div className="rounded-3xl border border-[#d8c8e6] bg-[#f0eafa] p-4 text-sm leading-6 text-[#665782]">
+          <span className="font-black">Move Mode:</span> new retirement and kids investment contributions are paused until the move. The projections below remain the long-term baseline and assume contributions resume after the move.
+        </div>
+      )}
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">College Projection — Today’s Dollars</h2>
         <p className="mt-1 text-sm text-[#8d7a66]">All kids combined.</p>
