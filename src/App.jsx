@@ -486,7 +486,7 @@ function InvestmentsView({ data }) {
       </Card>
       {data.moveMode?.active && (
         <div className="rounded-3xl border border-[#d8c8e6] bg-[#f0eafa] p-4 text-sm leading-6 text-[#665782]">
-          <span className="font-black">Move Mode:</span> new retirement and kids investment contributions are paused until the move. The projections below remain the long-term baseline and assume contributions resume after the move.
+          <span className="font-black">Move Mode:</span> the Roth 401(k) continues at the level needed to capture the employer match. Roth IRA and kids investment contributions are paused until the move. The projections below remain the long-term baseline and assume paused contributions resume after the move.
         </div>
       )}
       <Card className="p-4 md:p-5">
