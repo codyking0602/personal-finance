@@ -304,7 +304,7 @@ function BudgetingView({ data }) {
         <h2 className="text-lg font-black md:text-xl">Budget vs Actual Chart</h2>
         <div className="mt-4 space-y-3">
           {(data.budgetRows || []).map((row) => {
-            const pct = Math.min(100, Math.round((row.actual / row.budget) * 100));
+            const pct = row.budget > 0 ? Math.min(100, Math.round((row.actual / row.budget) * 100)) : 0;
             const variance = row.budget - row.actual;
             return (
               <div key={row.category}>
@@ -592,9 +592,10 @@ export default function PersonalFinanceCommandCenter() {
     return listed.length ? listed : [dashboardMeta.activeMonth];
   }, []);
 
-  const [activeMonth, setActiveMonth] = useState(dashboardMeta.activeMonth);
+  const initialMonth = availableMonths.at(-1) || dashboardMeta.activeMonth;
+  const [activeMonth, setActiveMonth] = useState(initialMonth);
   const [activeSection, setActiveSection] = useState("dashboard");
-  const activeData = monthlyRecords?.[activeMonth] || monthlyRecords?.[dashboardMeta.activeMonth] || fallbackData;
+  const activeData = monthlyRecords?.[activeMonth] || monthlyRecords?.[initialMonth] || fallbackData;
 
   const renderSection = () => {
     switch (activeSection) {
