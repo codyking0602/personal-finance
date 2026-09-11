@@ -292,11 +292,26 @@ function DashboardView({ data }) {
               <div className="mt-1 text-2xl font-black">{money(data.moveMode.chaseCushion)}</div>
               <div className="mt-1 text-xs text-[#8d7a66]">kept available</div>
             </div>
+            <div className="rounded-2xl bg-[#e4eddc] p-4">
+              <div className="text-xs text-[#4f6840]">Base Move Pace</div>
+              <div className="mt-1 text-2xl font-black">{money(data.moveMode.monthlyPace)}</div>
+              <div className="mt-1 text-xs text-[#8d7a66]">per month · Ashley work excluded</div>
+            </div>
+            <div className="rounded-2xl bg-[#fff4e6] p-4">
+              <div className="text-xs text-[#9b4f12]">$50k Target Date</div>
+              <div className="mt-1 text-2xl font-black">{data.moveMode.projectedDate}</div>
+              <div className="mt-1 text-xs text-[#8d7a66]">July floor: {money(data.moveMode.minimumPaceToJuly)}/mo</div>
+            </div>
           </div>
           <div className="mt-3 rounded-2xl bg-[#e8e0f1] p-4">
             <div className="text-sm font-bold text-[#665782]">{data.moveMode.status}</div>
             <div className="mt-1 text-xs leading-5 text-[#8d7a66]">{data.moveMode.note}</div>
           </div>
+          {data.moveMode.ashleyWorkIncome !== undefined && (
+            <div className="mt-3 rounded-2xl bg-[#f5ddd4] p-4 text-xs leading-5 text-[#7f5849]">
+              <span className="font-black">ASH accounting:</span> {money(data.moveMode.ashleyGrossShopping)} gross shopping − {money(data.moveMode.ashleyWorkIncome)} Ashley work income = {money(data.moveMode.ashleyFamilyFundedShopping)} family-funded ASH.
+            </div>
+          )}
         </Card>
       ) : (
       <Card className="p-4 md:p-5">
