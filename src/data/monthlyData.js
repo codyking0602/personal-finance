@@ -203,7 +203,7 @@ const augustHomeMetrics = {
 const augustMonthlyCloseout = [
   ["Bottom Line", "August was a spending-heavy month and ran about a $1.9k operating shortfall, but move savings still increased from May and now sit around $23.2k."],
   ["Watch Point", "ASH spending was about $6.0k and was the clear pressure point. Gifts, Grandma / House Repairs, and CK were emptied and applied against ASH."],
-  ["Cash Plan", "Pause retirement and investing contributions until the move. Keep about $5,000 in Chase and direct available cash toward the move; Next Home liquid savings are about $23.2k."],
+  ["Cash Plan", "Keep the Roth 401(k) contribution needed for the employer match. Pause Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown until the move; keep about $5,000 in Chase and direct available cash toward the move."],
 ];
 
 const augustAllocation = { housePaydown: 0, houseBrokerage: 0 };
@@ -213,8 +213,8 @@ const augustMoveMode = {
   nextHomeSavings: 23196.30,
   target: 50000,
   chaseCushion: 5000,
-  status: "Retirement + investing paused",
-  note: "All extra cash goes to the move until the move is complete.",
+  status: "Roth 401(k) match stays on",
+  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown are paused. All other extra cash goes to the move.",
 };
 
 const augustBudgetRows = [
