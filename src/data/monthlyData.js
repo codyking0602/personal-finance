@@ -194,15 +194,15 @@ const augustDashboardMeta = { activeMonth: "Aug", subtitle: "August 2026" };
 
 const augustHomeMetrics = {
   cash: 28196.30,
-  income: 10585.47,
-  spending: 12489.75,
+  income: 9821.41,
+  spending: 11725.69,
   investments: 118087.81,
   actualSurplus: -1904.28,
 };
 
 const augustMonthlyCloseout = [
   ["Bottom Line", "August was a spending-heavy month and ran about a $1.9k operating shortfall, but move savings still increased from May and now sit around $23.2k."],
-  ["Watch Point", "ASH spending was about $6.0k and was the clear pressure point. Gifts, Grandma / House Repairs, and CK were emptied and applied against ASH."],
+  ["Watch Point", "ASH gross shopping was $6,026. Ashley's $764 of work income now goes directly against her shopping, leaving $5,262 as the family-funded ASH spend. Gifts, Grandma / House Repairs, and CK were emptied and applied against ASH."],
   ["Cash Plan", "Keep the Roth 401(k) contribution needed for the employer match. Pause Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown until the move; keep about $5,000 in Chase and direct available cash toward the move."],
 ];
 
@@ -214,7 +214,7 @@ const augustMoveMode = {
   target: 50000,
   chaseCushion: 5000,
   status: "Roth 401(k) match stays on",
-  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown are paused. All other extra cash goes to the move.",
+  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown are paused. Ashley's work income is excluded from household income and offsets ASH shopping directly. All other extra cash goes to the move.",
 };
 
 const augustBudgetRows = [
@@ -227,7 +227,7 @@ const augustBudgetRows = [
   ["Bigger House Goal",1182,0,false,null,true],
   ["Gifts",250,0,true,0,false],
   ["Grandma / House Repairs",290,377.79,true,0,false],
-  ["ASH",1000,6026.30,true,-758.70,false],
+  ["ASH",1000,5262.24,true,-758.70,false],
   ["CK",100,157.76,true,0,false],
   ["Subscriptions",100,60.36,false,null,false],
   ["Random",150,209.85,false,null,false],
@@ -431,6 +431,9 @@ const augustSpendTransactions = {
     ["8/28","Target return",-6.48],
     ["8/31","American Eagle",170.82],
     ["8/31","Echo Park Paper",98.61],
+    ["8/5","Ashley work income offset - Wisely",-250.00],
+    ["8/7","Ashley work income offset - Shear Drive",-264.92],
+    ["8/21","Ashley work income offset - Shear Drive",-249.14],
   ],
   "CK": [
     ["8/28","Fanatics",157.76],
