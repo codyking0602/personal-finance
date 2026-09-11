@@ -15,6 +15,7 @@ import {
   retirementSummary,
   houseGoal,
   targetHome,
+  currentTargetHome,
   monthlyRecords,
 } from "./data/monthlyData.js";
 
@@ -452,7 +453,7 @@ function InvestmentsView({ data }) {
 
 function GoalsView({ data }) {
   const goal = data.houseGoal || {};
-  const home = data.targetHome || {};
+  const home = currentTargetHome || data.targetHome || {};
   const target = goal.downPaymentTarget || 50000;
   const saved = goal.nextHomeSavings ?? goal.cashSavings ?? goal.currentSavings ?? 20000;
   const left = Math.max(0, target - saved);
