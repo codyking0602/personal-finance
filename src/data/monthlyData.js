@@ -352,7 +352,7 @@ export const currentTargetHome = {
   offerInsightsPrice: 489000,
   zestimate: null,
   beds: 4,
-  baths: 3,
+  baths: 2.5,
   sqft: 3020,
   lotSqft: 8363,
   builtYear: 2020,
