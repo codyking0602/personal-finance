@@ -540,10 +540,20 @@ const augustTargetHome = {
 };
 
 
+export const modelHousePlanningRules = {
+  priceUsedDiscountRate: 0.025,
+  priceUsedRounding: 1000,
+  priceRule: "Price Used = current list price less 2.5%, rounded to the nearest $1,000, unless property-specific evidence supports an explicit override.",
+  rateRefreshCadence: "monthly_closeout",
+  rateRule: "Refresh each monthly closeout using current top-tier conventional 30-year pricing for an approximately 800 credit score and the actual down-payment / LTV profile. Assume aggressive rate shopping, but do not include seller-paid points or a temporary buydown unless explicitly modeled.",
+  sellerPaidPointsInBaseCase: false,
+};
+
 export const currentTargetHome = {
   address: "3609 Red Deer Ln, Melissa, TX 75454",
-  price: 489000,
-  offerInsightsPrice: 489000,
+  listPrice: 484000,
+  price: 484000,
+  offerInsightsPrice: 472000,
   zestimate: null,
   beds: 4,
   baths: 2.5,
@@ -554,12 +564,12 @@ export const currentTargetHome = {
   homeInsuranceMonthly: 167,
   estimatedPropertyTaxAnnual: 9795,
   downPayment: 50000,
-  interestRate: 0.0625,
+  interestRate: 0.07125,
   loanTermYears: 30,
-  principalAndInterestMonthly: 2703,
+  principalAndInterestMonthly: 2843,
   mortgageInsuranceMonthly: 73.17,
   incomeMultiplier: 45.4545,
-  incomeTargetAnnual: 175000,
+  incomeTargetAnnual: 180000,
   schoolNote: "Strong Melissa-area household income, home values, education, and homeownership remain the location fit. This home adds a 2020 build, rare 3-car garage, private office, game room, media room, pool-sized backyard, and solar panels that the seller says will be paid off at closing, while keeping the family in Melissa ISD with convenient access to US-75, H-E-B, Kroger, parks, and trails.",
   imageUrl: "https://photos.zillowstatic.com/fp/8d72064c6815e0e23242e922edb012a3-cc_ft_960.jpg",
   listingUrl: "https://www.zillow.com/homedetails/3609-Red-Deer-Ln-Melissa-TX-75454/336111536_zpid/",
@@ -574,6 +584,14 @@ const septemberHomeMetrics = {
   investments: 119499.67,
   actualSurplus: -1512.06,
 };
+
+const septemberSnapshot = [
+  ["Bottom Line", "$1,512 operating shortfall on $9,821 of family income and $11,333 of family spending."],
+  ["ASH", "$6,889 gross shopping less $3,770 of Ashley work income = $3,119 family-funded ASH."],
+  ["Food", "$2,906, driven heavily by Costco under the standing 90% Food / 10% ASH rule."],
+  ["Next Home", "$21,584 saved toward the $50,000 liquid target."],
+  ["Cash Plan", "Transfer $583 from SoFi to Chase after September card payments to restore the $5,000 Chase cushion."],
+];
 
 const septemberMonthlyCloseout = [
   ["Bottom Line", "Family income was $9,821 and family spending was $11,333, for a $1,512 operating shortfall. September ended with $26,584 of usable cash, including $21,584 earmarked toward the move."],
@@ -909,6 +927,7 @@ export const monthlyRecords = {
   Sep: {
     dashboardMeta: septemberDashboardMeta,
     homeMetrics: septemberHomeMetrics,
+    snapshot: septemberSnapshot,
     monthlyCloseout: septemberMonthlyCloseout,
     allocation: septemberAllocation,
     moveMode: septemberMoveMode,
