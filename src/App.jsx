@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   months,
   dashboardMeta,
@@ -105,6 +105,13 @@ function SmallMetric({ label, value, note, tone = "cyan" }) {
 }
 
 function Header({ activeMonth, setActiveMonth, activeData, availableMonths }) {
+  const monthStripRef = useRef(null);
+
+  useEffect(() => {
+    const activeButton = monthStripRef.current?.querySelector(`[data-month="${activeMonth}"]`);
+    activeButton?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [activeMonth]);
+
   return (
     <header className="mb-5">
       <div className="mb-4 flex items-start justify-between gap-3">
@@ -126,13 +133,14 @@ function Header({ activeMonth, setActiveMonth, activeData, availableMonths }) {
           </select>
         </label>
       </div>
-      <div className="-mx-4 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0">
+      <div ref={monthStripRef} className="-mx-4 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0">
         <div className="flex min-w-max gap-2">
           {months.map((month) => {
             const hasData = availableMonths.includes(month);
             return (
               <button
                 key={month}
+                data-month={month}
                 disabled={!hasData}
                 onClick={() => hasData && setActiveMonth(month)}
                 className={`rounded-2xl px-4 py-2 text-sm font-black transition ${activeMonth === month ? "bg-[#e48733] text-white" : "bg-[#efe2d0] text-[#8d7a66]"} ${!hasData ? "cursor-not-allowed opacity-40" : ""}`}
@@ -248,6 +256,7 @@ function DashboardView({ data }) {
   const progressPct = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
   const projectedDate = goal.projectedDate || "March 2027";
   const monthlyPace = goal.monthlyPace || 3139;
+  const snapshotMonth = data.dashboardMeta?.subtitle?.split(" ")?.[0] || data.dashboardMeta?.activeMonth || "";
 
   return (
     <div className="space-y-4">
@@ -259,7 +268,7 @@ function DashboardView({ data }) {
       </section>
 
       <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">{data.dashboardMeta?.activeMonth} Snapshot</h2>
+        <h2 className="text-lg font-black md:text-xl">{snapshotMonth} Snapshot</h2>
         <div className="mt-4 space-y-3">
           {snapshotItems.slice(0, 5).map((item, index) => {
             const [label, text] = Array.isArray(item) ? item : ["", item];
