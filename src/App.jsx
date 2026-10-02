@@ -450,7 +450,7 @@ function ExpensesView({ data }) {
         <div className="mt-4 space-y-3">
           {selectedRows.length === 0 ? (
             <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">
-              {rows.find((row) => row.category === selectedCategory)?.paused ? "Paused for the move. No August contribution." : "No transactions in this category for the selected month."}
+              {rows.find((row) => row.category === selectedCategory)?.paused ? "Paused for the move. No contribution this month." : "No transactions in this category for the selected month."}
             </div>
           ) : (
             selectedRows.map((row, index) => (
