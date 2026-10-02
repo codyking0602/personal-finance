@@ -501,14 +501,7 @@ function InvestmentsView({ data }) {
 }
 
 function GoalsView({ data }) {
-  const goal = data.houseGoal || {};
   const home = currentTargetHome || data.targetHome || {};
-  const target = goal.downPaymentTarget || 50000;
-  const saved = goal.nextHomeSavings ?? goal.cashSavings ?? goal.currentSavings ?? 20000;
-  const left = Math.max(0, target - saved);
-  const progressPct = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
-  const projectedDate = goal.projectedDate || "March 2027";
-  const monthlyPace = goal.monthlyPace || 3139;
 
   const listPrice = home.listPrice ?? home.price ?? home.offerInsightsPrice ?? 0;
   const modelPrice = home.priceUsed ?? roundToNearest(
@@ -532,39 +525,6 @@ function GoalsView({ data }) {
 
   return (
     <div className="space-y-4">
-      <Card className="overflow-hidden p-0">
-        <div className="bg-gradient-to-br from-[#fff4e6] via-[#f7dfbd] to-[#e7b875] p-5 md:p-7">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#9b4f12]">Next Home Progress</p>
-              <h2 className="mt-2 text-3xl font-black leading-tight text-[#3f3025] md:text-5xl">{money(saved)} saved</h2>
-              <p className="mt-2 text-sm font-semibold text-[#7b6856]">Building toward our {money(target)} next-home goal</p>
-            </div>
-            <div className="rounded-3xl bg-white/55 px-4 py-3 text-right shadow-sm">
-              <div className="text-xs font-bold text-[#8d7a66]">Progress</div>
-              <div className="text-3xl font-black text-[#3f3025]">{progressPct}%</div>
-            </div>
-          </div>
-          <div className="mt-6 h-6 overflow-hidden rounded-full bg-[#d9c9b4]/80 shadow-inner">
-            <div className="h-full rounded-full bg-gradient-to-r from-[#d68936] to-[#9f6b36]" style={{ width: `${progressPct}%` }} />
-          </div>
-          <div className="mt-2 flex justify-between text-xs font-bold text-[#7b6856]">
-            <span>Start</span>
-            <span>$25k</span>
-            <span>{money(target)} goal</span>
-          </div>
-        </div>
-        <div className="p-4 md:p-5">
-          <div className="rounded-3xl bg-[#fff4e6] p-5 text-center shadow-inner shadow-[#d6a96b]/20">
-            <div className="text-xs font-black uppercase tracking-[0.18em] text-[#9b4f12]">Anticipated Date</div>
-            <div className="mt-2 text-4xl font-black text-[#3f3025]">{projectedDate}</div>
-            <div className="mt-2 text-sm font-semibold text-[#7b6856]">
-              {money(left)} left at about {money(monthlyPace)} per month
-            </div>
-          </div>
-        </div>
-      </Card>
-
       <Card className="overflow-hidden p-0">
         <div className="relative h-64 w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 md:h-96">
           {home.imageUrl ? (
