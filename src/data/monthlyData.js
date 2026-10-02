@@ -587,15 +587,15 @@ const septemberHomeMetrics = {
 
 const septemberSnapshot = [
   ["Bottom Line", "$1,512 operating shortfall on $9,821 of family income and $11,333 of family spending."],
-  ["ASH", "$6,889 gross shopping less $3,770 of Ashley work income = $3,119 family-funded ASH."],
-  ["Food", "$2,906, driven heavily by Costco under the standing 90% Food / 10% ASH rule."],
+  ["ASH", "$3,119 was family-funded in September. After the $1,000 allowance, August carryforward, and approved Gifts offset, ASH ends with a $2,627 overage."],
+  ["Food", "$2,906 for September, one of the month's main spending pressure points."],
   ["Next Home", "$21,584 saved toward the $50,000 liquid target."],
   ["Cash Plan", "Transfer $583 from SoFi to Chase after September card payments to restore the $5,000 Chase cushion."],
 ];
 
 const septemberMonthlyCloseout = [
   ["Bottom Line", "Family income was $9,821 and family spending was $11,333, for a $1,512 operating shortfall. September ended with $26,584 of usable cash, including $21,584 earmarked toward the move."],
-  ["Watch Point", "ASH gross shopping was $6,889. Ashley earned $3,770 from her work and that income offsets her shopping directly, leaving $3,119 funded by the family side. Food was $2,906, driven heavily by the standing 90% Costco-to-Food rule."],
+  ["Watch Point", "ASH gross shopping was $6,889. Ashley earned $3,770 from her work, leaving $3,119 funded by the family side. After the allowance, prior carryforward, and approved Gifts offset, ASH ends with a $2,627 overage. Food was $2,906."],
   ["Cash Plan", "Transfer $582.62 from SoFi to Chase after September card payments to restore the $5,000 Chase cushion. Resume the $3,139 monthly move pace in October; the $50,000 target is now projected for July 2027."],
 ];
 
