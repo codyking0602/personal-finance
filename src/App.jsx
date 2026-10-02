@@ -16,13 +16,13 @@ import {
   houseGoal,
   targetHome,
   currentTargetHome,
+  modelHousePlanningRules,
   monthlyRecords,
 } from "./data/monthlyData.js";
 
 const sections = [
   ["dashboard", "Home", "▦"],
   ["budgeting", "Budget", "◉"],
-  ["expenses", "Spend", "↘"],
   ["investments", "Invest", "▰"],
   ["goals", "Goals", "◎"],
 ];
@@ -240,6 +240,15 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#d68936", labelFormatter = 
 
 function DashboardView({ data }) {
   const metrics = data.homeMetrics || {};
+  const snapshotItems = data.snapshot || data.monthlyCloseout || [];
+  const goal = data.houseGoal || {};
+  const target = goal.downPaymentTarget || 50000;
+  const saved = goal.nextHomeSavings ?? goal.cashSavings ?? goal.currentSavings ?? 20000;
+  const left = Math.max(0, target - saved);
+  const progressPct = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
+  const projectedDate = goal.projectedDate || "March 2027";
+  const monthlyPace = goal.monthlyPace || 3139;
+
   return (
     <div className="space-y-4">
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
@@ -248,86 +257,57 @@ function DashboardView({ data }) {
         <SmallMetric label="Spending" value={money(metrics.spending)} tone="rose" />
         <SmallMetric label="Investments" value={money(metrics.investments)} tone="violet" />
       </section>
+
       <Card className="p-4 md:p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-black md:text-xl">Net Worth Trend</h2>
-            <p className="mt-1 text-sm text-[#8d7a66]">Are we moving up over time?</p>
-          </div>
-          <div className="rounded-2xl bg-[#e4eddc] px-3 py-2 text-right text-[#4f6840]">
-            <div className="text-xs">{data.dashboardMeta?.activeMonth}</div>
-            <div className="text-lg font-black">{money(data.netWorthTrend?.at(-1)?.netWorth || 0)}</div>
-          </div>
-        </div>
-        <MiniLineChart data={data.netWorthTrend || []} xKey="month" yKey="netWorth" stroke="#d68936" xAxisLabel="Month" />
-        {data.dashboardMeta?.activeMonth === "Aug" && (
-          <p className="mt-3 text-xs leading-5 text-[#8d7a66]">June and July were not backfilled, so this chart intentionally jumps from May to August.</p>
-        )}
-      </Card>
-      <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">{data.dashboardMeta?.activeMonth} Monthly Closeout</h2>
-        <div className="mt-4 space-y-3 text-sm leading-6 text-[#6e5a47]">
-          {(data.monthlyCloseout || []).map(([label, text]) => (
-            <p key={label}><span className="font-bold text-[#3f3025]">{label}:</span> {text}</p>
-          ))}
+        <h2 className="text-lg font-black md:text-xl">{data.dashboardMeta?.activeMonth} Snapshot</h2>
+        <div className="mt-4 space-y-3">
+          {snapshotItems.slice(0, 5).map((item, index) => {
+            const [label, text] = Array.isArray(item) ? item : ["", item];
+            return (
+              <div key={`${label}-${index}`} className="flex gap-3 text-sm leading-6 text-[#6e5a47]">
+                <span className="mt-[9px] h-2 w-2 shrink-0 rounded-full bg-[#d68936]" />
+                <p>
+                  {label ? <span className="font-black text-[#3f3025]">{label}: </span> : null}
+                  {text}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </Card>
-      {data.moveMode?.active ? (
-        <Card className="p-4 md:p-5">
-          <div className="flex items-start justify-between gap-3">
+
+      <Card className="overflow-hidden p-0">
+        <div className="bg-gradient-to-br from-[#fff4e6] via-[#f7dfbd] to-[#e7b875] p-5 md:p-7">
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#b5601c]">Move Mode</p>
-              <h2 className="mt-1 text-lg font-black md:text-xl">Every extra dollar points to the move</h2>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#9b4f12]">Next Home Progress</p>
+              <h2 className="mt-2 text-3xl font-black leading-tight text-[#3f3025] md:text-5xl">{money(saved)} saved</h2>
+              <p className="mt-2 text-sm font-semibold text-[#7b6856]">Building toward our {money(target)} next-home goal</p>
             </div>
-            <div className="rounded-full bg-[#e4eddc] px-3 py-1 text-xs font-bold text-[#4f6840]">Active</div>
-          </div>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl bg-[#fde5c8] p-4">
-              <div className="text-xs text-[#9b4f12]">Next Home Savings</div>
-              <div className="mt-1 text-2xl font-black">{money(data.moveMode.nextHomeSavings)}</div>
-              <div className="mt-1 text-xs text-[#8d7a66]">of {money(data.moveMode.target)}</div>
-            </div>
-            <div className="rounded-2xl bg-[#efe2d0] p-4">
-              <div className="text-xs text-[#6e5a47]">Chase Cushion</div>
-              <div className="mt-1 text-2xl font-black">{money(data.moveMode.chaseCushion)}</div>
-              <div className="mt-1 text-xs text-[#8d7a66]">kept available</div>
-            </div>
-            <div className="rounded-2xl bg-[#e4eddc] p-4">
-              <div className="text-xs text-[#4f6840]">Base Move Pace</div>
-              <div className="mt-1 text-2xl font-black">{money(data.moveMode.monthlyPace)}</div>
-              <div className="mt-1 text-xs text-[#8d7a66]">per month · Ashley work excluded</div>
-            </div>
-            <div className="rounded-2xl bg-[#fff4e6] p-4">
-              <div className="text-xs text-[#9b4f12]">$50k Target Date</div>
-              <div className="mt-1 text-2xl font-black">{data.moveMode.projectedDate}</div>
-              <div className="mt-1 text-xs text-[#8d7a66]">July floor: {money(data.moveMode.minimumPaceToJuly)}/mo</div>
+            <div className="rounded-3xl bg-white/55 px-4 py-3 text-right shadow-sm">
+              <div className="text-xs font-bold text-[#8d7a66]">Progress</div>
+              <div className="text-3xl font-black text-[#3f3025]">{progressPct}%</div>
             </div>
           </div>
-          <div className="mt-3 rounded-2xl bg-[#e8e0f1] p-4">
-            <div className="text-sm font-bold text-[#665782]">{data.moveMode.status}</div>
-            <div className="mt-1 text-xs leading-5 text-[#8d7a66]">{data.moveMode.note}</div>
+          <div className="mt-6 h-6 overflow-hidden rounded-full bg-[#d9c9b4]/80 shadow-inner">
+            <div className="h-full rounded-full bg-gradient-to-r from-[#d68936] to-[#9f6b36]" style={{ width: `${progressPct}%` }} />
           </div>
-          {data.moveMode.ashleyWorkIncome !== undefined && (
-            <div className="mt-3 rounded-2xl bg-[#f5ddd4] p-4 text-xs leading-5 text-[#7f5849]">
-              <span className="font-black">ASH accounting:</span> {money(data.moveMode.ashleyGrossShopping)} gross shopping − {money(data.moveMode.ashleyWorkIncome)} Ashley work income = {money(data.moveMode.ashleyFamilyFundedShopping)} family-funded ASH.
+          <div className="mt-2 flex justify-between text-xs font-bold text-[#7b6856]">
+            <span>Start</span>
+            <span>$25k</span>
+            <span>{money(target)} goal</span>
+          </div>
+        </div>
+        <div className="p-4 md:p-5">
+          <div className="rounded-3xl bg-[#fff4e6] p-5 text-center shadow-inner shadow-[#d6a96b]/20">
+            <div className="text-xs font-black uppercase tracking-[0.18em] text-[#9b4f12]">Anticipated Date</div>
+            <div className="mt-2 text-4xl font-black text-[#3f3025]">{projectedDate}</div>
+            <div className="mt-2 text-sm font-semibold text-[#7b6856]">
+              {money(left)} left at about {money(monthlyPace)} per month
             </div>
-          )}
-        </Card>
-      ) : (
-      <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Month-End Allocation</h2>
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-[#fde5c8] p-4">
-            <div className="text-xs text-[#9b4f12]">House Paydown</div>
-            <div className="mt-2 text-2xl font-black">{money(data.allocation?.housePaydown)}</div>
-          </div>
-          <div className="rounded-2xl bg-[#efe2d0] p-4">
-            <div className="text-xs text-[#6e5a47]">House Brokerage</div>
-            <div className="mt-2 text-2xl font-black">{money(data.allocation?.houseBrokerage)}</div>
           </div>
         </div>
       </Card>
-      )}
     </div>
   );
 }
@@ -335,6 +315,7 @@ function DashboardView({ data }) {
 function BudgetingView({ data }) {
   const reserves = (data.fundBalances || []).filter((fund) => fund.balance > 0);
   const overages = (data.fundBalances || []).filter((fund) => fund.balance < 0);
+  const [expandedCategory, setExpandedCategory] = useState(null);
 
   return (
     <div className="space-y-4">
@@ -352,9 +333,6 @@ function BudgetingView({ data }) {
         {overages.length > 0 && (
           <div className="mt-5 border-t border-[#ddd4c7] pt-4">
             <div className="text-xs font-black uppercase tracking-[0.16em] text-[#9a5c46]">Carryforward / Overage</div>
-            {data.moveMode?.active && (
-              <p className="mt-1 text-xs leading-5 text-[#8d7a66]">Gifts, Grandma / House Repairs, and CK were emptied into ASH for the move-focused closeout.</p>
-            )}
             <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
               {overages.map((fund) => (
                 <div key={fund.name} className="rounded-2xl bg-[#f5ddd4] p-4">
@@ -366,103 +344,78 @@ function BudgetingView({ data }) {
           </div>
         )}
       </Card>
+
       <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Budget vs Actual Chart</h2>
+        <h2 className="text-lg font-black md:text-xl">Budget vs Actual</h2>
+        <p className="mt-1 text-sm text-[#8d7a66]">Tap any category to see the transactions behind it.</p>
         <div className="mt-4 space-y-3">
           {(data.budgetRows || []).map((row) => {
             const pct = row.budget > 0 ? Math.min(100, Math.round((row.actual / row.budget) * 100)) : 0;
             const variance = row.budget - row.actual;
-            return (
-              <div key={row.category}>
-                <div className="mb-1 flex items-center justify-between gap-2 text-xs">
-                  <span className="text-[#6e5a47]">{row.category}</span>
-                  {row.paused ? (
-                    <span className="rounded-full bg-[#e8e0f1] px-2 py-1 font-bold text-[#665782]">Paused for Move</span>
-                  ) : (
-                    <span className={`font-bold ${variance >= 0 ? "text-[#4f6840]" : "text-[#8d4f3b]"}`}>{money(row.actual)} / {money(row.budget)}</span>
-                  )}
-                </div>
-                <div className="h-3 rounded-full bg-[#d9c9b4]">
-                  {!row.paused && <div className={`h-3 rounded-full ${variance >= 0 ? "bg-[#d68936]" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </Card>
-    </div>
-  );
-}
+            const isOpen = expandedCategory === row.category;
+            const transactions = data.spendTransactions?.[row.category] || [];
+            const transactionTotal = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
 
-function ExpensesView({ data }) {
-  const rows = data.budgetRows || [];
-  const [selectedCategory, setSelectedCategory] = useState(rows[0]?.category || "");
-  const selectedRows = data.spendTransactions?.[selectedCategory] || [];
-  const selectedTotal = selectedRows.reduce((sum, row) => sum + row.amount, 0);
-
-  return (
-    <div className="space-y-4">
-      <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">Spend by Category</h2>
-        <p className="mt-1 text-sm text-[#8d7a66]">Tap a category to see the underlying transactions for the selected month.</p>
-        <div className="mt-4 space-y-3">
-          {rows.map((row) => {
-            const variance = row.budget - row.actual;
-            const pct = row.budget > 0 ? Math.min(100, Math.round((row.actual / row.budget) * 100)) : 0;
-            const isActive = selectedCategory === row.category;
             return (
-              <button
-                key={row.category}
-                onClick={() => setSelectedCategory(row.category)}
-                className={`w-full rounded-2xl p-4 text-left transition ${isActive ? "bg-[#f4b36f]/35 ring-2 ring-[#e48733]/70" : "bg-[#efe2d0] hover:bg-[#eadbc7]"}`}
-              >
-                <div className="flex justify-between gap-3">
-                  <div>
-                    <div className="font-bold text-[#3f3025]">{row.category}</div>
+              <div key={row.category} className="overflow-hidden rounded-2xl bg-[#faf5ec]">
+                <button
+                  type="button"
+                  onClick={() => setExpandedCategory(isOpen ? null : row.category)}
+                  className="w-full p-3 text-left transition hover:bg-[#f6ecdf]"
+                >
+                  <div className="mb-2 flex items-center justify-between gap-2 text-xs">
+                    <span className="flex items-center gap-2 text-[#6e5a47]">
+                      <span className="font-bold">{row.category}</span>
+                      <span className="text-[#aa927a]">{isOpen ? "−" : "+"}</span>
+                    </span>
                     {row.paused ? (
-                      <div className="mt-1 inline-flex rounded-full bg-[#e8e0f1] px-2 py-1 text-xs font-bold text-[#665782]">Paused for Move</div>
+                      <span className="rounded-full bg-[#e8e0f1] px-2 py-1 font-bold text-[#665782]">Paused for Move</span>
                     ) : (
-                      <div className="mt-1 text-xs text-[#8d7a66]">{money(row.actual)} spent of {money(row.budget)}</div>
+                      <span className={`font-bold ${variance >= 0 ? "text-[#4f6840]" : "text-[#8d4f3b]"}`}>{money(row.actual)} / {money(row.budget)}</span>
                     )}
-                    {row.fund && row.endingFund !== null && <div className="mt-1 text-xs text-[#6e5a47]">Ending fund: {money(row.endingFund)}</div>}
                   </div>
-                  {!row.paused && <div className={`font-black ${variance >= 0 ? "text-[#4f6840]" : "text-[#8d4f3b]"}`}>{money(variance)}</div>}
-                </div>
-                <div className="mt-3 h-2 rounded-full bg-[#d9c9b4]">
-                  {!row.paused && <div className={`h-2 rounded-full ${variance >= 0 ? "bg-[#d68936]" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />}
-                </div>
-              </button>
+                  <div className="h-3 rounded-full bg-[#d9c9b4]">
+                    {!row.paused && <div className={`h-3 rounded-full ${variance >= 0 ? "bg-[#d68936]" : "bg-rose-400"}`} style={{ width: `${pct}%` }} />}
+                  </div>
+                </button>
+
+                {isOpen && (
+                  <div className="border-t border-[#e4d8c8] bg-[#fffdf9] p-3">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <div>
+                        <div className="text-xs font-black uppercase tracking-[0.14em] text-[#9b4f12]">{row.category} Detail</div>
+                        {row.fund && row.endingFund !== null ? (
+                          <div className="mt-1 text-xs text-[#8d7a66]">Ending fund: {money(row.endingFund)}</div>
+                        ) : null}
+                      </div>
+                      <div className="text-right">
+                        <div className="text-[10px] uppercase tracking-wide text-[#8d7a66]">Transactions</div>
+                        <div className="font-black text-[#3f3025]">{money(transactionTotal, 2)}</div>
+                      </div>
+                    </div>
+
+                    {transactions.length === 0 ? (
+                      <div className="rounded-xl bg-[#efe2d0] p-3 text-xs leading-5 text-[#8d7a66]">
+                        {row.paused ? "Paused for the move. No contribution this month." : "No transactions in this category for the selected month."}
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        {transactions.map((transaction, index) => (
+                          <div key={`${transaction.date}-${transaction.merchant}-${index}`} className="flex items-center justify-between gap-3 rounded-xl bg-[#efe2d0] px-3 py-2.5">
+                            <div className="min-w-0">
+                              <div className="truncate text-sm font-bold text-[#3f3025]">{transaction.merchant}</div>
+                              <div className="mt-0.5 text-[11px] text-[#8d7a66]">{transaction.date}</div>
+                            </div>
+                            <div className={`shrink-0 text-sm font-black ${transaction.amount < 0 ? "text-[#4f6840]" : "text-[#3f3025]"}`}>{money(transaction.amount, 2)}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             );
           })}
-        </div>
-      </Card>
-      <Card className="p-4 md:p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-black md:text-xl">{selectedCategory} Transactions</h2>
-            <p className="mt-1 text-sm text-[#8d7a66]">Transaction-level detail stored for the selected month.</p>
-          </div>
-          <div className="rounded-2xl bg-[#efe2d0] px-3 py-2 text-right text-[#6e5a47]">
-            <div className="text-xs">Total</div>
-            <div className="text-lg font-black">{money(selectedTotal, 2)}</div>
-          </div>
-        </div>
-        <div className="mt-4 space-y-3">
-          {selectedRows.length === 0 ? (
-            <div className="rounded-2xl bg-[#efe2d0] p-4 text-sm text-[#8d7a66]">
-              {rows.find((row) => row.category === selectedCategory)?.paused ? "Paused for the move. No contribution this month." : "No transactions in this category for the selected month."}
-            </div>
-          ) : (
-            selectedRows.map((row, index) => (
-              <div key={`${row.date}-${row.merchant}-${index}`} className="flex items-center justify-between gap-3 rounded-2xl bg-[#efe2d0] p-4">
-                <div>
-                  <div className="font-bold text-[#3f3025]">{row.merchant}</div>
-                  <div className="mt-1 text-xs text-[#8d7a66]">{row.date}</div>
-                </div>
-                <div className={`font-black ${row.amount < 0 ? "text-[#4f6840]" : "text-[#3f3025]"}`}>{money(row.amount, 2)}</div>
-              </div>
-            ))
-          )}
         </div>
       </Card>
     </div>
@@ -483,6 +436,22 @@ function InvestmentsView({ data }) {
         <SmallMetric label="Kids" value={money(kidsTotal)} note="Brokerage + legacy ESA" tone="cyan" />
         <SmallMetric label="House Brokerage" value={money(houseBrokerage)} note="Future down payment" tone="orange" />
       </section>
+      <Card className="p-4 md:p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-black md:text-xl">Net Worth Trend</h2>
+            <p className="mt-1 text-sm text-[#8d7a66]">Are we moving up over time?</p>
+          </div>
+          <div className="rounded-2xl bg-[#e4eddc] px-3 py-2 text-right text-[#4f6840]">
+            <div className="text-xs">{data.dashboardMeta?.activeMonth}</div>
+            <div className="text-lg font-black">{money(data.netWorthTrend?.at(-1)?.netWorth || 0)}</div>
+          </div>
+        </div>
+        <MiniLineChart data={data.netWorthTrend || []} xKey="month" yKey="netWorth" stroke="#d68936" xAxisLabel="Month" />
+        {!data.netWorthTrend?.some((point) => point.month === "Jun") && data.netWorthTrend?.some((point) => point.month === "Aug") ? (
+          <p className="mt-3 text-xs leading-5 text-[#8d7a66]">June and July were not backfilled, so the trend intentionally jumps from May to August.</p>
+        ) : null}
+      </Card>
       <Card className="p-4 md:p-5">
         <h2 className="text-lg font-black md:text-xl">Investment Accounts</h2>
         <div className="mt-4 space-y-3">
@@ -541,21 +510,25 @@ function GoalsView({ data }) {
   const projectedDate = goal.projectedDate || "March 2027";
   const monthlyPace = goal.monthlyPace || 3139;
 
-  const modelPrice = home.offerInsightsPrice || home.price || 0;
+  const listPrice = home.listPrice ?? home.price ?? home.offerInsightsPrice ?? 0;
+  const modelPrice = home.priceUsed ?? roundToNearest(
+    listPrice * (1 - (modelHousePlanningRules.priceUsedDiscountRate || 0)),
+    modelHousePlanningRules.priceUsedRounding || 1000
+  );
   const downPayment = home.downPayment || 50000;
   const annualRate = home.interestRate || 0.0625;
   const loanTermMonths = (home.loanTermYears || 30) * 12;
   const monthlyRate = annualRate / 12;
   const loanPrincipal = Math.max(0, modelPrice - downPayment);
   const calculatedPrincipalAndInterest = loanPrincipal > 0 ? (loanPrincipal * monthlyRate) / (1 - (1 + monthlyRate) ** -loanTermMonths) : 0;
-  const principalAndInterest = home.principalAndInterestMonthly ?? calculatedPrincipalAndInterest;
+  const principalAndInterest = calculatedPrincipalAndInterest;
   const propertyTaxMonthly = (home.estimatedPropertyTaxAnnual || 0) / 12;
   const homeInsuranceMonthly = home.homeInsuranceMonthly || 0;
   const hoaMonthly = home.hoaMonthly || 0;
   const pmiMonthly = home.mortgageInsuranceMonthly ?? ((loanPrincipal * 0.002) / 12);
   const totalMonthlyHousing = principalAndInterest + propertyTaxMonthly + homeInsuranceMonthly + hoaMonthly + pmiMonthly;
   const incomeMultiplier = home.incomeMultiplier || 45.4545;
-  const incomeTarget = home.incomeTargetAnnual || roundToNearest(totalMonthlyHousing * incomeMultiplier, 5000);
+  const incomeTarget = roundToNearest(totalMonthlyHousing * incomeMultiplier, 5000);
 
   return (
     <div className="space-y-4">
@@ -682,8 +655,6 @@ export default function PersonalFinanceCommandCenter() {
     switch (activeSection) {
       case "budgeting":
         return <BudgetingView data={activeData} />;
-      case "expenses":
-        return <ExpensesView data={activeData} />;
       case "investments":
         return <InvestmentsView data={activeData} />;
       case "goals":
