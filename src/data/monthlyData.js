@@ -564,12 +564,12 @@ export const currentTargetHome = {
   homeInsuranceMonthly: 167,
   estimatedPropertyTaxAnnual: 9795,
   downPayment: 50000,
-  interestRate: 0.07125,
+  interestRate: 0.0675,
   loanTermYears: 30,
-  principalAndInterestMonthly: 2843,
+  principalAndInterestMonthly: 2737.08,
   mortgageInsuranceMonthly: 73.17,
   incomeMultiplier: 45.4545,
-  incomeTargetAnnual: 180000,
+  incomeTargetAnnual: 175000,
   schoolNote: "Strong Melissa-area household income, home values, education, and homeownership remain the location fit. This home adds a 2020 build, rare 3-car garage, private office, game room, media room, pool-sized backyard, and solar panels that the seller says will be paid off at closing, while keeping the family in Melissa ISD with convenient access to US-75, H-E-B, Kroger, parks, and trails.",
   imageUrl: "https://photos.zillowstatic.com/fp/8d72064c6815e0e23242e922edb012a3-cc_ft_960.jpg",
   listingUrl: "https://www.zillow.com/homedetails/3609-Red-Deer-Ln-Melissa-TX-75454/336111536_zpid/",
@@ -890,7 +890,115 @@ const septemberHouseGoal = {
   source: "Public home value estimate, refreshed monthly when possible",
 };
 
+
+const octoberDashboardMeta = { activeMonth: "Oct", subtitle: "October 2026" };
+const octoberHomeMetrics = {
+  cash: 27357.57,
+  income: 9612.96,
+  spending: 8839.63,
+  investments: 118403.41,
+  actualSurplus: 773.33,
+};
+const octoberSnapshot = [
+  ["Bottom Line", "$9,613 of family income and $8,840 of spending left a $773 operating surplus — $2,366 below our $3,139 savings goal."],
+  ["ASH", "$3,977 of family-funded shopping. Redirecting October's $640 Gifts, Vacation, and Grandma budgets leaves a $4,965 negative ASH carryforward; the existing $3,900 Vacation reserve stays intact."],
+  ["Food", "$1,232 of spending, $118 under budget."],
+  ["Next Home", "$22,358 saved toward $50,000; $27,642 remaining, with July 2027 projected at the $3,139 monthly pace."],
+  ["Cash Plan", "$27,358 usable cash after card obligations. No SoFi-to-Chase replenishment needed; Chase has about $5,936 after estimated payments. No transfers executed."],
+];
+const octoberMonthlyCloseout = [
+  ["Bottom Line", "$9,612.96 of family income, $8,839.63 spending, and $773.33 operating surplus. October missed the $3,139 Next Home savings target by $2,365.67."],
+  ["Watch Point", "ASH was the main pressure point: $5,350.10 gross shopping, $1,269.34 in Ashley work income, $103.45 in shopping reimbursements, and $3,977.31 family-funded ASH. After the $1,000 family allowance, prior $2,627.30 overage, and $640 approved budget redirection, the ASH carryforward is negative $4,964.61."],
+  ["Cash Plan", "Usable cash is $27,357.57 after the aggregate card obligation roll-forward. No SoFi-to-Chase transfer is required to maintain the $5,000 Chase cushion; optional $935.99 Chase-to-SoFi adjustment was not executed. Next Home savings are $22,357.57."],
+];
+const octoberAllocation = { housePaydown: 0, houseBrokerage: 0 };
+const octoberMoveMode = {
+  active: true,
+  nextHomeSavings: 22357.57,
+  target: 50000,
+  chaseCushion: 5000,
+  monthlyPace: 3139,
+  minimumPaceToJuly: 3071.38,
+  actualMoveSavings: 773.33,
+  projectedDate: "July 2027",
+  ashleyWorkIncome: 1269.34,
+  ashleyGrossShopping: 5350.10,
+  ashleyShoppingReimbursements: 103.45,
+  ashleyFamilyFundedShopping: 3977.31,
+  ashleyPriorCarryforward: -2627.30,
+  ashleyOctoberBudgetRedirects: { gifts: 250, vacation: 100, grandma: 290 },
+  ashleyEndingCarryforward: -4964.61,
+  status: "Roth 401(k) match stays on",
+  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage principal remain paused. October's $640 planned Gifts/Vacation/Grandma funding went to ASH; existing Vacation reserve remains $3,900. April 2027 bonus excluded until confirmed. No fund-to-bank transfers executed.",
+};
+const octoberBudgetRows = [
+  ["Housing",2450,2449.62,false,null,false],
+  ["Car",350,200.14,false,null,false],
+  ["Utilities",500,528.62,false,null,false],
+  ["Food",1350,1232.21,false,null,false],
+  ["Life Insurance / Will",75,47.54,false,null,false],
+  ["Vacations",100,0,true,3900,false],
+  ["Bigger House Goal",1182,0,false,null,true],
+  ["Gifts",250,0,true,0,false],
+  ["Grandma / House Repairs",290,0,true,0,false],
+  ["ASH",1000,3977.31,true,-4964.61,false],
+  ["CK",100,8,true,-19.88,false],
+  ["Subscriptions",100,86.45,false,null,false],
+  ["Random",150,129.99,false,null,false],
+  ["Medical Debt",200,179.75,false,null,false],
+  ["Kids College",667,0,false,null,true],
+  ["Investing",1000,0,false,null,true],
+].map(([category,budget,actual,fund,endingFund,paused])=>({category,budget,actual,fund,endingFund,paused}));
+const octoberFundBalances = [
+  ["Emergency Fund",20000],
+  ["Car Insurance Reserve",155],
+  ["Vacation",3900],
+  ["Grandma / House Repairs",0],
+  ["Gifts",0],
+  ["ASH",-4964.61],
+  ["CK",-19.88],
+].map(([name,balance])=>({name,balance}));
+const octoberSpendTransactions = {"Medical Debt":[{"date":"10/1","merchant":"BSW Health","amount":97.67},{"date":"10/7","merchant":"Urology Clinics","amount":50},{"date":"10/15","merchant":"Walgreens (Wells Fargo)","amount":16.04},{"date":"10/16","merchant":"Walgreens (Citi)","amount":16.04}],"Subscriptions":[{"date":"10/1","merchant":"Disney+","amount":5.39},{"date":"10/4","merchant":"Netflix","amount":9.73},{"date":"10/7","merchant":"Apple.com/bill","amount":0.99},{"date":"10/8","merchant":"Apple.com/bill","amount":21.64},{"date":"10/26","merchant":"Cash App Google","amount":48.7}],"ASH":[{"date":"10/2","merchant":"Pottery Barn Kids","amount":12.76},{"date":"10/2","merchant":"Target.com","amount":43.29},{"date":"10/2","merchant":"Target.com","amount":32.48},{"date":"10/2","merchant":"Target.com","amount":21.65},{"date":"10/2","merchant":"Ashley work income — Shear Drive","amount":-274.52},{"date":"10/2","merchant":"Target Forney","amount":52.18},{"date":"10/3","merchant":"Amazon","amount":25.97},{"date":"10/3","merchant":"Anthropologie","amount":58.89},{"date":"10/3","merchant":"Anthropologie","amount":46.76},{"date":"10/3","merchant":"Anthropologie","amount":37.03},{"date":"10/3","merchant":"Etsy","amount":39.16},{"date":"10/3","merchant":"Target.com","amount":43.29},{"date":"10/4","merchant":"Amazon","amount":55.46},{"date":"10/4","merchant":"Target.com","amount":86.57},{"date":"10/5","merchant":"Amazon","amount":18.39},{"date":"10/5","merchant":"Target.com","amount":27.05},{"date":"10/5","merchant":"Target.com","amount":54.11},{"date":"10/5","merchant":"Target.com","amount":86.59},{"date":"10/6","merchant":"Target.com","amount":46.54},{"date":"10/6","merchant":"Ashley work income — Wisely","amount":-280},{"date":"10/6","merchant":"Costco warehouse — ASH share","amount":29.14},{"date":"10/7","merchant":"Amazon","amount":208.94},{"date":"10/7","merchant":"Anthropologie","amount":89.63},{"date":"10/7","merchant":"Fat Brain Toys","amount":219.06},{"date":"10/7","merchant":"Target.com","amount":45.45},{"date":"10/8","merchant":"Amazon","amount":92.21},{"date":"10/8","merchant":"Amazon","amount":11.36},{"date":"10/8","merchant":"Amazon","amount":25.95},{"date":"10/8","merchant":"Amazon","amount":38.24},{"date":"10/8","merchant":"Crate & Barrel","amount":64.93},{"date":"10/8","merchant":"Nordstrom refund","amount":-48.71},{"date":"10/8","merchant":"Pottery Barn Kids","amount":34.58},{"date":"10/9","merchant":"Costco warehouse — ASH share","amount":17.05},{"date":"10/10","merchant":"Amazon","amount":20.55},{"date":"10/10","merchant":"Amazon","amount":29.21},{"date":"10/11","merchant":"Target.com","amount":17.31},{"date":"10/11","merchant":"Target.com","amount":75.75},{"date":"10/12","merchant":"Costco warehouse — ASH share","amount":13.04},{"date":"10/12","merchant":"Target Rowlett","amount":21},{"date":"10/12","merchant":"Target Forney","amount":32.46},{"date":"10/12","merchant":"Target Forney","amount":7.57},{"date":"10/13","merchant":"Nebraska Furniture Mart","amount":54.53},{"date":"10/13","merchant":"Target.com","amount":7.87},{"date":"10/13","merchant":"Target.com","amount":17.31},{"date":"10/13","merchant":"Target.com","amount":13.76},{"date":"10/13","merchant":"Zelle to Kristin Frey","amount":240},{"date":"10/13","merchant":"Target Garland","amount":53.58},{"date":"10/13","merchant":"Target Garland","amount":18.4},{"date":"10/13","merchant":"Target Mesquite","amount":29.88},{"date":"10/14","merchant":"Mpix","amount":58.34},{"date":"10/14","merchant":"Target.com","amount":83.35},{"date":"10/14","merchant":"Ashley work income — Wisely","amount":-160},{"date":"10/15","merchant":"Amazon","amount":21.64},{"date":"10/15","merchant":"Jellycat","amount":116.64},{"date":"10/15","merchant":"Apple Cash shopping reimbursement","amount":-83.45},{"date":"10/16","merchant":"Crate & Barrel","amount":48.67},{"date":"10/16","merchant":"Ashley work income — Shear Drive","amount":-267.33},{"date":"10/16","merchant":"Costco warehouse — ASH share","amount":16.12},{"date":"10/16","merchant":"Target Forney","amount":41.88},{"date":"10/17","merchant":"Amazon","amount":40.49},{"date":"10/19","merchant":"Jellycat","amount":97.2},{"date":"10/19","merchant":"Target.com","amount":54.11},{"date":"10/19","merchant":"FNBO shopping — approved payment proxy","amount":877.72},{"date":"10/20","merchant":"Abercrombie & Fitch","amount":184.03},{"date":"10/20","merchant":"Capital One cashback","amount":-254},{"date":"10/20","merchant":"Magnolia","amount":125.17},{"date":"10/21","merchant":"Crate & Barrel","amount":54.1},{"date":"10/22","merchant":"Amazon","amount":31.37},{"date":"10/22","merchant":"Amazon","amount":39.99},{"date":"10/23","merchant":"Amazon","amount":15.14},{"date":"10/23","merchant":"Anthropologie","amount":100.46},{"date":"10/23","merchant":"H&M","amount":138.83},{"date":"10/23","merchant":"Jellycat","amount":126.36},{"date":"10/23","merchant":"Zara","amount":64.45},{"date":"10/23","merchant":"Target Forney","amount":72.57},{"date":"10/24","merchant":"Target.com","amount":37.89},{"date":"10/26","merchant":"Zelle shopping reimbursement","amount":-20},{"date":"10/27","merchant":"Costco warehouse — ASH share","amount":10.93},{"date":"10/28","merchant":"Macy's","amount":111.52},{"date":"10/28","merchant":"Zara","amount":93.67},{"date":"10/29","merchant":"Amazon","amount":38.18},{"date":"10/29","merchant":"Disney Store","amount":71.41},{"date":"10/29","merchant":"Disney Store","amount":133.08},{"date":"10/29","merchant":"Pottery Barn","amount":75.51},{"date":"10/29","merchant":"Pottery Barn Kids","amount":159.13},{"date":"10/30","merchant":"Amazon","amount":7.65},{"date":"10/30","merchant":"Ashley work income — Shear Drive","amount":-287.49},{"date":"10/31","merchant":"Pottery Barn Kids","amount":188.28}],"Food":[{"date":"10/2","merchant":"Walmart.com","amount":123.46},{"date":"10/6","merchant":"Costco warehouse — Food share","amount":262.27},{"date":"10/7","merchant":"Whataburger","amount":13.74},{"date":"10/9","merchant":"Costco warehouse — Food share","amount":153.48},{"date":"10/12","merchant":"Costco warehouse — Food share","amount":117.39},{"date":"10/14","merchant":"McDonald's","amount":25.17},{"date":"10/14","merchant":"In-N-Out","amount":10.5},{"date":"10/15","merchant":"Walmart.com","amount":33.75},{"date":"10/16","merchant":"Costco warehouse — Food share","amount":145.05},{"date":"10/18","merchant":"McDonald's","amount":25.28},{"date":"10/19","merchant":"Whataburger","amount":13.74},{"date":"10/21","merchant":"Walmart","amount":48.34},{"date":"10/24","merchant":"Walmart","amount":68.85},{"date":"10/25","merchant":"McDonald's","amount":25.28},{"date":"10/25","merchant":"Walmart","amount":53.83},{"date":"10/26","merchant":"Whataburger","amount":13.74},{"date":"10/27","merchant":"Costco warehouse — Food share","amount":98.34}],"Housing":[{"date":"10/2","merchant":"Lakeview mortgage payment","amount":2449.62}],"Utilities":[{"date":"10/4","merchant":"AT&T","amount":73.2},{"date":"10/13","merchant":"Forney Lake Water","amount":92.26},{"date":"10/20","merchant":"Kaufman County MUD","amount":84.16},{"date":"10/27","merchant":"Farmers Electric","amount":279}],"Life Insurance / Will":[{"date":"10/8","merchant":"Lincoln National","amount":20.63},{"date":"10/13","merchant":"Brighthouse","amount":26.91}],"Car":[{"date":"10/8","merchant":"NTTA Autocharge","amount":40},{"date":"10/12","merchant":"Costco Gas","amount":54.62},{"date":"10/13","merchant":"NTTA Autocharge","amount":10},{"date":"10/22","merchant":"NTTA Autocharge","amount":40},{"date":"10/25","merchant":"Costco Gas","amount":55.52}],"CK":[{"date":"10/13","merchant":"Cash App to Shane King","amount":8}],"Random":[{"date":"10/15","merchant":"The Light Park","amount":36.27},{"date":"10/23","merchant":"Home Depot","amount":68.15},{"date":"10/23","merchant":"Home Depot","amount":25.57}]};
+const octoberInvestmentAccounts = [
+  ["Roth 401(k)","Retirement",60932.54,"Tax-free"],
+  ["Roth IRA","Retirement",46211.54,"Tax-free"],
+  ["Kids Brokerage","Kids / future flexibility",5239.82,"Taxable"],
+  ["Kids ESA","Legacy education account",5308,"Education"],
+  ["House Brokerage","Future house down payment",711.51,"Taxable"],
+].map(([name,purpose,value,tax])=>({name,purpose,value,tax}));
+const octoberNetWorthTrend = [...septemberNetWorthTrend, {month:"Oct",netWorth:147112.21}];
+const octoberHouseGoal = {
+  downPaymentTarget: 50000,
+  nextHomeSavings: 22357.57,
+  projectedDate: "July 2027",
+  monthlyPace: 3139,
+  estimatedHomeValue: 284000,
+  estimatedMortgageBalance: 282681.01,
+  estimatedHomeEquity: 1318.99,
+  houseBrokerage: 711.51,
+  source: "Mortgage principal refreshed from October statement; home value and other assets carried forward pending new information.",
+};
+const octoberRecord = {
+  dashboardMeta: octoberDashboardMeta,
+  homeMetrics: octoberHomeMetrics,
+  snapshot: octoberSnapshot,
+  monthlyCloseout: octoberMonthlyCloseout,
+  allocation: octoberAllocation,
+  moveMode: octoberMoveMode,
+  budgetRows: octoberBudgetRows,
+  fundBalances: octoberFundBalances,
+  netWorthTrend: octoberNetWorthTrend,
+  spendTransactions: octoberSpendTransactions,
+  investmentAccounts: octoberInvestmentAccounts,
+  collegeProjection: septemberCollegeProjection,
+  retirementProjection: septemberRetirementProjection,
+  retirementSummary: septemberRetirementSummary,
+  houseGoal: octoberHouseGoal,
+  targetHome: currentTargetHome,
+};
+
 export const monthlyRecords = {
+  Oct: octoberRecord,
   May: {
     dashboardMeta,
     homeMetrics,
