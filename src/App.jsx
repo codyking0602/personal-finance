@@ -246,16 +246,48 @@ function MiniLineChart({ data, xKey, yKey, stroke = "#d68936", labelFormatter = 
   );
 }
 
+// October 2026 onward: money already committed to any funded reserve is not Next Home cash.
+// Count every positive fund balance (including future funded ASH/CK/Gifts/Grandma reserves).
+// Negative overages are tracked separately and must never increase liquid savings.
+function liquidNextHomeSavings(cash, cushion, fundBalances) {
+  const fundedReserves = (fundBalances || []).reduce(
+    (sum, fund) => sum + Math.max(0, Number(fund.balance) || 0),
+    0
+  );
+  return Math.max(0, Math.round((Number(cash) - Number(cushion) - fundedReserves) * 100) / 100);
+}
+
+function estimatedNextHomeDate(saved, target, pace, closeoutMonth, fallback) {
+  const match = /^([A-Za-z]+) (\d{4})$/.exec(closeoutMonth || "");
+  const names = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const monthIndex = match ? names.indexOf(match[1]) : -1;
+  if (monthIndex < 0 || !Number.isFinite(pace) || pace <= 0) return fallback;
+  const monthsNeeded = Math.max(0, Math.ceil(Math.max(0, target - saved) / pace));
+  return new Date(Number(match[2]), monthIndex + monthsNeeded, 1).toLocaleString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+}
+
 function DashboardView({ data }) {
   const metrics = data.homeMetrics || {};
   const snapshotItems = data.snapshot || data.monthlyCloseout || [];
   const goal = data.houseGoal || {};
   const target = goal.downPaymentTarget || 50000;
-  const saved = goal.nextHomeSavings ?? goal.cashSavings ?? goal.currentSavings ?? 20000;
+  // Preserve prior finalized August/September snapshots without retroactively changing them.
+  // All subsequent Move Mode closeouts use this same fund-aware rule automatically.
+  const archivedBeforeReserveRule = ["August 2026", "September 2026"].includes(data.dashboardMeta?.subtitle);
+  const fundAwareSavings = data.moveMode?.active && !archivedBeforeReserveRule &&
+    Number.isFinite(Number(metrics.cash));
+  const saved = fundAwareSavings
+    ? liquidNextHomeSavings(metrics.cash, data.moveMode?.chaseCushion ?? 5000, data.fundBalances)
+    : (goal.nextHomeSavings ?? goal.cashSavings ?? goal.currentSavings ?? 20000);
   const left = Math.max(0, target - saved);
   const progressPct = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
-  const projectedDate = goal.projectedDate || "March 2027";
   const monthlyPace = goal.monthlyPace || 3139;
+  const projectedDate = fundAwareSavings
+    ? estimatedNextHomeDate(saved, target, monthlyPace, data.dashboardMeta?.subtitle, goal.projectedDate || "March 2027")
+    : (goal.projectedDate || "March 2027");
   const snapshotMonth = data.dashboardMeta?.subtitle?.split(" ")?.[0] || data.dashboardMeta?.activeMonth || "";
 
   return (
