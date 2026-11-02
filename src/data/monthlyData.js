@@ -900,11 +900,11 @@ const octoberHomeMetrics = {
   actualSurplus: 773.33,
 };
 const octoberSnapshot = [
-  ["Bottom Line", "$9,613 of family income and $8,840 of spending left a $773 operating surplus — $2,366 below our $3,139 savings goal."],
-  ["ASH", "$3,977 of family-funded shopping. Redirecting October's $640 Gifts, Vacation, and Grandma budgets leaves a $4,965 negative ASH carryforward; the existing $3,900 Vacation reserve stays intact."],
-  ["Food", "$1,232 of spending, $118 under budget."],
-  ["Next Home", "$22,358 saved toward $50,000; $27,642 remaining, with July 2027 projected at the $3,139 monthly pace."],
-  ["Cash Plan", "$27,358 usable cash after card obligations. No SoFi-to-Chase replenishment needed; Chase has about $5,936 after estimated payments. No transfers executed."],
+  ["Bottom Line", "$773 surplus, $2,366 short of our monthly savings goal."],
+  ["ASH", "$3,977 family-funded shopping, $2,977 over allowance. $4,965 negative carryforward."],
+  ["Food", "$1,232, coming in $118 under budget."],
+  ["Next Home", "Added $773 toward our $3,139 monthly target."],
+  ["Cash Plan", "$27,358 usable cash. Chase cushion covered; no transfer needed."],
 ];
 const octoberMonthlyCloseout = [
   ["Bottom Line", "$9,612.96 of family income, $8,839.63 spending, and $773.33 operating surplus. October missed the $3,139 Next Home savings target by $2,365.67."],
