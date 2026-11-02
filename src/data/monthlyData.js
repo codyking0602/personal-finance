@@ -903,24 +903,24 @@ const octoberSnapshot = [
   ["Bottom Line", "$773 surplus, $2,366 short of our monthly savings goal."],
   ["ASH", "$3,977 family-funded shopping, $2,977 over the $1,000 ASH budget. $4,965 negative carryforward."],
   ["Watch Point", "Roth IRA, Kids College, House Brokerage, and extra mortgage paydown are paused for the move. Even so, we missed our savings target; Roth 401(k) match continues."],
-  ["Next Home", "Added $773 toward our $3,139 monthly target."],
+  ["Next Home", "$18,303 available after dedicated reserves, with $31,697 remaining to reach $50,000."],
   ["Cash Plan", "$27,358 usable cash. Chase cushion covered; no transfer needed."],
 ];
 const octoberMonthlyCloseout = [
   ["Bottom Line", "$9,612.96 of family income, $8,839.63 spending, and $773.33 operating surplus. October missed the $3,139 Next Home savings target by $2,365.67."],
   ["Watch Point", "ASH was the main pressure point: $5,350.10 gross shopping, $1,269.34 in Ashley work income, $103.45 in shopping reimbursements, and $3,977.31 family-funded ASH. After the $1,000 ASH budget, prior $2,627.30 overage, and $640 approved budget redirection, the ASH carryforward is negative $4,964.61."],
-  ["Cash Plan", "Usable cash is $27,357.57 after the aggregate card obligation roll-forward. No SoFi-to-Chase transfer is required to maintain the $5,000 Chase cushion; optional $935.99 Chase-to-SoFi adjustment was not executed. Next Home savings are $22,357.57."],
+  ["Cash Plan", "Usable cash is $27,357.57 after the aggregate card obligation roll-forward. No SoFi-to-Chase transfer is required to maintain the $5,000 Chase cushion; optional $935.99 Chase-to-SoFi adjustment was not executed. Next Home savings are $18,302.57 after the Chase cushion and all funded reserves."],
 ];
 const octoberAllocation = { housePaydown: 0, houseBrokerage: 0 };
 const octoberMoveMode = {
   active: true,
-  nextHomeSavings: 22357.57,
+  nextHomeSavings: 18302.57,
   target: 50000,
   chaseCushion: 5000,
   monthlyPace: 3139,
-  minimumPaceToJuly: 3071.38,
+  minimumPaceToTarget: 2881.59,
   actualMoveSavings: 773.33,
-  projectedDate: "July 2027",
+  projectedDate: "September 2027",
   ashleyWorkIncome: 1269.34,
   ashleyGrossShopping: 5350.10,
   ashleyShoppingReimbursements: 103.45,
@@ -929,7 +929,7 @@ const octoberMoveMode = {
   ashleyOctoberBudgetRedirects: { gifts: 250, vacation: 100, grandma: 290 },
   ashleyEndingCarryforward: -4964.61,
   status: "Roth 401(k) match stays on",
-  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage principal remain paused. October's $640 planned Gifts/Vacation/Grandma funding went to ASH; existing Vacation reserve remains $3,900. April 2027 bonus excluded until confirmed. No fund-to-bank transfers executed.",
+  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage principal remain paused. October's $640 planned Gifts/Vacation/Grandma funding went to ASH; existing Vacation reserve remains $3,900. Next Home excludes the Chase cushion and every positive funded reserve; negative carryforwards are not cash. No separate $20,000 emergency reserve is assumed in Move Mode. April bonus excluded until confirmed. No transfers executed.",
 };
 const octoberBudgetRows = [
   ["Housing",2450,2449.62,false,null,false],
@@ -950,7 +950,6 @@ const octoberBudgetRows = [
   ["Investing",1000,0,false,null,true],
 ].map(([category,budget,actual,fund,endingFund,paused])=>({category,budget,actual,fund,endingFund,paused}));
 const octoberFundBalances = [
-  ["Emergency Fund",20000],
   ["Car Insurance Reserve",155],
   ["Vacation",3900],
   ["Grandma / House Repairs",0],
@@ -969,8 +968,8 @@ const octoberInvestmentAccounts = [
 const octoberNetWorthTrend = [...septemberNetWorthTrend, {month:"Oct",netWorth:147112.21}];
 const octoberHouseGoal = {
   downPaymentTarget: 50000,
-  nextHomeSavings: 22357.57,
-  projectedDate: "July 2027",
+  nextHomeSavings: 18302.57,
+  projectedDate: "September 2027",
   monthlyPace: 3139,
   estimatedHomeValue: 284000,
   estimatedMortgageBalance: 282681.01,
