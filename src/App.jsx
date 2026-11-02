@@ -308,7 +308,7 @@ function DashboardView({ data }) {
           </div>
         </div>
         <div className="p-4 md:p-5">
-          <div className="rounded-3xl bg-[#fff4e6] p-5 text-center shadow-inner shadow-[#d6a96b]/20">
+          <div className="rounded-3xl bg-[#fff4e6] px-5 py-3 text-center shadow-inner shadow-[#d6a96b]/20">
             <div className="text-xs font-black uppercase tracking-[0.18em] text-[#9b4f12]">Anticipated Date</div>
             <div className="mt-2 text-4xl font-black text-[#3f3025]">{projectedDate}</div>
             <div className="mt-2 text-sm font-semibold text-[#7b6856]">
