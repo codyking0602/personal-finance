@@ -902,7 +902,7 @@ const octoberHomeMetrics = {
 const octoberSnapshot = [
   ["Bottom Line", "$773 surplus, $2,366 short of our monthly savings goal."],
   ["ASH", "$3,977 family-funded shopping, $2,977 over the $1,000 ASH budget. $4,965 negative carryforward."],
-  ["Food", "$1,232, coming in $118 under budget."],
+  ["Watch Point", "Roth IRA, Kids College, House Brokerage, and extra mortgage paydown are paused for the move. Even so, we missed our savings target; Roth 401(k) match continues."],
   ["Next Home", "Added $773 toward our $3,139 monthly target."],
   ["Cash Plan", "$27,358 usable cash. Chase cushion covered; no transfer needed."],
 ];
