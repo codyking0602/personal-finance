@@ -220,7 +220,7 @@ const augustMoveMode = {
   ashleyGrossShopping: 6026.30,
   ashleyFamilyFundedShopping: 5262.24,
   status: "Roth 401(k) match stays on",
-  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown are paused. Ashley keeps her work income plus the normal $1,000 family ASH allowance for shopping. Her work income is excluded from the move plan. The April bonus is reserved for closing / moving costs, amount TBD.",
+  note: "Roth IRA, Kids Brokerage, House Brokerage, and extra mortgage paydown are paused. Ashley keeps her work income plus the normal $1,000 family ASH shopping budget. Her work income is excluded from the move plan. The April bonus is reserved for closing / moving costs, amount TBD.",
 };
 
 const augustBudgetRows = [
@@ -587,7 +587,7 @@ const septemberHomeMetrics = {
 
 const septemberSnapshot = [
   ["Bottom Line", "$1,512 operating shortfall on $9,821 of family income and $11,333 of family spending."],
-  ["ASH", "$3,119 was family-funded in September. After the $1,000 allowance, August carryforward, and approved Gifts offset, ASH ends with a $2,627 overage."],
+  ["ASH", "$3,119 was family-funded in September. After the $1,000 ASH budget, August carryforward, and approved Gifts offset, ASH ends with a $2,627 overage."],
   ["Food", "$2,906 for September, one of the month's main spending pressure points."],
   ["Next Home", "$21,584 saved toward the $50,000 liquid target."],
   ["Cash Plan", "Transfer $583 from SoFi to Chase after September card payments to restore the $5,000 Chase cushion."],
@@ -595,7 +595,7 @@ const septemberSnapshot = [
 
 const septemberMonthlyCloseout = [
   ["Bottom Line", "Family income was $9,821 and family spending was $11,333, for a $1,512 operating shortfall. September ended with $26,584 of usable cash, including $21,584 earmarked toward the move."],
-  ["Watch Point", "ASH gross shopping was $6,889. Ashley earned $3,770 from her work, leaving $3,119 funded by the family side. After the allowance, prior carryforward, and approved Gifts offset, ASH ends with a $2,627 overage. Food was $2,906."],
+  ["Watch Point", "ASH gross shopping was $6,889. Ashley earned $3,770 from her work, leaving $3,119 funded by the family side. After the ASH budget, prior carryforward, and approved Gifts offset, ASH ends with a $2,627 overage. Food was $2,906."],
   ["Cash Plan", "Transfer $582.62 from SoFi to Chase after September card payments to restore the $5,000 Chase cushion. Resume the $3,139 monthly move pace in October; the $50,000 target is now projected for July 2027."],
 ];
 
@@ -901,14 +901,14 @@ const octoberHomeMetrics = {
 };
 const octoberSnapshot = [
   ["Bottom Line", "$773 surplus, $2,366 short of our monthly savings goal."],
-  ["ASH", "$3,977 family-funded shopping, $2,977 over allowance. $4,965 negative carryforward."],
+  ["ASH", "$3,977 family-funded shopping, $2,977 over the $1,000 ASH budget. $4,965 negative carryforward."],
   ["Food", "$1,232, coming in $118 under budget."],
   ["Next Home", "Added $773 toward our $3,139 monthly target."],
   ["Cash Plan", "$27,358 usable cash. Chase cushion covered; no transfer needed."],
 ];
 const octoberMonthlyCloseout = [
   ["Bottom Line", "$9,612.96 of family income, $8,839.63 spending, and $773.33 operating surplus. October missed the $3,139 Next Home savings target by $2,365.67."],
-  ["Watch Point", "ASH was the main pressure point: $5,350.10 gross shopping, $1,269.34 in Ashley work income, $103.45 in shopping reimbursements, and $3,977.31 family-funded ASH. After the $1,000 family allowance, prior $2,627.30 overage, and $640 approved budget redirection, the ASH carryforward is negative $4,964.61."],
+  ["Watch Point", "ASH was the main pressure point: $5,350.10 gross shopping, $1,269.34 in Ashley work income, $103.45 in shopping reimbursements, and $3,977.31 family-funded ASH. After the $1,000 ASH budget, prior $2,627.30 overage, and $640 approved budget redirection, the ASH carryforward is negative $4,964.61."],
   ["Cash Plan", "Usable cash is $27,357.57 after the aggregate card obligation roll-forward. No SoFi-to-Chase transfer is required to maintain the $5,000 Chase cushion; optional $935.99 Chase-to-SoFi adjustment was not executed. Next Home savings are $22,357.57."],
 ];
 const octoberAllocation = { housePaydown: 0, houseBrokerage: 0 };
