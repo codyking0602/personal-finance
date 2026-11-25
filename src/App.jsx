@@ -785,21 +785,6 @@ const annualBudgetGroups = [
         null
       ],
       [
-        "Baseball / softball",
-        450,
-        null
-      ],
-      [
-        "Basketball",
-        200,
-        null
-      ],
-      [
-        "Other sports",
-        50,
-        null
-      ],
-      [
         "Kids' toys & gear",
         1680,
         null
@@ -837,7 +822,7 @@ const annualBudgetGroups = [
     ]
   },
   {
-    "name": "Children / sports",
+    "name": "Children's Sports",
     "rows": [
       [
         "Soccer — Child 1, spring",
@@ -858,6 +843,21 @@ const annualBudgetGroups = [
         "Soccer — Child 2, fall",
         125,
         "Aug"
+      ],
+      [
+        "Baseball / softball",
+        450,
+        null
+      ],
+      [
+        "Basketball",
+        200,
+        null
+      ],
+      [
+        "Other sports",
+        50,
+        null
       ]
     ]
   },
