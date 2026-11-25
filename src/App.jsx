@@ -158,7 +158,7 @@ function Header({ activeMonth, setActiveMonth, activeData, availableMonths }) {
 
 function MobileNav({ activeSection, setActiveSection }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#d8c8b2] bg-[#f8f2e8]/95 px-2 py-2 backdrop-blur md:hidden">
+    <div className="annual-mobile-nav fixed bottom-0 left-0 right-0 z-50 border-t border-[#d8c8b2] bg-[#f8f2e8]/95 px-2 py-2 backdrop-blur md:hidden">
       <div className="flex justify-between gap-1">
         {sections.map(([key, label, icon]) => (
           <button
@@ -1541,7 +1541,7 @@ const planMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct",
 const planPayroll = [["Cody net payroll",9553.78],["Ashley net payroll",1269.34]];
 
 function AnnualBudgetView() {
-  const [timing, setTiming] = useState(false);
+  const [timing, setTiming] = useState(true);
   const [collapsed, setCollapsed] = useState({});
   const sum = (values) => values.reduce((a,b) => a+b,0);
   const monthlyValues = (annual, month) => planMonths.map(m => timing && month ? (m === month ? annual : 0) : annual / 12);
@@ -1560,60 +1560,89 @@ function AnnualBudgetView() {
     const bg = kind === "surplus" ? "bg-[#e4eddc]" : subtotal ? "bg-[#efe2d0]" : "bg-[#fffdf9]";
     return (
       <tr key={key || label} className={bg + " border-b border-[#e6dccd]"}>
-        <th scope="row" className={"sticky left-0 z-10 border-r border-[#ddd4c7] px-3 py-2 text-left " + bg + (subtotal ? " font-black" : " font-medium")}>{label}</th>
+        <th scope="row" className={"sticky left-0 z-10 border-r border-[#ddd4c7] px-2 py-1.5 text-left " + bg + (subtotal ? " font-black" : " font-medium")}>{label}</th>
         {columns(values).map((value,i) => (
-          <td key={i} className={"whitespace-nowrap px-3 py-2 text-right tabular-nums " + (subtotal || i>=12 ? "font-bold " : "") + (value < -0.005 ? "text-[#9a5c46] " : kind==="surplus" ? "text-[#4f6840] " : "") + (i>=12 ? "border-l border-[#ddd4c7]" : "")}>{Math.abs(value)<0.005 ? "—" : money(value,2)}</td>
+          <td key={i} className={"whitespace-nowrap px-2 py-1.5 text-right tabular-nums " + (subtotal || i>=12 ? "font-bold " : "") + (value < -0.005 ? "text-[#9a5c46] " : kind==="surplus" ? "text-[#4f6840] " : "") + (i>=12 ? "border-l border-[#ddd4c7]" : "")}>{Math.abs(value)<0.005 ? "—" : money(value,2)}</td>
         ))}
       </tr>
     );
   };
   return (
-    <div className="space-y-4">
-      <header className="mb-2">
-        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">The King's</p>
-        <h1 className="mt-1 text-4xl font-black leading-tight text-[#3f3025] md:text-5xl">Finances</h1>
-        <p className="mt-1 text-sm text-[#8d7a66]">2027 household plan · Dual income / preferred</p>
-      </header>
-      <Card className="p-4 md:p-5">
-        <h2 className="text-lg font-black md:text-xl">2027 Budget</h2>
-        <div role="group" aria-label="Planning view" className="mt-3 flex gap-1 rounded-2xl bg-[#efe2d0] p-1">
-          {[["Budget",false],["Cash Timing",true]].map(([label,value]) => (
-            <button key={label} type="button" aria-pressed={timing===value} onClick={()=>setTiming(value)} className={"flex-1 rounded-xl px-3 py-2.5 text-sm font-black transition " + (timing===value ? "bg-[#e48733] text-white shadow-sm" : "text-[#6e5a47]")}>{label}</button>
+    <div className="annual-plan-view space-y-3">
+      <style>{`
+        .annual-plan-table th, .annual-plan-table td { overflow-wrap: anywhere; }
+        .annual-plan-scroll { scrollbar-color: #c9b59d #f1e7da; }
+        @media (orientation: landscape) and (max-height: 650px) {
+          .annual-plan-shell { height: 100dvh; min-height: 0; overflow: hidden; }
+          .annual-plan-shell > div { height: 100%; min-height: 0; }
+          .annual-plan-shell > div > aside { display: none; }
+          .annual-plan-shell > div > main { height: 100%; min-height: 0; padding: 6px 10px 44px; overflow: hidden; }
+          .annual-plan-shell > div > .annual-mobile-nav { display: block; padding: 3px 8px; }
+          .annual-plan-shell .annual-mobile-nav button { flex-direction: row; justify-content: center; padding: 5px 8px; }
+          .annual-plan-view { height: 100%; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+          .annual-plan-view > * { margin-top: 0 !important; }
+          .annual-plan-toolbar { padding: 6px 10px; border-radius: 14px; }
+          .annual-plan-brand { display: none; }
+          .annual-plan-controls { flex-wrap: nowrap; gap: 8px; }
+          .annual-plan-controls h1 { font-size: 16px; white-space: nowrap; }
+          .annual-plan-toggle { width: auto; flex: 0 1 280px; }
+          .annual-plan-toggle button { padding: 5px 12px; font-size: 12px; white-space: nowrap; }
+          .annual-plan-metrics { margin-top: 5px; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; }
+          .annual-plan-metrics > div { padding: 4px 9px; border-radius: 9px; }
+          .annual-plan-metrics .annual-metric-value { margin-top: 0; font-size: 15px; line-height: 20px; }
+          .annual-plan-metrics .annual-metric-label { font-size: 10px; line-height: 14px; }
+          .annual-plan-table-card { flex: 1; min-height: 0; display: flex; flex-direction: column; border-radius: 14px; }
+          .annual-plan-table-toolbar { padding: 5px 10px; flex-wrap: nowrap; }
+          .annual-plan-table-toolbar button { padding: 4px 9px; }
+          .annual-plan-scroll { flex: 1; min-height: 0; max-height: none; }
+          .annual-plan-table { min-width: 1260px; font-size: 11px; }
+          .annual-plan-table col:first-child { width: 174px; }
+          .annual-plan-table col:not(:first-child) { width: 76px; }
+          .annual-plan-table col:nth-last-child(-n+2) { width: 87px; }
+          .annual-plan-table th, .annual-plan-table td { padding: 4px 5px; }
+          .annual-plan-table-note { display: none; }
+        }
+      `}</style>
+      <Card className="annual-plan-toolbar p-3 md:p-4">
+        <div className="annual-plan-controls flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p className="annual-plan-brand text-[10px] font-bold uppercase tracking-[0.18em] text-[#b5601c]">The King's Finances</p>
+            <h1 className="text-xl font-black text-[#3f3025]">2027 Budget</h1>
+          </div>
+          <div role="group" aria-label="Planning view" className="annual-plan-toggle flex w-full gap-1 rounded-xl bg-[#efe2d0] p-1 sm:w-auto">
+            {[["Cash Timing",true],["Budget",false]].map(([label,value]) => (
+              <button key={label} type="button" aria-pressed={timing===value} onClick={()=>setTiming(value)} className={"flex-1 rounded-lg px-4 py-2 text-sm font-black transition " + (timing===value ? "bg-[#e48733] text-white shadow-sm" : "text-[#6e5a47]")}>{label}</button>
+            ))}
+          </div>
+        </div>
+        <div className="annual-plan-metrics mt-3 grid grid-cols-3 gap-2">
+          {[
+            ["Avg. income",sum(income)/12,"bg-[#efe2d0] text-[#6e5a47]"],
+            ["Avg. allocations",sum(allocations)/12,"bg-[#fde5c8] text-[#9b4f12]"],
+            ["Avg. surplus",sum(surplus)/12,"bg-[#e4eddc] text-[#4f6840]"]
+          ].map(([label,value,tone])=>(
+            <div key={label} className={"min-w-0 rounded-xl p-2 sm:p-3 "+tone}>
+              <p className="annual-metric-label text-[10px] font-semibold sm:text-xs">{label}</p>
+              <p className="annual-metric-value mt-1 whitespace-nowrap text-[clamp(12px,3.5vw,20px)] font-black tabular-nums sm:text-lg">{money(value,2)}</p>
+            </div>
           ))}
         </div>
-        <p className="mt-3 text-xs leading-5 text-[#8d7a66]">{timing ? "Projected payment months; unknown dates are spread evenly. Negative months are timing shortfalls, not actual bank balances." : "Monthly funding commitments, including sinking funds. These are planned amounts, not actual spending."}</p>
-        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-          <div className="rounded-2xl bg-[#efe2d0] p-3">
-            <p className="text-xs text-[#6e5a47]">Average income</p>
-            <p className="mt-1 text-lg font-black tabular-nums">{money(sum(income)/12,2)}</p>
-          </div>
-          <div className="rounded-2xl bg-[#fde5c8] p-3">
-            <p className="text-xs text-[#9b4f12]">Average allocations</p>
-            <p className="mt-1 text-lg font-black tabular-nums">{money(sum(allocations)/12,2)}</p>
-          </div>
-          <div className="col-span-2 rounded-2xl bg-[#e4eddc] p-3 text-[#4f6840] sm:col-span-1">
-            <p className="text-xs">Average surplus</p>
-            <p className="mt-1 text-xl font-black tabular-nums">{money(sum(surplus)/12,2)}</p>
-            <p className="mt-1 text-xs">{money(sum(surplus),2)} / year</p>
-          </div>
-        </div>
-        <p className="mt-3 text-xs leading-5 text-[#8d7a66]">Includes the conditional $3,500 net tax-preparation travel offset. College and retirement funding remain included.</p>
       </Card>
-      <Card className="min-w-0 overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between gap-3 p-4">
+      <Card className="annual-plan-table-card min-w-0 overflow-hidden">
+        <div className="annual-plan-table-toolbar flex flex-wrap items-center justify-between gap-2 p-3">
           <div>
-            <h2 className="font-black">January–December 2027</h2>
-            <p className="mt-1 text-xs text-[#8d7a66]">Swipe across months · Tap a category to collapse it.</p>
+            <h2 className="text-sm font-black">{timing ? "2027 Cash Timing" : "2027 Funding Budget"}</h2>
+            <p className="annual-plan-table-note text-[10px] text-[#8d7a66]">Dual income · Preferred · Swipe across months</p>
           </div>
-          <button type="button" onClick={()=>setCollapsed(Object.keys(collapsed).length && groups.every(g=>collapsed[g.name]) ? {} : Object.fromEntries(groups.map(g=>[g.name,true])))} className="rounded-xl bg-[#efe2d0] px-3 py-2 text-xs font-bold text-[#6e5a47]">{groups.every(g=>collapsed[g.name]) ? "Expand all" : "Collapse all"}</button>
+          <button type="button" onClick={()=>setCollapsed(groups.every(g=>collapsed[g.name]) ? {} : Object.fromEntries(groups.map(g=>[g.name,true])))} className="rounded-lg bg-[#efe2d0] px-3 py-1.5 text-xs font-bold text-[#6e5a47]">{groups.every(g=>collapsed[g.name]) ? "Expand all" : "Collapse all"}</button>
         </div>
-        <div tabIndex={0} role="region" aria-label={timing ? "2027 cash timing table" : "2027 budget table"} className="max-h-[70vh] overflow-auto border-t border-[#ddd4c7]">
-          <table className="w-full min-w-[1660px] table-fixed border-separate border-spacing-0 text-xs">
-            <colgroup><col className="w-[165px] md:w-[250px]"/>{Array.from({length:14},(_,i)=><col key={i} className="w-[105px]"/>)}</colgroup>
+        <div tabIndex={0} role="region" aria-label={timing ? "2027 cash timing table" : "2027 budget table"} className="annual-plan-scroll max-h-[72vh] overflow-auto border-t border-[#ddd4c7]">
+          <table className="annual-plan-table w-full min-w-[1390px] table-fixed border-separate border-spacing-0 text-xs">
+            <colgroup><col className="w-[160px] md:w-[190px]"/>{Array.from({length:14},(_,i)=><col key={i} className={i>=12?"w-[94px]":"w-[86px]"}/>)}</colgroup>
             <thead className="sticky top-0 z-20">
               <tr className="bg-[#f1e7da] text-[#6e5a47]">
-                <th scope="col" className="sticky left-0 z-30 border-b border-r border-[#ddd4c7] bg-[#f1e7da] px-3 py-3 text-left">Budget line</th>
-                {[...planMonths,"Annual","Monthly avg"].map(m=><th key={m} scope="col" className="border-b border-[#ddd4c7] px-3 py-3 text-right">{m}</th>)}
+                <th scope="col" className="sticky left-0 z-30 border-b border-r border-[#ddd4c7] bg-[#f1e7da] px-2 py-2 text-left">Budget line</th>
+                {[...planMonths,"Annual","Monthly avg"].map(m=><th key={m} scope="col" className="border-b border-[#ddd4c7] px-2 py-2 text-right">{m}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -1624,7 +1653,7 @@ function AnnualBudgetView() {
               {groups.map(group=>(
                 <React.Fragment key={group.name}>
                   <tr className="bg-[#f5e9d9]">
-                    <th scope="row" className="sticky left-0 z-10 border-b border-r border-[#ddd4c7] bg-[#f5e9d9] px-3 py-2 text-left">
+                    <th scope="row" className="sticky left-0 z-10 border-b border-r border-[#ddd4c7] bg-[#f5e9d9] px-2 py-1.5 text-left">
                       <button type="button" aria-expanded={!collapsed[group.name]} onClick={()=>setCollapsed(old=>({...old,[group.name]:!old[group.name]}))} className="w-full text-left font-black text-[#9b4f12]">{collapsed[group.name] ? "▸ " : "▾ "}{group.name}</button>
                     </th>
                     <td colSpan={14} className="border-b border-[#ddd4c7] px-3 text-xs text-[#8d7a66]">{group.rows.length} budget lines</td>
@@ -1639,7 +1668,7 @@ function AnnualBudgetView() {
             </tbody>
           </table>
         </div>
-        <p className="p-4 text-xs leading-5 text-[#8d7a66]">Source: 2027 Detailed Budget v3 · 152 budget lines · Selected plan only. Amounts are displayed to cents; totals use unrounded annual inputs.</p>
+        <p className="annual-plan-table-note px-3 py-2 text-[10px] leading-4 text-[#8d7a66]">2027 plan · Includes conditional $3,500 tax-prep offset. Projected amounts, not actual balances.</p>
       </Card>
     </div>
   );
@@ -1673,10 +1702,10 @@ export default function PersonalFinanceCommandCenter() {
   };
 
   return (
-    <div className={`min-h-screen ${COLORS.appBg} ${COLORS.appText}`}>
+    <div className={`min-h-screen ${COLORS.appBg} ${COLORS.appText} ${activeSection === "annual-budget" ? "annual-plan-shell" : ""}`}>
       <div className="flex min-h-screen">
         <DesktopSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
-        <main className="min-w-0 flex-1 px-4 pb-28 pt-5 md:p-8">
+        <main className={`min-w-0 flex-1 ${activeSection === "annual-budget" ? "px-2 pb-24 pt-3 md:p-4" : "px-4 pb-28 pt-5 md:p-8"}`}>
           {activeSection !== "annual-budget" && <Header activeMonth={activeData.dashboardMeta?.activeMonth || activeMonth} setActiveMonth={setActiveMonth} activeData={activeData} availableMonths={availableMonths} />}
           {renderSection()}
         </main>
