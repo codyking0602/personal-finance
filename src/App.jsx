@@ -21,8 +21,9 @@ import {
 } from "./data/monthlyData.js";
 
 const sections = [
+  ["annual-budget", "Budget", "▤"],
   ["dashboard", "Home", "▦"],
-  ["budgeting", "Budget", "◉"],
+  ["budgeting", "Spending", "◉"],
   ["investments", "Invest", "▰"],
   ["goals", "Goals", "◎"],
 ];
@@ -640,6 +641,1010 @@ function GoalsView({ data }) {
   );
 }
 
+
+/* 2027 planning snapshot from Kings_Finances_2027_Detailed_Budget_v3.xlsx.
+ * Annual values are the selected dual-income preferred plan; cash dates mirror the workbook.
+ * The negative travel funding row is a conditional dedicated offset, not payroll. */
+const annualBudgetGroups = [
+  {
+    "name": "Housing",
+    "rows": [
+      [
+        "Mortgage",
+        29400,
+        null
+      ],
+      [
+        "HOA",
+        423,
+        "Jan"
+      ]
+    ]
+  },
+  {
+    "name": "Transportation",
+    "rows": [
+      [
+        "Gas",
+        2400,
+        null
+      ],
+      [
+        "Tolls",
+        1200,
+        null
+      ],
+      [
+        "Auto insurance",
+        1800,
+        null
+      ],
+      [
+        "Registration & inspection",
+        200,
+        null
+      ],
+      [
+        "Maintenance & parts",
+        1200,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Utilities",
+    "rows": [
+      [
+        "Electricity",
+        3300,
+        null
+      ],
+      [
+        "Water",
+        960,
+        null
+      ],
+      [
+        "MUD",
+        960,
+        null
+      ],
+      [
+        "Internet",
+        900,
+        null
+      ],
+      [
+        "Phones",
+        1236,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Food",
+    "rows": [
+      [
+        "Groceries (including baby food)",
+        15000,
+        null
+      ],
+      [
+        "Family dining & fast food",
+        2400,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Children",
+    "rows": [
+      [
+        "Haisley clothing",
+        700,
+        null
+      ],
+      [
+        "Kohen clothing (incl. bamboo pajamas)",
+        700,
+        null
+      ],
+      [
+        "Kylan clothing",
+        700,
+        null
+      ],
+      [
+        "Brennan clothing",
+        700,
+        null
+      ],
+      [
+        "Brennan diapers",
+        600,
+        null
+      ],
+      [
+        "Kylan diapers / pull-ups",
+        540,
+        null
+      ],
+      [
+        "Wipes",
+        240,
+        null
+      ],
+      [
+        "Diaper cream",
+        60,
+        null
+      ],
+      [
+        "Kohen skincare",
+        360,
+        null
+      ],
+      [
+        "Baseball / softball",
+        450,
+        null
+      ],
+      [
+        "Basketball",
+        200,
+        null
+      ],
+      [
+        "Other sports",
+        50,
+        null
+      ],
+      [
+        "Kids' toys & gear",
+        1680,
+        null
+      ],
+      [
+        "Haircuts",
+        0,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Children / homeschool",
+    "rows": [
+      [
+        "Curriculum",
+        240,
+        null
+      ],
+      [
+        "Books",
+        120,
+        null
+      ],
+      [
+        "Printing",
+        120,
+        null
+      ],
+      [
+        "Learning activities",
+        120,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Children / sports",
+    "rows": [
+      [
+        "Soccer — Child 1, spring",
+        125,
+        "Feb"
+      ],
+      [
+        "Soccer — Child 1, fall",
+        125,
+        "Aug"
+      ],
+      [
+        "Soccer — Child 2, spring",
+        125,
+        "Feb"
+      ],
+      [
+        "Soccer — Child 2, fall",
+        125,
+        "Aug"
+      ]
+    ]
+  },
+  {
+    "name": "Insurance",
+    "rows": [
+      [
+        "Lincoln National",
+        247.56,
+        null
+      ],
+      [
+        "Brighthouse",
+        322.92,
+        null
+      ],
+      [
+        "Unallocated insurance / will cushion",
+        29.52,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Remaining",
+    "rows": [
+      [
+        "Home maintenance and repairs",
+        2400,
+        null
+      ],
+      [
+        "Personal Ashley",
+        3000,
+        null
+      ],
+      [
+        "Personal Cody",
+        1200,
+        null
+      ],
+      [
+        "Miscellaneous",
+        1200,
+        null
+      ],
+      [
+        "Medical",
+        2400,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Christmas",
+    "rows": [
+      [
+        "Haisley — gifts / stockings / shared allocation",
+        500,
+        "Dec"
+      ],
+      [
+        "Kohen — gifts / stockings / shared allocation",
+        500,
+        "Dec"
+      ],
+      [
+        "Kylan — gifts / stockings / shared allocation",
+        500,
+        "Dec"
+      ],
+      [
+        "Brennan — gifts / stockings / shared allocation",
+        500,
+        "Dec"
+      ],
+      [
+        "Ashley Christmas gifts",
+        150,
+        "Dec"
+      ],
+      [
+        "Cody Christmas gifts",
+        150,
+        "Dec"
+      ],
+      [
+        "Wrapping/cards/supplies",
+        50,
+        "Dec"
+      ],
+      [
+        "Ashley's parents",
+        150,
+        "Dec"
+      ],
+      [
+        "Cody's parents",
+        50,
+        "Dec"
+      ],
+      [
+        "Cody's brother",
+        40,
+        "Dec"
+      ],
+      [
+        "Brother's wife",
+        40,
+        "Dec"
+      ],
+      [
+        "Ashley's sister",
+        40,
+        "Dec"
+      ],
+      [
+        "Sister's partner",
+        40,
+        "Dec"
+      ],
+      [
+        "Ashley's married brother",
+        40,
+        "Dec"
+      ],
+      [
+        "His wife",
+        40,
+        "Dec"
+      ],
+      [
+        "Ashley's other brother",
+        40,
+        "Dec"
+      ],
+      [
+        "Cody's sister",
+        40,
+        "Dec"
+      ],
+      [
+        "Brother child 1",
+        50,
+        "Dec"
+      ],
+      [
+        "Brother child 2",
+        50,
+        "Dec"
+      ],
+      [
+        "Brother child 3",
+        50,
+        "Dec"
+      ],
+      [
+        "Stepbrother child 1",
+        50,
+        "Dec"
+      ],
+      [
+        "Stepbrother child 2",
+        50,
+        "Dec"
+      ],
+      [
+        "Stepbrother child 3",
+        50,
+        "Dec"
+      ],
+      [
+        "Cody's grandma and Papa Lois",
+        100,
+        "Dec"
+      ],
+      [
+        "Ashley's grandma and Linda",
+        0,
+        "Dec"
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Birthdays",
+    "rows": [
+      [
+        "Haisley presents",
+        200,
+        null
+      ],
+      [
+        "Haisley home party",
+        500,
+        null
+      ],
+      [
+        "Haisley birthday decorations",
+        100,
+        null
+      ],
+      [
+        "Haisley outing",
+        225,
+        null
+      ],
+      [
+        "Kohen presents",
+        200,
+        "Dec"
+      ],
+      [
+        "Kohen home party",
+        500,
+        "Dec"
+      ],
+      [
+        "Kohen birthday decorations",
+        100,
+        "Dec"
+      ],
+      [
+        "Kohen outing",
+        225,
+        "Dec"
+      ],
+      [
+        "Kylan presents",
+        200,
+        null
+      ],
+      [
+        "Kylan home party",
+        500,
+        null
+      ],
+      [
+        "Kylan birthday decorations",
+        100,
+        null
+      ],
+      [
+        "Kylan outing",
+        225,
+        null
+      ],
+      [
+        "Brennan presents",
+        200,
+        "Mar"
+      ],
+      [
+        "Brennan home party",
+        500,
+        "Mar"
+      ],
+      [
+        "Brennan birthday decorations",
+        100,
+        "Mar"
+      ],
+      [
+        "Brennan outing",
+        225,
+        "Mar"
+      ],
+      [
+        "Ashley gift and celebration",
+        200,
+        null
+      ],
+      [
+        "Cody gift and celebration",
+        50,
+        null
+      ],
+      [
+        "Ashley's parents",
+        100,
+        null
+      ],
+      [
+        "Cody's parents",
+        50,
+        null
+      ],
+      [
+        "Adult siblings/spouses",
+        0,
+        null
+      ],
+      [
+        "Haisley friend party 1",
+        50,
+        null
+      ],
+      [
+        "Haisley friend party 2",
+        50,
+        null
+      ],
+      [
+        "Haisley friend party 3",
+        50,
+        null
+      ],
+      [
+        "Haisley friend party 4",
+        50,
+        null
+      ],
+      [
+        "Ashley's close friends",
+        400,
+        null
+      ],
+      [
+        "Extended family party 1",
+        25,
+        null
+      ],
+      [
+        "Extended family party 2",
+        25,
+        null
+      ],
+      [
+        "Ashley's grandma and Linda",
+        0,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Valentine's",
+    "rows": [
+      [
+        "Couple",
+        200,
+        "Feb"
+      ],
+      [
+        "Haisley Valentine gifts",
+        25,
+        "Feb"
+      ],
+      [
+        "Kohen Valentine gifts",
+        25,
+        "Feb"
+      ],
+      [
+        "Kylan Valentine gifts",
+        25,
+        "Feb"
+      ],
+      [
+        "Brennan Valentine gifts",
+        25,
+        "Feb"
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Easter",
+    "rows": [
+      [
+        "Baskets / egg hunt",
+        150,
+        "Mar"
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Mother's Day",
+    "rows": [
+      [
+        "Ashley",
+        150,
+        "May"
+      ],
+      [
+        "Cody's mother",
+        25,
+        "May"
+      ],
+      [
+        "Ashley's mother",
+        75,
+        "May"
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Father's Day",
+    "rows": [
+      [
+        "Cody",
+        75,
+        "Jun"
+      ],
+      [
+        "Cody's father",
+        25,
+        "Jun"
+      ],
+      [
+        "Ashley's father",
+        75,
+        "Jun"
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Halloween",
+    "rows": [
+      [
+        "Haisley Halloween costume",
+        35,
+        "Oct"
+      ],
+      [
+        "Kohen Halloween costume",
+        35,
+        "Oct"
+      ],
+      [
+        "Kylan Halloween costume",
+        35,
+        "Oct"
+      ],
+      [
+        "Brennan Halloween costume",
+        35,
+        "Oct"
+      ],
+      [
+        "Candy and activities",
+        60,
+        "Oct"
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Other",
+    "rows": [
+      [
+        "Weddings/showers/other gifts",
+        100,
+        null
+      ],
+      [
+        "Thanksgiving",
+        50,
+        "Nov"
+      ]
+    ]
+  },
+  {
+    "name": "Pets",
+    "rows": [
+      [
+        "Dog food",
+        180,
+        null
+      ],
+      [
+        "Dog treats",
+        120,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Household essentials",
+    "rows": [
+      [
+        "Toilet paper",
+        180,
+        null
+      ],
+      [
+        "Paper towels / tissues",
+        240,
+        null
+      ],
+      [
+        "Laundry products",
+        240,
+        null
+      ],
+      [
+        "Dish soap / dishwasher detergent",
+        180,
+        null
+      ],
+      [
+        "Cleaning products",
+        180,
+        null
+      ],
+      [
+        "Trash bags",
+        60,
+        null
+      ],
+      [
+        "Foil / storage bags / kitchen supplies",
+        120,
+        null
+      ],
+      [
+        "Adult shampoo / conditioner / body wash",
+        240,
+        null
+      ],
+      [
+        "Adult dental / hygiene",
+        180,
+        null
+      ],
+      [
+        "Feminine hygiene",
+        120,
+        null
+      ],
+      [
+        "Sponges, filters, miscellaneous supplies",
+        180,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Decor / replacements",
+    "rows": [
+      [
+        "Christmas / winter",
+        300,
+        "Nov"
+      ],
+      [
+        "Halloween / fall / Thanksgiving",
+        240,
+        "Oct"
+      ],
+      [
+        "Easter / spring",
+        120,
+        "Mar"
+      ],
+      [
+        "Valentine / summer / other seasons",
+        60,
+        null
+      ],
+      [
+        "Everyday decor",
+        80,
+        null
+      ],
+      [
+        "Functional household replacements",
+        360,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Subscriptions",
+    "rows": [
+      [
+        "Disney+ & Hulu",
+        64.68,
+        null
+      ],
+      [
+        "Netflix",
+        116.76,
+        null
+      ],
+      [
+        "YouTube TV",
+        584.4,
+        null
+      ],
+      [
+        "ChatGPT Plus",
+        259.68,
+        null
+      ],
+      [
+        "Apple $0.99 unidentified",
+        11.88,
+        null
+      ],
+      [
+        "Amazon Prime",
+        139,
+        "Apr"
+      ],
+      [
+        "Costco Executive",
+        130,
+        null
+      ],
+      [
+        "Target Circle 360 — promo",
+        0,
+        null
+      ],
+      [
+        "Unallocated allowance / tax & renewal cushion",
+        193.6,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Family entertainment",
+    "rows": [
+      [
+        "Weekday activities",
+        2100,
+        null
+      ],
+      [
+        "Weekend family activities",
+        3300,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Family vacation",
+    "rows": [
+      [
+        "Family vacation (all costs)",
+        3200,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "Gifts / Anniversary",
+    "rows": [
+      [
+        "Anniversary (trip & celebration)",
+        1800,
+        "Jun"
+      ]
+    ]
+  },
+  {
+    "name": "Travel funding",
+    "rows": [
+      [
+        "Expected net tax-prep proceeds (dedicated offset)",
+        -3500,
+        "Apr"
+      ]
+    ]
+  },
+  {
+    "name": "Investments",
+    "rows": [
+      [
+        "Kids college",
+        8004,
+        null
+      ],
+      [
+        "Investing",
+        12000,
+        null
+      ]
+    ]
+  }
+];
+const planMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const planPayroll = [["Cody net payroll",9553.78],["Ashley net payroll",1269.34]];
+
+function AnnualBudgetView() {
+  const [timing, setTiming] = useState(false);
+  const [collapsed, setCollapsed] = useState({});
+  const sum = (values) => values.reduce((a,b) => a+b,0);
+  const monthlyValues = (annual, month) => planMonths.map(m => timing && month ? (m === month ? annual : 0) : annual / 12);
+  const addColumns = (rows) => planMonths.map((_,i) => sum(rows.map(row => row.values[i])));
+  const groups = annualBudgetGroups.map(group => {
+    const rows = group.rows.map(([label, annual, month]) => ({label, values:monthlyValues(annual,month)}));
+    return { ...group, rows, values:addColumns(rows) };
+  });
+  const payroll = planPayroll.map(([label, amount]) => ({label, values:planMonths.map(() => amount)}));
+  const income = addColumns(payroll);
+  const allocations = addColumns(groups);
+  const surplus = income.map((value,i) => value-allocations[i]);
+  const columns = (values) => [...values,sum(values),sum(values)/12];
+  const renderRow = (label, values, kind, key) => {
+    const subtotal = kind !== "detail";
+    const bg = kind === "surplus" ? "bg-[#e4eddc]" : subtotal ? "bg-[#efe2d0]" : "bg-[#fffdf9]";
+    return (
+      <tr key={key || label} className={bg + " border-b border-[#e6dccd]"}>
+        <th scope="row" className={"sticky left-0 z-10 border-r border-[#ddd4c7] px-3 py-2 text-left " + bg + (subtotal ? " font-black" : " font-medium")}>{label}</th>
+        {columns(values).map((value,i) => (
+          <td key={i} className={"whitespace-nowrap px-3 py-2 text-right tabular-nums " + (subtotal || i>=12 ? "font-bold " : "") + (value < -0.005 ? "text-[#9a5c46] " : kind==="surplus" ? "text-[#4f6840] " : "") + (i>=12 ? "border-l border-[#ddd4c7]" : "")}>{Math.abs(value)<0.005 ? "—" : money(value,2)}</td>
+        ))}
+      </tr>
+    );
+  };
+  return (
+    <div className="space-y-4">
+      <header className="mb-2">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#b5601c]">The King's</p>
+        <h1 className="mt-1 text-4xl font-black leading-tight text-[#3f3025] md:text-5xl">Finances</h1>
+        <p className="mt-1 text-sm text-[#8d7a66]">2027 household plan · Dual income / preferred</p>
+      </header>
+      <Card className="p-4 md:p-5">
+        <h2 className="text-lg font-black md:text-xl">2027 Budget</h2>
+        <div role="group" aria-label="Planning view" className="mt-3 flex gap-1 rounded-2xl bg-[#efe2d0] p-1">
+          {[["Budget",false],["Cash Timing",true]].map(([label,value]) => (
+            <button key={label} type="button" aria-pressed={timing===value} onClick={()=>setTiming(value)} className={"flex-1 rounded-xl px-3 py-2.5 text-sm font-black transition " + (timing===value ? "bg-[#e48733] text-white shadow-sm" : "text-[#6e5a47]")}>{label}</button>
+          ))}
+        </div>
+        <p className="mt-3 text-xs leading-5 text-[#8d7a66]">{timing ? "Projected payment months; unknown dates are spread evenly. Negative months are timing shortfalls, not actual bank balances." : "Monthly funding commitments, including sinking funds. These are planned amounts, not actual spending."}</p>
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <div className="rounded-2xl bg-[#efe2d0] p-3">
+            <p className="text-xs text-[#6e5a47]">Average income</p>
+            <p className="mt-1 text-lg font-black tabular-nums">{money(sum(income)/12,2)}</p>
+          </div>
+          <div className="rounded-2xl bg-[#fde5c8] p-3">
+            <p className="text-xs text-[#9b4f12]">Average allocations</p>
+            <p className="mt-1 text-lg font-black tabular-nums">{money(sum(allocations)/12,2)}</p>
+          </div>
+          <div className="col-span-2 rounded-2xl bg-[#e4eddc] p-3 text-[#4f6840] sm:col-span-1">
+            <p className="text-xs">Average surplus</p>
+            <p className="mt-1 text-xl font-black tabular-nums">{money(sum(surplus)/12,2)}</p>
+            <p className="mt-1 text-xs">{money(sum(surplus),2)} / year</p>
+          </div>
+        </div>
+        <p className="mt-3 text-xs leading-5 text-[#8d7a66]">Includes the conditional $3,500 net tax-preparation travel offset. College and retirement funding remain included.</p>
+      </Card>
+      <Card className="min-w-0 overflow-hidden">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-4">
+          <div>
+            <h2 className="font-black">January–December 2027</h2>
+            <p className="mt-1 text-xs text-[#8d7a66]">Swipe across months · Tap a category to collapse it.</p>
+          </div>
+          <button type="button" onClick={()=>setCollapsed(Object.keys(collapsed).length && groups.every(g=>collapsed[g.name]) ? {} : Object.fromEntries(groups.map(g=>[g.name,true])))} className="rounded-xl bg-[#efe2d0] px-3 py-2 text-xs font-bold text-[#6e5a47]">{groups.every(g=>collapsed[g.name]) ? "Expand all" : "Collapse all"}</button>
+        </div>
+        <div tabIndex={0} role="region" aria-label={timing ? "2027 cash timing table" : "2027 budget table"} className="max-h-[70vh] overflow-auto border-t border-[#ddd4c7]">
+          <table className="w-full min-w-[1660px] table-fixed border-separate border-spacing-0 text-xs">
+            <colgroup><col className="w-[165px] md:w-[250px]"/>{Array.from({length:14},(_,i)=><col key={i} className="w-[105px]"/>)}</colgroup>
+            <thead className="sticky top-0 z-20">
+              <tr className="bg-[#f1e7da] text-[#6e5a47]">
+                <th scope="col" className="sticky left-0 z-30 border-b border-r border-[#ddd4c7] bg-[#f1e7da] px-3 py-3 text-left">Budget line</th>
+                {[...planMonths,"Annual","Monthly avg"].map(m=><th key={m} scope="col" className="border-b border-[#ddd4c7] px-3 py-3 text-right">{m}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {payroll.map(row=>renderRow(row.label,row.values,"detail"))}
+              {renderRow("TOTAL PAYROLL INCOME",income,"total")}
+              {renderRow("TOTAL NET ALLOCATIONS",allocations,"total")}
+              {renderRow("AVAILABLE AFTER ALLOCATIONS",surplus,"surplus")}
+              {groups.map(group=>(
+                <React.Fragment key={group.name}>
+                  <tr className="bg-[#f5e9d9]">
+                    <th scope="row" className="sticky left-0 z-10 border-b border-r border-[#ddd4c7] bg-[#f5e9d9] px-3 py-2 text-left">
+                      <button type="button" aria-expanded={!collapsed[group.name]} onClick={()=>setCollapsed(old=>({...old,[group.name]:!old[group.name]}))} className="w-full text-left font-black text-[#9b4f12]">{collapsed[group.name] ? "▸ " : "▾ "}{group.name}</button>
+                    </th>
+                    <td colSpan={14} className="border-b border-[#ddd4c7] px-3 text-xs text-[#8d7a66]">{group.rows.length} budget lines</td>
+                  </tr>
+                  {!collapsed[group.name] && group.rows.map((row,i)=>renderRow(row.label,row.values,"detail",group.name+i))}
+                  {renderRow(group.name+" total",group.values,"total",group.name+" total")}
+                </React.Fragment>
+              ))}
+              {renderRow("TOTAL NET ALLOCATIONS",allocations,"total","bottom allocations")}
+              {renderRow("TOTAL PAYROLL INCOME",income,"total","bottom payroll")}
+              {renderRow("AVAILABLE AFTER ALLOCATIONS",surplus,"surplus","bottom surplus")}
+            </tbody>
+          </table>
+        </div>
+        <p className="p-4 text-xs leading-5 text-[#8d7a66]">Source: 2027 Detailed Budget v3 · 152 budget lines · Selected plan only. Amounts are displayed to cents; totals use unrounded annual inputs.</p>
+      </Card>
+    </div>
+  );
+}
+
 export default function PersonalFinanceCommandCenter() {
   const availableMonths = useMemo(() => {
     const records = monthlyRecords || {};
@@ -649,11 +1654,13 @@ export default function PersonalFinanceCommandCenter() {
 
   const initialMonth = availableMonths.at(-1) || dashboardMeta.activeMonth;
   const [activeMonth, setActiveMonth] = useState(initialMonth);
-  const [activeSection, setActiveSection] = useState("dashboard");
+  const [activeSection, setActiveSection] = useState("annual-budget");
   const activeData = monthlyRecords?.[activeMonth] || monthlyRecords?.[initialMonth] || fallbackData;
 
   const renderSection = () => {
     switch (activeSection) {
+      case "annual-budget":
+        return <AnnualBudgetView />;
       case "budgeting":
         return <BudgetingView data={activeData} />;
       case "investments":
@@ -670,7 +1677,7 @@ export default function PersonalFinanceCommandCenter() {
       <div className="flex min-h-screen">
         <DesktopSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
         <main className="min-w-0 flex-1 px-4 pb-28 pt-5 md:p-8">
-          <Header activeMonth={activeData.dashboardMeta?.activeMonth || activeMonth} setActiveMonth={setActiveMonth} activeData={activeData} availableMonths={availableMonths} />
+          {activeSection !== "annual-budget" && <Header activeMonth={activeData.dashboardMeta?.activeMonth || activeMonth} setActiveMonth={setActiveMonth} activeData={activeData} availableMonths={availableMonths} />}
           {renderSection()}
         </main>
         <MobileNav activeSection={activeSection} setActiveSection={setActiveSection} />
